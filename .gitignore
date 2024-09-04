@@ -25,3 +25,4 @@ replay_pid*
 /avatar-images/
 /.idea/
 /src/
+/node_modules/
