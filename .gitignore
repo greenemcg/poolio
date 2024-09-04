@@ -26,3 +26,7 @@ replay_pid*
 /.idea/
 /src/
 /node_modules/
+poolio.iml
+tsconfig.json
+types.d.ts
+vite.generated.ts
