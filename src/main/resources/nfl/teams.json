@@ -1,0 +1,130 @@
+ [
+  {
+    "team": "San Francisco 49ers",
+    "abbreviation": "SF"
+  },
+  {
+    "team": "Minnesota Vikings",
+    "abbreviation": "MIN"
+  },
+  {
+    "team": "Houston Texans",
+    "abbreviation": "HOU"
+  },
+  {
+    "team": "Philadelphia Eagles",
+    "abbreviation": "PHI"
+  },
+  {
+    "team": "Los Angeles Rams",
+    "abbreviation": "LAR"
+  },
+  {
+    "team": "Washington Commanders",
+    "abbreviation": "WAS"
+  },
+  {
+    "team": "Arizona Cardinals",
+    "abbreviation": "ARI"
+  },
+  {
+    "team": "New York Giants",
+    "abbreviation": "NYG"
+  },
+  {
+    "team": "Atlanta Falcons",
+    "abbreviation": "ATL"
+  },
+  {
+    "team": "Kansas City Chiefs",
+    "abbreviation": "KC"
+  },
+  {
+    "team": "Buffalo Bills",
+    "abbreviation": "BUF"
+  },
+  {
+    "team": "New Orleans Saints",
+    "abbreviation": "NO"
+  },
+  {
+    "team": "Tampa Bay Buccaneers",
+    "abbreviation": "TB"
+  },
+  {
+    "team": "Jacksonville Jaguars",
+    "abbreviation": "JAC"
+  },
+  {
+    "team": "Baltimore Ravens",
+    "abbreviation": "BAL"
+  },
+  {
+    "team": "Dallas Cowboys",
+    "abbreviation": "DAL"
+  },
+  {
+    "team": "Cincinnati Bengals",
+    "abbreviation": "CIN"
+  },
+  {
+    "team": "Green Bay Packers",
+    "abbreviation": "GB"
+  },
+  {
+    "team": "New York Jets",
+    "abbreviation": "NYG"
+  },
+  {
+    "team": "Seattle Seahawks",
+    "abbreviation": "SEA"
+  },
+  {
+    "team": "Pittsburgh Steelers",
+    "abbreviation": "PIT"
+  },
+  {
+    "team": "Denver Broncos",
+    "abbreviation": "DEN"
+  },
+  {
+    "team": "Las Vegas Raiders",
+    "abbreviation": "LV"
+  },
+  {
+    "team": "Los Angeles Chargers",
+    "abbreviation": "LAC"
+  },
+  {
+    "team": "Carolina Panthers",
+    "abbreviation": "CAR"
+  },
+  {
+    "team": "New England Patriots",
+    "abbreviation": "NE"
+  },
+  {
+    "team": "Indianapolis Colts",
+    "abbreviation": "IND"
+  },
+  {
+    "team": "Miami Dolphins",
+    "abbreviation": "MIA"
+  },
+  {
+    "team": "Cleveland Browns",
+    "abbreviation": "CLE"
+  },
+  {
+    "team": "Chicago Bears",
+    "abbreviation": "CHI"
+  },
+  {
+    "team": "Tennessee Titans",
+    "abbreviation": "TEN"
+  },
+  {
+    "team": "Detroit Lions",
+    "abbreviation": "DET"
+  }
+]

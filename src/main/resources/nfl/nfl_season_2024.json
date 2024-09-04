@@ -1,0 +1,2178 @@
+[
+  {
+    "homeTeam": "KC",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "KCatBAL_W1_Thu_2024-1",
+    "week": 1,
+    "gameTime": "2024-09-05T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "PHIatGB_W1_Fri_2024-2",
+    "week": 1,
+    "gameTime": "2024-09-06T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "BUFatARI_W1_Sun_2024-3",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "ATLatPIT_W1_Sun_2024-4",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "NOatCAR_W1_Sun_2024-5",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "CHIatTEN_W1_Sun_2024-6",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "CINatNE_W1_Sun_2024-7",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "INDatHOU_W1_Sun_2024-8",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "MIAatJAC_W1_Sun_2024-9",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "NYGatMIN_W1_Sun_2024-10",
+    "week": 1,
+    "gameTime": "2024-09-08T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "SEAatDEN_W1_Sun_2024-11",
+    "week": 1,
+    "gameTime": "2024-09-08T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "LACatLV_W1_Sun_2024-12",
+    "week": 1,
+    "gameTime": "2024-09-08T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "CLEatDAL_W1_Sun_2024-13",
+    "week": 1,
+    "gameTime": "2024-09-08T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "TBatWAS_W1_Sun_2024-14",
+    "week": 1,
+    "gameTime": "2024-09-08T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "DETatLAR_W1_Sun_2024-15",
+    "week": 1,
+    "gameTime": "2024-09-08T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "SFatNYJ_W1_Mon_2024-16",
+    "week": 1,
+    "gameTime": "2024-09-09T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "MIAatBUF_W2_Thu_2024-17",
+    "week": 2,
+    "gameTime": "2024-09-12T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "BALatLV_W2_Sun_2024-18",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "CARatLAC_W2_Sun_2024-19",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "JACatCLE_W2_Sun_2024-20",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "DALatNO_W2_Sun_2024-21",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "DETatTB_W2_Sun_2024-22",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "GBatIND_W2_Sun_2024-23",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "MINatSF_W2_Sun_2024-24",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "NEatSEA_W2_Sun_2024-25",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "WASatNYG_W2_Sun_2024-26",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "TENatNYJ_W2_Sun_2024-27",
+    "week": 2,
+    "gameTime": "2024-09-15T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "ARIatLAR_W2_Sun_2024-28",
+    "week": 2,
+    "gameTime": "2024-09-15T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "KCatCIN_W2_Sun_2024-29",
+    "week": 2,
+    "gameTime": "2024-09-15T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "DENatPIT_W2_Sun_2024-30",
+    "week": 2,
+    "gameTime": "2024-09-15T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "HOUatCHI_W2_Sun_2024-31",
+    "week": 2,
+    "gameTime": "2024-09-15T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "PHIatATL_W2_Mon_2024-32",
+    "week": 2,
+    "gameTime": "2024-09-16T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "NYJatNE_W3_Thu_2024-33",
+    "week": 3,
+    "gameTime": "2024-09-19T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "INDatCHI_W3_Sun_2024-34",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "CLEatNYG_W3_Sun_2024-35",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "TBatDEN_W3_Sun_2024-36",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "TENatGB_W3_Sun_2024-37",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "MINatHOU_W3_Sun_2024-38",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "PITatLAC_W3_Sun_2024-39",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "NOatPHI_W3_Sun_2024-40",
+    "week": 3,
+    "gameTime": "2024-09-22T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "LVatCAR_W3_Sun_2024-41",
+    "week": 3,
+    "gameTime": "2024-09-22T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "SEAatMIA_W3_Sun_2024-42",
+    "week": 3,
+    "gameTime": "2024-09-22T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "ARIatDET_W3_Sun_2024-43",
+    "week": 3,
+    "gameTime": "2024-09-22T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "DALatBAL_W3_Sun_2024-44",
+    "week": 3,
+    "gameTime": "2024-09-22T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "LARatSF_W3_Sun_2024-45",
+    "week": 3,
+    "gameTime": "2024-09-22T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "ATLatKC_W3_Sun_2024-46",
+    "week": 3,
+    "gameTime": "2024-09-22T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "BUFatJAC_W3_Mon_2024-47",
+    "week": 3,
+    "gameTime": "2024-09-23T19:30:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "CINatWAS_W3_Mon_2024-48",
+    "week": 3,
+    "gameTime": "2024-09-23T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "NYGatDAL_W4_Thu_2024-49",
+    "week": 4,
+    "gameTime": "2024-09-26T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "ATLatNO_W4_Sun_2024-50",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "CARatCIN_W4_Sun_2024-51",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "CHIatLAR_W4_Sun_2024-52",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "NYJatDEN_W4_Sun_2024-53",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "GBatMIN_W4_Sun_2024-54",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "HOUatJAC_W4_Sun_2024-55",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "INDatPIT_W4_Sun_2024-56",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "TBatPHI_W4_Sun_2024-57",
+    "week": 4,
+    "gameTime": "2024-09-29T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "ARIatWAS_W4_Sun_2024-58",
+    "week": 4,
+    "gameTime": "2024-09-29T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "SFatNE_W4_Sun_2024-59",
+    "week": 4,
+    "gameTime": "2024-09-29T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "LVatCLE_W4_Sun_2024-60",
+    "week": 4,
+    "gameTime": "2024-09-29T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "LACatKC_W4_Sun_2024-61",
+    "week": 4,
+    "gameTime": "2024-09-29T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "BALatBUF_W4_Sun_2024-62",
+    "week": 4,
+    "gameTime": "2024-09-29T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "MIAatTEN_W4_Mon_2024-63",
+    "week": 4,
+    "gameTime": "2024-09-30T19:30:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "DETatSEA_W4_Mon_2024-64",
+    "week": 4,
+    "gameTime": "2024-09-30T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "ATLatTB_W5_Thu_2024-65",
+    "week": 5,
+    "gameTime": "2024-10-03T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "MINatNYJ_W5_Sun_2024-66",
+    "week": 5,
+    "gameTime": "2024-10-06T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "CINatBAL_W5_Sun_2024-67",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "HOUatBUF_W5_Sun_2024-68",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "CHIatCAR_W5_Sun_2024-69",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "WASatCLE_W5_Sun_2024-70",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "JACatIND_W5_Sun_2024-71",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "NEatMIA_W5_Sun_2024-72",
+    "week": 5,
+    "gameTime": "2024-10-06T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "SFatARI_W5_Sun_2024-73",
+    "week": 5,
+    "gameTime": "2024-10-06T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "DENatLV_W5_Sun_2024-74",
+    "week": 5,
+    "gameTime": "2024-10-06T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "LARatGB_W5_Sun_2024-75",
+    "week": 5,
+    "gameTime": "2024-10-06T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "SEAatNYG_W5_Sun_2024-76",
+    "week": 5,
+    "gameTime": "2024-10-06T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "PITatDAL_W5_Sun_2024-77",
+    "week": 5,
+    "gameTime": "2024-10-06T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "KCatNO_W5_Mon_2024-78",
+    "week": 5,
+    "gameTime": "2024-10-07T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "SEAatSF_W6_Thu_2024-79",
+    "week": 6,
+    "gameTime": "2024-10-10T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "CHIatJAC_W6_Sun_2024-80",
+    "week": 6,
+    "gameTime": "2024-10-13T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "GBatARI_W6_Sun_2024-81",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "BALatWAS_W6_Sun_2024-82",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "PHIatCLE_W6_Sun_2024-83",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "NEatHOU_W6_Sun_2024-84",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "TENatIND_W6_Sun_2024-85",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "NOatTB_W6_Sun_2024-86",
+    "week": 6,
+    "gameTime": "2024-10-13T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "DENatLAC_W6_Sun_2024-87",
+    "week": 6,
+    "gameTime": "2024-10-13T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "LVatPIT_W6_Sun_2024-88",
+    "week": 6,
+    "gameTime": "2024-10-13T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "CARatATL_W6_Sun_2024-89",
+    "week": 6,
+    "gameTime": "2024-10-13T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "DALatDET_W6_Sun_2024-90",
+    "week": 6,
+    "gameTime": "2024-10-13T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "NYGatCIN_W6_Sun_2024-91",
+    "week": 6,
+    "gameTime": "2024-10-13T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "NYJatBUF_W6_Mon_2024-92",
+    "week": 6,
+    "gameTime": "2024-10-14T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "NOatDEN_W7_Thu_2024-93",
+    "week": 7,
+    "gameTime": "2024-10-17T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "JACatNE_W7_Sun_2024-94",
+    "week": 7,
+    "gameTime": "2024-10-20T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "ATLatSEA_W7_Sun_2024-95",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "BUFatTEN_W7_Sun_2024-96",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "CLEatCIN_W7_Sun_2024-97",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "MINatDET_W7_Sun_2024-98",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "GBatHOU_W7_Sun_2024-99",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "INDatMIA_W7_Sun_2024-100",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "NYGatPHI_W7_Sun_2024-101",
+    "week": 7,
+    "gameTime": "2024-10-20T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "WASatCAR_W7_Sun_2024-102",
+    "week": 7,
+    "gameTime": "2024-10-20T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "LARatLV_W7_Sun_2024-103",
+    "week": 7,
+    "gameTime": "2024-10-20T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "SFatKC_W7_Sun_2024-104",
+    "week": 7,
+    "gameTime": "2024-10-20T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "PITatNYJ_W7_Sun_2024-105",
+    "week": 7,
+    "gameTime": "2024-10-20T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "TBatBAL_W7_Mon_2024-106",
+    "week": 7,
+    "gameTime": "2024-10-21T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "ARIatLAC_W7_Mon_2024-107",
+    "week": 7,
+    "gameTime": "2024-10-21T21:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "LARatMIN_W8_Thu_2024-108",
+    "week": 8,
+    "gameTime": "2024-10-24T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "MIAatARI_W8_Sun_2024-109",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "TBatATL_W8_Sun_2024-110",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "CLEatBAL_W8_Sun_2024-111",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "WASatCHI_W8_Sun_2024-112",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "DETatTEN_W8_Sun_2024-113",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "JACatGB_W8_Sun_2024-114",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "HOUatIND_W8_Sun_2024-115",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "NEatNYJ_W8_Sun_2024-116",
+    "week": 8,
+    "gameTime": "2024-10-27T13:00:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "SEAatBUF_W8_Sun_2024-117",
+    "week": 8,
+    "gameTime": "2024-10-27T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "LACatNO_W8_Sun_2024-118",
+    "week": 8,
+    "gameTime": "2024-10-27T16:05:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "DENatCAR_W8_Sun_2024-119",
+    "week": 8,
+    "gameTime": "2024-10-27T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "CINatPHI_W8_Sun_2024-120",
+    "week": 8,
+    "gameTime": "2024-10-27T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "LVatKC_W8_Sun_2024-121",
+    "week": 8,
+    "gameTime": "2024-10-27T16:25:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "SFatDAL_W8_Sun_2024-122",
+    "week": 8,
+    "gameTime": "2024-10-27T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "PITatNYG_W8_Mon_2024-123",
+    "week": 8,
+    "gameTime": "2024-10-28T20:20:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "NYJatHOU_W9_Thu_2024-124",
+    "week": 9,
+    "gameTime": "2024-10-31T20:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "ATLatDAL_W9_Sun_2024-125",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "BALatDEN_W9_Sun_2024-126",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "BUFatMIA_W9_Sun_2024-127",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "CARatNO_W9_Sun_2024-128",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "CINatLV_W9_Sun_2024-129",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "CLEatLAC_W9_Sun_2024-130",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "MINatIND_W9_Sun_2024-131",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "TENatNE_W9_Sun_2024-132",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "NYGatWAS_W9_Sun_2024-133",
+    "week": 9,
+    "gameTime": "2024-11-03T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "ARIatCHI_W9_Sun_2024-134",
+    "week": 9,
+    "gameTime": "2024-11-03T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "GBatDET_W9_Sun_2024-135",
+    "week": 9,
+    "gameTime": "2024-11-03T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "SEAatLAR_W9_Sun_2024-136",
+    "week": 9,
+    "gameTime": "2024-11-03T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "PHIatJAC_W9_Sun_2024-137",
+    "week": 9,
+    "gameTime": "2024-11-03T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "KCatTB_W9_Mon_2024-138",
+    "week": 9,
+    "gameTime": "2024-11-04T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "BALatCIN_W10_Thu_2024-139",
+    "week": 10,
+    "gameTime": "2024-11-07T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "CARatNYG_W10_Sun_2024-140",
+    "week": 10,
+    "gameTime": "2024-11-10T09:30:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "NOatATL_W10_Sun_2024-141",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "INDatBUF_W10_Sun_2024-142",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "CHIatNE_W10_Sun_2024-143",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "KCatDEN_W10_Sun_2024-144",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "JACatMIN_W10_Sun_2024-145",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "WASatPIT_W10_Sun_2024-146",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "TBatSF_W10_Sun_2024-147",
+    "week": 10,
+    "gameTime": "2024-11-10T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "LACatTEN_W10_Sun_2024-148",
+    "week": 10,
+    "gameTime": "2024-11-10T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "ARIatNYJ_W10_Sun_2024-149",
+    "week": 10,
+    "gameTime": "2024-11-10T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "DALatPHI_W10_Sun_2024-150",
+    "week": 10,
+    "gameTime": "2024-11-10T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "HOUatDET_W10_Sun_2024-151",
+    "week": 10,
+    "gameTime": "2024-11-10T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "LARatMIA_W10_Mon_2024-152",
+    "week": 10,
+    "gameTime": "2024-11-11T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "PHIatWAS_W11_Thu_2024-153",
+    "week": 11,
+    "gameTime": "2024-11-14T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "PITatBAL_W11_Sun_2024-154",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "CHIatGB_W11_Sun_2024-155",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "NOatCLE_W11_Sun_2024-156",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "DETatJAC_W11_Sun_2024-157",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "MIAatLV_W11_Sun_2024-158",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "NEatLAR_W11_Sun_2024-159",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "TENatMIN_W11_Sun_2024-160",
+    "week": 11,
+    "gameTime": "2024-11-17T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "DENatATL_W11_Sun_2024-161",
+    "week": 11,
+    "gameTime": "2024-11-17T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "SFatSEA_W11_Sun_2024-162",
+    "week": 11,
+    "gameTime": "2024-11-17T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "BUFatKC_W11_Sun_2024-163",
+    "week": 11,
+    "gameTime": "2024-11-17T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "LACatCIN_W11_Sun_2024-164",
+    "week": 11,
+    "gameTime": "2024-11-17T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "NYJatIND_W11_Sun_2024-165",
+    "week": 11,
+    "gameTime": "2024-11-17T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "DALatHOU_W11_Mon_2024-166",
+    "week": 11,
+    "gameTime": "2024-11-18T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "CLEatPIT_W12_Thu_2024-167",
+    "week": 12,
+    "gameTime": "2024-11-21T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "CARatKC_W12_Sun_2024-168",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "CHIatMIN_W12_Sun_2024-169",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "WASatDAL_W12_Sun_2024-170",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "INDatDET_W12_Sun_2024-171",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "HOUatTEN_W12_Sun_2024-172",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "MIAatNE_W12_Sun_2024-173",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "NYGatTB_W12_Sun_2024-174",
+    "week": 12,
+    "gameTime": "2024-11-24T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "LVatDEN_W12_Sun_2024-175",
+    "week": 12,
+    "gameTime": "2024-11-24T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "SEAatARI_W12_Sun_2024-176",
+    "week": 12,
+    "gameTime": "2024-11-24T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "GBatSF_W12_Sun_2024-177",
+    "week": 12,
+    "gameTime": "2024-11-24T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "LARatPHI_W12_Sun_2024-178",
+    "week": 12,
+    "gameTime": "2024-11-24T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "LACatBAL_W12_Mon_2024-179",
+    "week": 12,
+    "gameTime": "2024-11-25T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "DETatCHI_W13_Thu_2024-180",
+    "week": 13,
+    "gameTime": "2024-11-28T12:30:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "DALatNYG_W13_Thu_2024-181",
+    "week": 13,
+    "gameTime": "2024-11-28T16:30:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "GBatMIA_W13_Thu_2024-182",
+    "week": 13,
+    "gameTime": "2024-11-28T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "KCatLV_W13_Fri_2024-183",
+    "week": 13,
+    "gameTime": "2024-11-29T15:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "MINatARI_W13_Sun_2024-184",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "ATLatLAC_W13_Sun_2024-185",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "CINatPIT_W13_Sun_2024-186",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "JACatHOU_W13_Sun_2024-187",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "NEatIND_W13_Sun_2024-188",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "NYJatSEA_W13_Sun_2024-189",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "WASatTEN_W13_Sun_2024-190",
+    "week": 13,
+    "gameTime": "2024-12-01T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "CARatTB_W13_Sun_2024-191",
+    "week": 13,
+    "gameTime": "2024-12-01T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "NOatLAR_W13_Sun_2024-192",
+    "week": 13,
+    "gameTime": "2024-12-01T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "BALatPHI_W13_Sun_2024-193",
+    "week": 13,
+    "gameTime": "2024-12-01T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "BUFatSF_W13_Sun_2024-194",
+    "week": 13,
+    "gameTime": "2024-12-01T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "DENatCLE_W13_Mon_2024-195",
+    "week": 13,
+    "gameTime": "2024-12-02T19:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "DETatGB_W14_Thu_2024-196",
+    "week": 14,
+    "gameTime": "2024-12-05T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "MINatATL_W14_Sun_2024-197",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "PHIatCAR_W14_Sun_2024-198",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "PITatCLE_W14_Sun_2024-199",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "TENatJAC_W14_Sun_2024-200",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "TBatLV_W14_Sun_2024-201",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "MIAatNYJ_W14_Sun_2024-202",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "NYGatNO_W14_Sun_2024-203",
+    "week": 14,
+    "gameTime": "2024-12-08T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "ARIatSEA_W14_Sun_2024-204",
+    "week": 14,
+    "gameTime": "2024-12-08T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "LARatBUF_W14_Sun_2024-205",
+    "week": 14,
+    "gameTime": "2024-12-08T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "SFatCHI_W14_Sun_2024-206",
+    "week": 14,
+    "gameTime": "2024-12-08T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "KCatLAC_W14_Sun_2024-207",
+    "week": 14,
+    "gameTime": "2024-12-08T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "DALatCIN_W14_Mon_2024-208",
+    "week": 14,
+    "gameTime": "2024-12-09T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "SFatLAR_W15_Thu_2024-209",
+    "week": 15,
+    "gameTime": "2024-12-12T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "NYGatBAL_W15_Sun_2024-210",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "CARatDAL_W15_Sun_2024-211",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "TENatCIN_W15_Sun_2024-212",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "CLEatKC_W15_Sun_2024-213",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "HOUatMIA_W15_Sun_2024-214",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "JACatNYJ_W15_Sun_2024-215",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "NOatWAS_W15_Sun_2024-216",
+    "week": 15,
+    "gameTime": "2024-12-15T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "ARIatNE_W15_Sun_2024-217",
+    "week": 15,
+    "gameTime": "2024-12-15T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "DETatBUF_W15_Sun_2024-218",
+    "week": 15,
+    "gameTime": "2024-12-15T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "DENatIND_W15_Sun_2024-219",
+    "week": 15,
+    "gameTime": "2024-12-15T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "LACatTB_W15_Sun_2024-220",
+    "week": 15,
+    "gameTime": "2024-12-15T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "PHIatPIT_W15_Sun_2024-221",
+    "week": 15,
+    "gameTime": "2024-12-15T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "SEAatGB_W15_Sun_2024-222",
+    "week": 15,
+    "gameTime": "2024-12-15T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "MINatCHI_W15_Mon_2024-223",
+    "week": 15,
+    "gameTime": "2024-12-16T20:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "LVatATL_W15_Mon_2024-224",
+    "week": 15,
+    "gameTime": "2024-12-16T20:30:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "CINatCLE_W16_Thu_2024-225",
+    "week": 16,
+    "gameTime": "2024-12-19T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "KCatHOU_W16_Sat_2024-226",
+    "week": 16,
+    "gameTime": "2024-12-21T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "BALatPIT_W16_Sat_2024-227",
+    "week": 16,
+    "gameTime": "2024-12-21T16:30:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "CARatARI_W16_Sun_2024-228",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "ATLatNYG_W16_Sun_2024-229",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "NE",
+    "season": "S_2024",
+    "id": "BUFatNE_W16_Sun_2024-230",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "CHIatDET_W16_Sun_2024-231",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "INDatTEN_W16_Sun_2024-232",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "NYJatLAR_W16_Sun_2024-233",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "PHI",
+    "season": "S_2024",
+    "id": "WASatPHI_W16_Sun_2024-234",
+    "week": 16,
+    "gameTime": "2024-12-22T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "LACatDEN_W16_Sun_2024-235",
+    "week": 16,
+    "gameTime": "2024-12-22T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "SEAatMIN_W16_Sun_2024-236",
+    "week": 16,
+    "gameTime": "2024-12-22T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "LVatJAC_W16_Sun_2024-237",
+    "week": 16,
+    "gameTime": "2024-12-22T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "MIAatSF_W16_Sun_2024-238",
+    "week": 16,
+    "gameTime": "2024-12-22T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "TB",
+    "season": "S_2024",
+    "id": "DALatTB_W16_Sun_2024-239",
+    "week": 16,
+    "gameTime": "2024-12-22T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "GBatNO_W16_Mon_2024-240",
+    "week": 16,
+    "gameTime": "2024-12-23T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "PITatKC_W17_Wed_2024-241",
+    "week": 17,
+    "gameTime": "2024-12-25T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "HOUatBAL_W17_Wed_2024-242",
+    "week": 17,
+    "gameTime": "2024-12-25T16:30:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "CHIatSEA_W17_Thu_2024-243",
+    "week": 17,
+    "gameTime": "2024-12-26T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "ATL",
+    "season": "S_2024",
+    "id": "WASatATL_W17_Sun_2024-244",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "NYJ",
+    "season": "S_2024",
+    "id": "BUFatNYJ_W17_Sun_2024-245",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "TBatCAR_W17_Sun_2024-246",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "CINatDEN_W17_Sun_2024-247",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "MINatGB_W17_Sun_2024-248",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "IND",
+    "season": "S_2024",
+    "id": "NYGatIND_W17_Sun_2024-249",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "TEN",
+    "season": "S_2024",
+    "id": "JACatTEN_W17_Sun_2024-250",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "LV",
+    "season": "S_2024",
+    "id": "NOatLV_W17_Sun_2024-251",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "NEatLAC_W17_Sun_2024-252",
+    "week": 17,
+    "gameTime": "2024-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "ARI",
+    "season": "S_2024",
+    "id": "LARatARI_W17_Sun_2024-253",
+    "week": 17,
+    "gameTime": "2024-12-29T16:05:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "DAL",
+    "season": "S_2024",
+    "id": "PHIatDAL_W17_Sun_2024-254",
+    "week": 17,
+    "gameTime": "2024-12-29T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "CLEatMIA_W17_Sun_2024-255",
+    "week": 17,
+    "gameTime": "2024-12-29T20:20:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "DET",
+    "season": "S_2024",
+    "id": "SFatDET_W17_Mon_2024-256",
+    "week": 17,
+    "gameTime": "2024-12-30T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "CAR",
+    "season": "S_2024",
+    "id": "ATLatCAR_W18_Sun_2024-257",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "CLE",
+    "season": "S_2024",
+    "id": "BALatCLE_W18_Sun_2024-258",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "BUF",
+    "season": "S_2024",
+    "id": "NEatBUF_W18_Sun_2024-259",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "CHI",
+    "season": "S_2024",
+    "id": "GBatCHI_W18_Sun_2024-260",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "CIN",
+    "season": "S_2024",
+    "id": "PITatCIN_W18_Sun_2024-261",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "DALatWAS_W18_Sun_2024-262",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "DETatMIN_W18_Sun_2024-263",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "TENatHOU_W18_Sun_2024-264",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "JAC",
+    "season": "S_2024",
+    "id": "INDatJAC_W18_Sun_2024-265",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "MIA",
+    "season": "S_2024",
+    "id": "NYJatMIA_W18_Sun_2024-266",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "NO",
+    "season": "S_2024",
+    "id": "TBatNO_W18_Sun_2024-267",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "NYG",
+    "season": "S_2024",
+    "id": "PHIatNYG_W18_Sun_2024-268",
+    "week": 18,
+    "gameTime": "2025-01-05T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "SF",
+    "season": "S_2024",
+    "id": "ARIatSF_W18_Sun_2024-269",
+    "week": 18,
+    "gameTime": "2025-01-05T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "KC",
+    "season": "S_2024",
+    "id": "DENatKC_W18_Sun_2024-270",
+    "week": 18,
+    "gameTime": "2025-01-05T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "LVatLAC_W18_Sun_2024-271",
+    "week": 18,
+    "gameTime": "2025-01-05T16:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "SEA",
+    "season": "S_2024",
+    "id": "LARatSEA_W18_Sun_2024-272",
+    "week": 18,
+    "gameTime": "2025-01-05T16:25:00.000-0500"
+  }
+]

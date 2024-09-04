@@ -1,0 +1,51 @@
+app:
+  version: @project.version@
+  name: @project.artifactId@
+
+server:
+  port: 9090
+  error:
+    include-stacktrace: never
+spring:
+  application:
+    name: Poolio
+  datasource:
+    password: poolio
+    url: jdbc:postgresql://localhost:5432/poolio
+    username: poolio
+#    password: golf9c
+#    url: jdbc:postgresql://poolio.local:5432/poolio
+#    username: mike
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+  mustache:
+    check-template-location: false
+  sql:
+    init:
+      mode: never
+vaadin:
+  allowed-packages: com.vaadin,org.vaadin,nm.poolio
+  frontend:
+    hotdeploy: true
+  launch-browser: true
+
+logging:
+  level:
+    root: INFO
+    org.atmosphere: WARN
+    nm: DEBUG
+    net.ttddyy.dsproxy.listener: ERROR
+  pattern:
+    console: "%date %green(%level) %blue([%thread]) %cyan(%logger{30}:%line) %magenta(%mdc)  %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

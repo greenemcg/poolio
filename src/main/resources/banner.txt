@@ -1,0 +1,12 @@
+${AnsiColor.BRIGHT_YELLOW}
+${AnsiBackground.BRIGHT_BLACK}
+ ____             _ _
+ |  _ \ ___   ___ | (_) ___  
+ | |_) / _ \ / _ \| | |/ _ \
+ |  __/ (_) | (_) | | | (_) |
+ |_|   \___/ \___/|_|_|\___/ 
+${AnsiBackground.BRIGHT_BLUE} ${AnsiColor.BRIGHT_BLACK}
+Powered by Spring Boot ${spring-boot.version}
+App version: ${app.version}
+${AnsiBackground.DEFAULT}
+${AnsiColor.DEFAULT}
