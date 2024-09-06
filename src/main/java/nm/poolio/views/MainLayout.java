@@ -1,6 +1,7 @@
 package nm.poolio.views;
 
 import static nm.poolio.utils.VaddinUtils.ADMIN_ICON;
+import static nm.poolio.utils.VaddinUtils.BET_ICON;
 import static nm.poolio.utils.VaddinUtils.GAMES_ICON;
 import static nm.poolio.utils.VaddinUtils.POOL_ICON;
 import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
@@ -33,6 +34,7 @@ import java.util.Optional;
 import nm.poolio.data.User;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.views.admin.AdminView;
+import nm.poolio.views.bet.BetView;
 import nm.poolio.views.home.HomeView;
 import nm.poolio.views.nfl_game.NflGameView;
 import nm.poolio.views.pool.PoolView;
@@ -91,14 +93,16 @@ public class MainLayout extends AppLayout {
       nav.addItem(new SideNavItem("Home", HomeView.class, STORE_ALT_SOLID.create()));
 
     if (accessChecker.hasAccess(TicketView.class))
-      nav.addItem(new SideNavItem("Ticket", TicketView.class, TICKET_ICON.create()));
+      nav.addItem(new SideNavItem("Tickets", TicketView.class, TICKET_ICON.create()));
 
     if (accessChecker.hasAccess(PoolView.class))
-      nav.addItem(new SideNavItem("Pool", PoolView.class, POOL_ICON.create()));
+      nav.addItem(new SideNavItem("Pools", PoolView.class, POOL_ICON.create()));
 
-    if (accessChecker.hasAccess(UserView.class)) {
+    if (accessChecker.hasAccess(BetView.class))
+      nav.addItem(new SideNavItem("Bets", BetView.class, BET_ICON.create()));
+
+    if (accessChecker.hasAccess(UserView.class))
       nav.addItem(new SideNavItem("Users", UserView.class, USERS_ICON.create()));
-    }
 
     if (accessChecker.hasAccess(AdminView.class))
       nav.addItem(new SideNavItem("Admin", AdminView.class, ADMIN_ICON.create()));

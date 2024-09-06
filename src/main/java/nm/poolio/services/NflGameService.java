@@ -1,18 +1,14 @@
 package nm.poolio.services;
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
-import java.io.File;
 import java.io.InputStream;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,25 +50,25 @@ public class NflGameService {
         Collections.unmodifiableMap(
             gameList.stream().collect(Collectors.toMap(NflGame::getId, Function.identity())));
 
-//    gameList.stream()
-//        .forEach(
-//            g -> {
-//              var day = DateTimeFormatter.ofPattern("E").format(g.getLocalDateTime());
-//
-//              g.setId(
-//                  g.getHomeTeam()
-//                      + "at"
-//                      + g.getAwayTeam()
-//                      + "_W"
-//                      + g.getWeek()
-//                      + "_"
-//                      + day
-//                      + "_"
-//                      + g.getId());
-//            });
-//
-//    ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-//    writer.writeValue(new File("/tmp/nfl_season_2024.json"), gameList);
+    //    gameList.stream()
+    //        .forEach(
+    //            g -> {
+    //              var day = DateTimeFormatter.ofPattern("E").format(g.getLocalDateTime());
+    //
+    //              g.setId(
+    //                  g.getHomeTeam()
+    //                      + "at"
+    //                      + g.getAwayTeam()
+    //                      + "_W"
+    //                      + g.getWeek()
+    //                      + "_"
+    //                      + day
+    //                      + "_"
+    //                      + g.getId());
+    //            });
+    //
+    //    ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+    //    writer.writeValue(new File("/tmp/nfl_season_2024.json"), gameList);
   }
 
   public NflGame findGameById(String id) {
@@ -148,5 +144,12 @@ public class NflGameService {
     var n = gameList.stream().filter(g -> g.getWeek().equals(week.getWeekNum())).toList();
     n.parallelStream().forEach(this::addScores);
     return n;
+  }
+
+  public List<NflGame> getWeeklyGamesNotStarted(NflWeek week) {
+      return gameList.stream()
+          .filter(g -> g.getWeek() != null && g.getWeek().equals(week.getWeekNum()))
+          .filter(g -> g.getGameTime().isAfter(Instant.now()))
+          .toList();
   }
 }

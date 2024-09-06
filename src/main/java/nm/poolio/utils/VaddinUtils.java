@@ -55,6 +55,8 @@ public class VaddinUtils {
 
   public static final LineAwesomeIcon POOLIO_ICON = LineAwesomeIcon.FOOTBALL_BALL_SOLID;
 
+  public static final LineAwesomeIcon SPREAD_ICON = LineAwesomeIcon.ARROWS_ALT_V_SOLID;
+  public static final LineAwesomeIcon BET_ICON = LineAwesomeIcon.COMMENTS_DOLLAR_SOLID;
   public static final LineAwesomeIcon POOL_ICON = LineAwesomeIcon.SWIMMING_POOL_SOLID;
   public static final LineAwesomeIcon LEAGUE_ICON = LineAwesomeIcon.LIST_ALT_SOLID;
   public static final LineAwesomeIcon AMOUNT_ICON = LineAwesomeIcon.COINS_SOLID;

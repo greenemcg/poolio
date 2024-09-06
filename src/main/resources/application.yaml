@@ -7,15 +7,19 @@ server:
   error:
     include-stacktrace: never
 spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
   application:
     name: Poolio
   datasource:
     password: poolio
     url: jdbc:postgresql://localhost:5432/poolio
     username: poolio
-#    password: golf9c
-#    url: jdbc:postgresql://poolio.local:5432/poolio
-#    username: mike
+  #    password: golf9c
+  #    url: jdbc:postgresql://poolio.local:5432/poolio
+  #    username: mike
   jpa:
     defer-datasource-initialization: true
     hibernate:

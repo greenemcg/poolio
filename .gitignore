@@ -19,6 +19,8 @@
 *.tar.gz
 *.rar
 
+*.iml
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
@@ -30,3 +32,7 @@ poolio.iml
 tsconfig.json
 types.d.ts
 vite.generated.ts
+/target/
+/.mvn/wrapper/maven-wrapper.properties
+/.mvn/wrapper/MavenWrapperDownloader.java
+/src/main/frontend/generated/

@@ -4,6 +4,7 @@ public enum PoolioTransactionType {
   CASH_DEPOSIT,
   CASH_WITHDRAWAL,
   POOL_PURCHASE,
+  GAME_BET_PURCHASE,
   POOL_WINNER;
 
   public static PoolioTransactionType[] cashTypes() {

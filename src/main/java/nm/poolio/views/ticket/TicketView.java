@@ -5,16 +5,12 @@ import static nm.poolio.utils.VaddinUtils.NEW_ICON;
 import static nm.poolio.utils.VaddinUtils.VIEW_ICON;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HtmlComponent;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,12 +19,12 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.pool.PoolService;
+import nm.poolio.enitities.pool.UserPoolFinder;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
 import nm.poolio.model.enums.Season;
@@ -42,7 +38,8 @@ import nm.poolio.views.MainLayout;
 @Route(value = "ticket", layout = MainLayout.class)
 @RolesAllowed("USER")
 @Slf4j
-public class TicketView extends VerticalLayout implements PoolioNotification, TicketGrid {
+public class TicketView extends VerticalLayout
+    implements PoolioNotification, TicketGrid, UserPoolFinder {
   private final TicketService service;
   private final User player;
   private final PoolService poolService;
@@ -61,31 +58,10 @@ public class TicketView extends VerticalLayout implements PoolioNotification, Ti
     this.poolService = poolService;
     this.ticketUiService = ticketUiService;
 
-    var userPools =
-        player.getPoolIdNames().stream()
-            .map(idName -> poolService.get(idName.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .toList();
-
-    // List<Pool> userPools = poolService.findPoolsForUser(player);
+    var userPools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
     if (userPools.isEmpty()) {
-      Div text =
-          new Div(
-              new Text("Your Account is not linked to any Poolio pools."),
-              new HtmlComponent("br"),
-              new Text("Contact your admin to join a pool."));
-
-      Notification notification = createErrorNotification(text);
-
-      notification.addDetachListener(
-          openedChangeEvent -> {
-            UI.getCurrent().navigate("home");
-          });
-
-      add(notification);
-      notification.open();
+      add(createNoPoolNotification());
     } else {
       HorizontalLayout layout = new HorizontalLayout();
       layout.setVerticalComponentAlignment(Alignment.CENTER);

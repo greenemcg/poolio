@@ -10,6 +10,7 @@ import nm.poolio.data.User;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -48,4 +49,6 @@ public class PoolService {
   public List<PoolIdName> findPoolIdNames(User user) {
     return repository.findIdAndNameByPlayersAndInactiveDateIsNull(user);
   }
+
+
 }

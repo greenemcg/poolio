@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.pool.PoolService;
+import nm.poolio.enitities.pool.UserPoolFinder;
 import nm.poolio.enitities.score.GameScoreService;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
@@ -46,7 +47,7 @@ import nm.poolio.views.ticket.TicketShowGrid;
 @RolesAllowed({"ADMIN", "USER"})
 @Slf4j
 public class ResultsView extends VerticalLayout
-    implements ResultsGrid, PoolioAvatar, PoolioBadge, PoolioNotification {
+    implements ResultsGrid, PoolioAvatar, PoolioBadge, PoolioNotification, UserPoolFinder {
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
   private final TicketService ticketService;
@@ -62,7 +63,7 @@ public class ResultsView extends VerticalLayout
 
   @Getter Grid<Ticket> resultsGrid = createGrid(Ticket.class);
 
-  User user;
+  User player;
   Pool pool;
   List<NflGame> weeklyGames;
 
@@ -86,88 +87,80 @@ public class ResultsView extends VerticalLayout
 
     setHeight("100%");
 
-    var maybeUer = authenticatedUser.get();
-    maybeUer.ifPresent(u -> user = u);
-
-    var pools =
-        user.getPoolIdNames().stream()
-            .map(idName -> poolService.get(idName.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .toList();
+    player = authenticatedUser.get().orElseThrow();
+    var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
     if (pools.isEmpty()) {
-      createErrorNotification(new Span("No pools found please ask admin to let you join up."));
-      return;
-    }
+      add(createNoPoolNotification());
+    } else {
+      pool = pools.getFirst();
 
-    pool = pools.getFirst();
+      weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, pool.getWeek());
 
-    weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, pool.getWeek());
+      if (!player.getAdmin() && Instant.now().isBefore(weeklyGames.getFirst().getGameTime())) {
+        add(new H3("Games not started yet"));
+        add(new Div("You can view all pics once the first game begins..."));
 
-    if (!user.getAdmin() && Instant.now().isBefore(weeklyGames.getFirst().getGameTime())) {
-      add(new H3("Games not started yet"));
-      add(new Div("You can view all pics once the first game begins..."));
+        var tickets = ticketService.findTickets(pool, pool.getWeek());
+        HorizontalLayout usersLayout = new HorizontalLayout();
+        usersLayout.add(new Span(tickets.size() + " Players: "));
+        AvatarGroup avatarGroup = new AvatarGroup();
+        avatarGroup.setMaxItemsVisible(25);
 
-      var tickets = ticketService.findTickets(pool, pool.getWeek());
-      HorizontalLayout usersLayout = new HorizontalLayout();
-      usersLayout.add(new Span(tickets.size() + " Players: "));
-      AvatarGroup avatarGroup = new AvatarGroup();
-      avatarGroup.setMaxItemsVisible(25);
+        var counter = new AtomicInteger();
 
-      var counter = new AtomicInteger();
+        tickets.forEach(
+            t -> {
+              AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
+              avatar.setColorIndex((int) (t.getPlayer().getId() % 8));
+              avatarGroup.add(avatar);
+            });
 
-      tickets.forEach(
-          t -> {
-            AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
-            avatar.setColorIndex((int) (t.getPlayer().getId() % 8));
-            avatarGroup.add(avatar);
-          });
+        usersLayout.add(avatarGroup);
 
-      usersLayout.add(avatarGroup);
+        add(usersLayout);
 
-      add(usersLayout);
+        var poolLayout = new HorizontalLayout();
+        poolLayout.add(createBadge(new Span("  Pot: " + tickets.size() * pool.getAmount())));
+        createPoolBadge(pool, poolLayout);
 
-      var poolLayout = new HorizontalLayout();
-      poolLayout.add(createBadge(new Span("  Pot: " + tickets.size() * pool.getAmount())));
-      createPoolBadge(pool, poolLayout);
+        var optional = tickets.stream().filter(t -> t.getPlayer().equals(player)).findFirst();
 
-      var optional = tickets.stream().filter(t -> t.getPlayer().equals(user)).findFirst();
+        optional.ifPresent(ticket -> createTicketBadge(ticket, poolLayout));
 
-      optional.ifPresent(ticket -> createTicketBadge(ticket, poolLayout));
+        add(poolLayout);
 
-      add(poolLayout);
+        if (optional.isPresent()) {
+          var ticket = optional.get();
+          GameGrid grid = new GameGrid(ticketService);
 
-      if (optional.isPresent()) {
-        var ticket = optional.get();
-        GameGrid grid = new GameGrid(ticketService);
+          var games =
+              nflGameService.getWeeklyGamesThursdayFiltered(
+                  ticket.getWeek(), ticket.getPool().isIncludeThursday());
 
-        var games =
-            nflGameService.getWeeklyGamesThursdayFiltered(
-                ticket.getWeek(), ticket.getPool().isIncludeThursday());
+          grid.decorateTicketGrid(ticket.getSheet().getGamePicks(), Map.of());
+          grid.ticketGrid.setItems(games);
+          add(grid.ticketGrid);
 
-        grid.decorateTicketGrid(ticket.getSheet().getGamePicks(), Map.of());
-        grid.ticketGrid.setItems(games);
-        add(grid.ticketGrid);
+        } else {
+          add(new Div("No ticket for you "));
+        }
 
       } else {
-        add(new Div("No ticket for you "));
+        ticketsList = ticketScorerService.findAndScoreTickets(pool, pool.getWeek());
+
+        //      ticketsList = ticketService.findTickets(pool, pool.getWeek());
+        //      TicketScorer scorer = new TicketScorer(weeklyGames);
+        //      ticketsList.forEach(scorer::score);
+        //      ticketsList.sort(Comparator.comparing(Ticket::getFullScore).reversed());
+        //      new TicketRanker(ticketsList).rank();
+
+        decorateGrid();
+
+        resultsGrid.setItems(ticketsList);
+
+        add(resultsGrid);
       }
-
-    } else {
-      ticketsList = ticketScorerService.findAndScoreTickets(pool, pool.getWeek());
-
-      //      ticketsList = ticketService.findTickets(pool, pool.getWeek());
-      //      TicketScorer scorer = new TicketScorer(weeklyGames);
-      //      ticketsList.forEach(scorer::score);
-      //      ticketsList.sort(Comparator.comparing(Ticket::getFullScore).reversed());
-      //      new TicketRanker(ticketsList).rank();
-
-      decorateGrid();
-
-      resultsGrid.setItems(ticketsList);
-
-      add(resultsGrid);
     }
   }
 

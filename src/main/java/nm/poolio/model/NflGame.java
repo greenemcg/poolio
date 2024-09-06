@@ -77,6 +77,10 @@ public class NflGame {
     }
   }
 
+  public String getGameString() {
+    return String.format("%s at %s", homeTeam, awayTeam);
+  }
+
   @JsonIgnore
   public NflTeam getWinner() {
     if (awayScore == null || homeScore == null) {
