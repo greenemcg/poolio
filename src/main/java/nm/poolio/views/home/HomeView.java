@@ -3,6 +3,7 @@ package nm.poolio.views.home;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
@@ -18,6 +19,9 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -89,10 +93,11 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
       header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
       add(header);
 
-      var fundsSpan = new Span(createBoldSpan("Funds: $"), new Span(String.valueOf(user.getFunds())));
+      var fundsSpan =
+          new Span(createBoldSpan("Funds: $"), new Span(String.valueOf(user.getFunds())));
 
-      var usernameSpan = new Span(createBoldSpan(" Username: "), new Span(username));
-      add(new Paragraph(fundsSpan, usernameSpan));
+      var usernameSpan = new Span(createBoldSpan("Username: "), new Span(username));
+      add(new Paragraph(fundsSpan, new Span(" • "), usernameSpan));
 
       var pools = user.getPoolIdNames(); // poolService.findPoolsForUser(user);
 
@@ -104,12 +109,27 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
         pools.forEach(
             pool -> {
               // poolSpan.add(createPoolAvatar(pool, AvatarVariant.LUMO_XSMALL));
-              poolSpan.add(new Span(" " + pool.getName() + " ")); // Use join with commas
+              poolSpan.add(new Span(" " + pool.getName())); // Use join with commas
             });
 
       if (roles.contains(Role.ADMIN))
-        add(new Paragraph(poolSpan, new Span(createBoldSpan("Roles: "), new Span("" + roles))));
+        add(
+            new Paragraph(
+                poolSpan,
+                new Span(" • "),
+                new Span(createBoldSpan("Roles: "), new Span("" + roles))));
       else add(new Paragraph(poolSpan));
+
+      ZoneId zone = ZoneId.of("America/New_York");
+      var localDateTime = LocalDateTime.ofInstant(poolService.getBuildProperties().getTime(), zone);
+
+      add(
+          new Div(
+              createBoldSpan("Poolio Version: "),
+              new Span(poolService.getBuildProperties().getVersion()),
+              new Span(" • "),
+              createBoldSpan("Build Date: "),
+              new Span(DateTimeFormatter.ofPattern("MMM d, h:mm a").format(localDateTime))));
 
       decorateGrid();
       add(new Hr());

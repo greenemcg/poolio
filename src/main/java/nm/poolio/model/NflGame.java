@@ -1,12 +1,11 @@
 package nm.poolio.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import nm.poolio.model.enums.League;
 import nm.poolio.model.enums.NflTeam;
@@ -22,10 +21,8 @@ public class NflGame {
   String id;
   Integer week;
 
-  @JsonIgnore
-  Integer awayScore;
-  @JsonIgnore
-  Integer homeScore;
+  @JsonIgnore Integer awayScore;
+  @JsonIgnore Integer homeScore;
 
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,

@@ -1,5 +1,6 @@
 package nm.poolio.enitities.ticket;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +23,9 @@ public class TicketService {
   private final CacheConfig cacheConfig;
 
   public List<Ticket> getAllTickets(User player, Season season) {
-    return repository.findByPlayerAndSeason(player, season);
+    var tickets = repository.findByPlayerAndSeason(player, season);
+    tickets.sort(Comparator.comparing(Ticket::getWeek).reversed());
+    return tickets;
   }
 
   public Optional<Ticket> findTicketForUserCurrentWeek(Pool pool, User player) {

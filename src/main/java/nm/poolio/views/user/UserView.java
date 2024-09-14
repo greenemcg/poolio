@@ -29,16 +29,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.RolesAllowed;
-import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.enitities.transaction.NoteCreator;
-import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
-import nm.poolio.enitities.transaction.PoolioTransactionType;
-import nm.poolio.model.JsonbNote;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioNotification;
@@ -126,27 +122,29 @@ public class UserView extends VerticalLayout implements UserGrid, NoteCreator, P
     if (binder.validate().isOk()) {
       user.setUserName(user.getUserName().toLowerCase());
 
-      if (!checkUser(user)) {return;}
+      if (!checkUser(user)) {
+        return;
+      }
 
       var newUser = service.update(user);
 
       var optional = poolService.get(5L);
 
-      if( optional.isPresent()) {
+      if (optional.isPresent()) {
         var bobsPool = optional.get();
         bobsPool.getPlayers().add(newUser);
         poolService.update(bobsPool);
       }
 
-//      PoolioTransaction poolioTransaction = new PoolioTransaction();
-//      poolioTransaction.setDebitUser(newUser);
-//      poolioTransaction.setCreditUser(userService.getCashUser());
-//      poolioTransaction.setAmount(1);
-//      poolioTransaction.setType(PoolioTransactionType.CASH_DEPOSIT);
-//
-//      JsonbNote note = buildNote("Created User with One Dollar and Member of bobs pool");
-//      poolioTransaction.setNotes(List.of(note));
-//      poolioTransactionService.save(poolioTransaction);
+      //      PoolioTransaction poolioTransaction = new PoolioTransaction();
+      //      poolioTransaction.setDebitUser(newUser);
+      //      poolioTransaction.setCreditUser(userService.getCashUser());
+      //      poolioTransaction.setAmount(1);
+      //      poolioTransaction.setType(PoolioTransactionType.CASH_DEPOSIT);
+      //
+      //      JsonbNote note = buildNote("Created User with One Dollar and Member of bobs pool");
+      //      poolioTransaction.setNotes(List.of(note));
+      //      poolioTransactionService.save(poolioTransaction);
 
       dialog.close();
       grid.setItems(service.findAll());

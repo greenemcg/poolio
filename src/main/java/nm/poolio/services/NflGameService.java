@@ -5,6 +5,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -28,7 +30,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class NflGameService {
+public class NflGameService implements Serializable {
+  @Serial private static final long serialVersionUID = -3179691057002713470L;
   private final GameScoreService gameScoreService;
   List<NflGame> gameList = new ArrayList<>();
   Map<String, NflGame> gameMap = new HashMap<>();
@@ -90,6 +93,10 @@ public class NflGameService {
     return getGamesForPool(pool, pool.getWeek());
   }
 
+  public List<NflGame> getWeeklyGamesForPool(Pool pool, NflWeek week) {
+    return getGamesForPool(pool, week);
+  }
+
   public List<NflGame> getWeeklyGamesThursdayFiltered(NflWeek week, boolean includeThurs) {
     List<NflGame> weekGames = getWeeklyGames(week);
 
@@ -147,9 +154,9 @@ public class NflGameService {
   }
 
   public List<NflGame> getWeeklyGamesNotStarted(NflWeek week) {
-      return gameList.stream()
-          .filter(g -> g.getWeek() != null && g.getWeek().equals(week.getWeekNum()))
-          .filter(g -> g.getGameTime().isAfter(Instant.now()))
-          .toList();
+    return gameList.stream()
+        .filter(g -> g.getWeek() != null && g.getWeek().equals(week.getWeekNum()))
+        .filter(g -> g.getGameTime().isAfter(Instant.now()))
+        .toList();
   }
 }

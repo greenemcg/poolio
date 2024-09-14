@@ -40,11 +40,14 @@ public class TicketScorer {
 
     var optional = games.getLast().getScore();
 
+    Integer diff = null;
+
     if (optional.isPresent()) {
-      var diff = optional.get() - ticket.getTieBreaker();
+      diff = optional.get() - ticket.getTieBreaker();
       fullScore -= Math.abs(diff);
     }
 
+    ticket.setScoreString(score + ((diff == null) ? "" : "-" + diff));
     ticket.setFullScore(fullScore);
   }
 }

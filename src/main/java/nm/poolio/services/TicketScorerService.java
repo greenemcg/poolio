@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
-import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflWeek;
 import nm.poolio.utils.TicketScorer;
 import nm.poolio.views.result.TicketRanker;
@@ -32,8 +31,6 @@ public class TicketScorerService {
     ticketsList.sort(Comparator.comparing(Ticket::getFullScore).reversed());
     // must sort before rank
     new TicketRanker(ticketsList).rank();
-
- 
 
     log.info("Scored {} tickets for pool {} week {}", ticketsList.size(), pool.getName(), week);
     return ticketsList;

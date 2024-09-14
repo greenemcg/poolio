@@ -4,19 +4,24 @@ import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
 import static nm.poolio.utils.VaddinUtils.BET_ICON;
 import static nm.poolio.utils.VaddinUtils.GAMES_ICON;
 import static nm.poolio.utils.VaddinUtils.POOLIO_ICON;
+import static nm.poolio.utils.VaddinUtils.SPLIT_ICON;
 import static nm.poolio.utils.VaddinUtils.SPREAD_ICON;
+import static nm.poolio.utils.VaddinUtils.createIconSpan;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
@@ -44,30 +49,38 @@ import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.Season;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameService;
+import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.views.MainLayout;
 import org.springframework.util.CollectionUtils;
+import org.vaadin.lineawesome.LineAwesomeIcon;
 
 @PageTitle("Bets \uD83C\uDFB0")
 @Route(value = "bet", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 @Slf4j
-public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDialog, NoteCreator {
+public class BetView extends VerticalLayout
+    implements UserPoolFinder, PoolioDialog, NoteCreator, PoolioAvatar {
+
   private final GameBetService service;
-  private final NflGameService nflGameService;
-  private final PoolioTransactionService poolioTransactionService;
+  @Getter private final NflGameService nflGameService;
+  @Getter private final PoolioTransactionService poolioTransactionService;
   @Getter private final AuthenticatedUser authenticatedUser;
 
-  private final User player;
+  private final ComponentRenderer<Component, GameBet> personCardRenderer;
+
   Binder<GameBet> binder = new Binder<>(GameBet.class);
   Dialog betDialog = new Dialog();
   ComboBox<NflGame> game = new ComboBox<>();
   ComboBox<NflTeam> teamPicked = new ComboBox<>();
-  IntegerField spread = new IntegerField("Spread");
+  IntegerField spread = new IntegerField("Home Team Spread");
   IntegerField amount = new IntegerField("Amount");
+  Checkbox betCanBeSplit = new Checkbox();
   DateTimePicker dateTimePicker = new DateTimePicker();
+  BetProposalRenderer betProposalRenderer;
+
+  private User player = null;
   private Pool pool; // used to get current week
-  private Span status;
 
   public BetView(
       GameBetService service,
@@ -79,10 +92,13 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
     this.nflGameService = nflGameService;
     this.poolioTransactionService = poolioTransactionService;
     this.authenticatedUser = authenticatedUser;
+    player = authenticatedUser.get().orElseThrow();
+    betProposalRenderer =
+        new BetProposalRenderer(player, this, nflGameService, poolioTransactionService);
 
+    personCardRenderer = new ComponentRenderer<>(betProposalRenderer::render);
     setHeight("100%");
 
-    player = authenticatedUser.get().orElseThrow();
     var userPools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
     var funds = poolioTransactionService.getFunds(player);
@@ -96,6 +112,7 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
       pool = userPools.getFirst();
       var games = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
       var openBets = service.findOpenBets();
+      log.info("Open Bets: {}", openBets.size());
 
       if (CollectionUtils.isEmpty(games)) {
         Span noGamesAvailableToBet = new Span("No Games available to Bet");
@@ -104,18 +121,30 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
       } else {
         createDialog(betDialog, e -> onSaveBet(binder.getBean()), createGameBetDialogLayout(games));
 
-        Button newBetButton =
-            new Button("New Bet", BET_ICON.create(), e -> openBetDialog(new GameBet()));
-        add(newBetButton);
+        Button proposeNewBetButton =
+            new Button(
+                "Propose New Bet", BET_ICON.create(), e -> openBetProposalDialog(new GameBet()));
+        add(proposeNewBetButton);
       }
-      add(new Span("Mike"));
+
+      HorizontalLayout horizontalLayout = new HorizontalLayout();
+      horizontalLayout.add(new H3("Open Game bet Proposals"));
+      Span pending = new Span("Your Funds: $" + funds);
+      pending.getElement().getThemeList().add("badge success");
+      horizontalLayout.add(pending);
+
+      add(horizontalLayout);
+      VirtualList<GameBet> list = new VirtualList<>();
+      list.getElement().getStyle().set("background-color", "rgba(0, 0, 0, 0.1)");
+      // list.setMaxHeight("300px");
+      list.setItems(openBets);
+      list.setRenderer(personCardRenderer);
+      add(list);
     }
   }
 
   private void onSaveBet(GameBet bean) {
-
     if (binder.validate().isOk()) {
-
       var funds = poolioTransactionService.getFunds(player);
 
       if (bean.getAmount() > funds) {
@@ -128,7 +157,7 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
         bean.setSeason(Season.S_2024);
         bean.setWeek(pool.getWeek());
         bean.setGameId(nflGame.getId());
-        bean.setProposer(player);
+        bean.setProposerCanEditTeam(false);
         bean.setExpiryDate(
             dateTimePicker.getValue().atZone(ZoneId.of("America/New_York")).toInstant());
 
@@ -147,30 +176,36 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
                             bean.getAmount(),
                             bean.getSpread()))));
 
+        bean.setProposerTransaction(poolioTransaction);
+
         showConfirmDialog(bean);
       }
-      //  betDialog.close();
     }
   }
 
   void showConfirmDialog(GameBet bet) {
     HorizontalLayout layout = new HorizontalLayout();
-    layout.setAlignItems(FlexComponent.Alignment.CENTER);
-    layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+    layout.setAlignItems(Alignment.CENTER);
+    layout.setJustifyContentMode(JustifyContentMode.CENTER);
 
     ConfirmDialog dialog = new ConfirmDialog();
-    dialog.setHeader("Are you sure");
+    dialog.setHeader("Bet Proposal: Are you sure");
     dialog.setText(bet.getHumanReadableString());
 
     dialog.setCancelable(true);
     // dialog.addCancelListener(event -> setStatus("Canceled"));
 
-    dialog.setConfirmText("Make Bet");
+    dialog.setConfirmText("Propose Bet");
     dialog.setConfirmButtonTheme("primary");
     dialog.addConfirmListener(
         event -> {
-          betDialog.close();
-          saveToDb(bet);
+          try {
+            saveToDb(bet);
+            betDialog.close();
+          } catch (Exception e) {
+            log.error("Cannot save to DB", e);
+            createErrorNotification(new Span(e.getMessage()));
+          }
         });
 
     add(layout);
@@ -178,12 +213,12 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
   }
 
   private void saveToDb(GameBet bet) {
-
-    log.info("Save");
+    var saved = service.save(bet);
+    createSucessNotification(new Span("Successfully created new proposed Bet"));
+    log.info("Saved Bet {}", saved.getGameId());
   }
 
-  public void openBetDialog(GameBet bet) {
-
+  public void openBetProposalDialog(GameBet bet) {
     betDialog.getHeader().removeAll();
 
     // String headerTitle = (pool.getId() == null) ? "New" : "Edit";
@@ -238,10 +273,13 @@ public class BetView extends VerticalLayout implements UserPoolFinder, PoolioDia
     dateTimePicker.setLabel("Expire Date if No Takers (EST)");
     dateTimePicker.setStep(Duration.ofMinutes(10));
     ZoneId zone = ZoneId.of("America/New_York");
-    LocalDateTime.ofInstant(Instant.now(), zone);
+
     dateTimePicker.setMin(LocalDateTime.ofInstant(Instant.now(), zone));
     dateTimePicker.setEnabled(false);
 
-    return new Component[] {game, teamPicked, amount, spread, dateTimePicker};
+    betCanBeSplit.setLabelComponent(createIconSpan(SPLIT_ICON, "Bet Can Be Split"));
+
+    var h4 = new H4("Propose Bet");
+    return new Component[] {h4, game, teamPicked, amount, spread, betCanBeSplit, dateTimePicker};
   }
 }

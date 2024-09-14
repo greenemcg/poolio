@@ -1,8 +1,13 @@
 package nm.poolio.views.ticket;
 
+import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
+
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -14,6 +19,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -28,6 +34,8 @@ import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketScorerService;
 import nm.poolio.views.MainLayout;
+import org.springframework.boot.actuate.autoconfigure.management.ThreadDumpEndpointAutoConfiguration;
+import org.vaadin.lineawesome.LineAwesomeIcon;
 
 @PageTitle("Ticket View \uD83D\uDC40")
 @Route(value = "ticketShow", layout = MainLayout.class)
@@ -44,6 +52,7 @@ public class TicketShowView extends VerticalLayout
   private final GameScoreService gameScoreService;
   private final NflGameScorerService nflGameScorerService;
   private final TicketScorerService ticketScorerService;
+
 
   Ticket ticket;
   @Getter boolean errorFound = false;
@@ -90,15 +99,40 @@ public class TicketShowView extends VerticalLayout
 
   private void createUIComponents() {
     setHeight("100%");
-
-    add(createHeaderBadges(ticket.getPool(), ticket));
-    add(createBadge(new Span("TieBreaker: " + ticket.getTieBreaker())));
-
     var scoredTickets = ticketScorerService.findAndScoreTickets(ticket.getPool(), ticket.getWeek());
+
+    ticket =
+        scoredTickets.stream()
+            .filter(t -> t.getPlayer().equals(player))
+            .findFirst()
+            .orElseThrow(() -> new PoolioException("Cannot find ticket"));
+
+    var weeklyGames =
+        nflGameService.getWeeklyGamesThursdayFiltered(
+            ticket.getWeek(), ticket.getPool().isIncludeThursday());
+
+    add(createHeaderBadgesTop(ticket.getPool(), ticket));
+    add(createHeaderBadgesBottom(ticket));
+
+    if (Instant.now().isAfter(weeklyGames.getFirst().getGameTime())) {
+      var button =
+          new Button(
+              "View Results Grid for " + ticket.getWeek(),
+              e -> UI.getCurrent().getPage().open("/result?week=" + ticket.getWeek(), "_self"));
+      button.setPrefixComponent(RESULTS_ICON.create());
+      button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+      add(button);
+    } else {
+      var button = new Button("Games have no started yet " + ticket.getWeek());
+      button.addThemeVariants(ButtonVariant.LUMO_ERROR);
+      button.setPrefixComponent(LineAwesomeIcon.CLOCK_SOLID.create());
+      button.setEnabled(false);
+      add(button);
+    }
 
     HorizontalLayout horizontalLayout = new HorizontalLayout();
     horizontalLayout.setWidthFull();
-    horizontalLayout.add(new Span( scoredTickets.size() + " Players: "));
+    horizontalLayout.add(new Span(scoredTickets.size() + " Players: "));
     AvatarGroup avatarGroup = new AvatarGroup();
     avatarGroup.setMaxItemsVisible(25);
     scoredTickets.forEach(
@@ -110,20 +144,10 @@ public class TicketShowView extends VerticalLayout
     horizontalLayout.add(avatarGroup);
     add(horizontalLayout);
 
-     ticket =
-        scoredTickets.stream()
-            .filter(t -> t.getPlayer().equals(player))
-            .findFirst()
-            .orElseThrow(() -> new PoolioException("Cannot find ticket"));
-
-    var games =
-        nflGameService.getWeeklyGamesThursdayFiltered(
-            ticket.getWeek(), ticket.getPool().isIncludeThursday());
-
-    var scores = gameScoreService.getScores(games);
+    var scores = gameScoreService.getScores(weeklyGames);
 
     decorateTicketGrid(ticket.getSheet().getGamePicks(), scores);
-    ticketGrid.setItems(games);
+    ticketGrid.setItems(weeklyGames);
 
     add(ticketGrid);
   }

@@ -40,6 +40,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     })
 public class Ticket extends AbstractEntity {
   @Transient int score;
+  @Transient String scoreString;
   @Transient int fullScore; // using higher values to allow for tiebreaker
   @Transient String rankString;
   @Transient Integer rank;
@@ -48,7 +49,6 @@ public class Ticket extends AbstractEntity {
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "transaction_id")
   PoolioTransaction transaction;
-
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "winning_transaction_id")

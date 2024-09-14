@@ -31,9 +31,7 @@ public class NflGameScorerService {
     return service.gameList;
   }
 
-
   private void addScore(NflGame g) {
-      service.addScores(g);
-    }
-  
+    service.addScores(g);
+  }
 }

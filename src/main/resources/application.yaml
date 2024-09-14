@@ -1,6 +1,5 @@
 app:
-  version: @project.version@
-  name: @project.artifactId@
+  allowBets: true
 
 server:
   port: 9090
@@ -17,9 +16,9 @@ spring:
     password: poolio
     url: jdbc:postgresql://localhost:5432/poolio
     username: poolio
-  #    password: golf9c
-  #    url: jdbc:postgresql://poolio.local:5432/poolio
-  #    username: mike
+#      password: golf9c
+#      url: jdbc:postgresql://poolio.local:5432/poolio
+#      username: mike
   jpa:
     defer-datasource-initialization: true
     hibernate:

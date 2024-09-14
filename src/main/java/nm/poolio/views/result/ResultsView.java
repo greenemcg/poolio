@@ -4,6 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
 import com.vaadin.flow.component.avatar.AvatarVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox.AutoExpandMode;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -12,13 +15,19 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.Location;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +41,7 @@ import nm.poolio.enitities.ticket.TicketService;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
+import nm.poolio.model.enums.NflWeek;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
@@ -41,31 +51,37 @@ import nm.poolio.vaadin.PoolioBadge;
 import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.views.MainLayout;
 import nm.poolio.views.ticket.TicketShowGrid;
+import org.springframework.util.CollectionUtils;
 
 @PageTitle("Results \uD83D\uDCC3")
 @Route(value = "result", layout = MainLayout.class)
 @RolesAllowed({"ADMIN", "USER"})
 @Slf4j
 public class ResultsView extends VerticalLayout
-    implements ResultsGrid, PoolioAvatar, PoolioBadge, PoolioNotification, UserPoolFinder {
+    implements ResultsGrid,
+        PoolioAvatar,
+        PoolioBadge,
+        PoolioNotification,
+        UserPoolFinder,
+        HasUrlParameter<String> {
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
   private final TicketService ticketService;
   private final NflGameService nflGameService;
   private final GameScoreService gameScoreService;
-
   private final NflGameScorerService nflGameScorerService;
   private final TicketScorerService ticketScorerService;
-
   @Getter private final PoolioTransactionService poolioTransactionService;
-
   List<Ticket> ticketsList;
-
   @Getter Grid<Ticket> resultsGrid = createGrid(Ticket.class);
-
   User player;
   Pool pool;
   List<NflGame> weeklyGames;
+  ComboBox<NflWeek> comboBox = new ComboBox<>("Change Week");
+  MultiSelectComboBox<User> playerComboBox = new MultiSelectComboBox<>("Select Players");
+
+  Span poolInfoSpan = new Span("Pool Value: $");
+  private NflWeek week;
 
   public ResultsView(
       AuthenticatedUser authenticatedUser,
@@ -86,8 +102,12 @@ public class ResultsView extends VerticalLayout
     this.poolioTransactionService = poolioTransactionService;
 
     setHeight("100%");
-
     player = authenticatedUser.get().orElseThrow();
+
+    poolInfoSpan.getElement().getThemeList().add("badge success");
+  }
+
+  private void createUI() {
     var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
     if (pools.isEmpty()) {
@@ -95,19 +115,19 @@ public class ResultsView extends VerticalLayout
     } else {
       pool = pools.getFirst();
 
-      weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, pool.getWeek());
+      weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, week);
 
       if (!player.getAdmin() && Instant.now().isBefore(weeklyGames.getFirst().getGameTime())) {
         add(new H3("Games not started yet"));
         add(new Div("You can view all pics once the first game begins..."));
 
-        var tickets = ticketService.findTickets(pool, pool.getWeek());
+        var tickets = ticketService.findTickets(pool, week);
         HorizontalLayout usersLayout = new HorizontalLayout();
         usersLayout.add(new Span(tickets.size() + " Players: "));
         AvatarGroup avatarGroup = new AvatarGroup();
         avatarGroup.setMaxItemsVisible(25);
 
-        var counter = new AtomicInteger();
+        var counter = new AtomicInteger(); // todo fix dup
 
         tickets.forEach(
             t -> {
@@ -147,7 +167,7 @@ public class ResultsView extends VerticalLayout
         }
 
       } else {
-        ticketsList = ticketScorerService.findAndScoreTickets(pool, pool.getWeek());
+        ticketsList = ticketScorerService.findAndScoreTickets(pool, week);
 
         //      ticketsList = ticketService.findTickets(pool, pool.getWeek());
         //      TicketScorer scorer = new TicketScorer(weeklyGames);
@@ -155,7 +175,49 @@ public class ResultsView extends VerticalLayout
         //      ticketsList.sort(Comparator.comparing(Ticket::getFullScore).reversed());
         //      new TicketRanker(ticketsList).rank();
 
+        HorizontalLayout badgesHorizontalLayout = new HorizontalLayout();
+        badgesHorizontalLayout.setPadding(false);
+        badgesHorizontalLayout.setSpacing(false);
+        badgesHorizontalLayout.add(poolInfoSpan);
+        add(badgesHorizontalLayout);
+
+        HorizontalLayout comboBoxesHorizontalLayout = new HorizontalLayout();
+        comboBox.setItems(computeWeekValue(NflWeek.values(), pool.getWeek()));
+        comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
+        comboBox.setValue(week);
+        comboBox.addValueChangeListener(e -> changeWeek(e.getValue()));
+        comboBoxesHorizontalLayout.add(comboBox);
+
+        var players =
+            ticketsList.stream()
+                .map(t -> t.getPlayer())
+                .sorted(Comparator.comparing(User::getName))
+                .toList();
+        playerComboBox.setItemLabelGenerator(User::getName);
+        playerComboBox.setItems(players);
+        playerComboBox.select(players);
+        playerComboBox.setClearButtonVisible(true);
+        playerComboBox.setAutoExpand(AutoExpandMode.HORIZONTAL);
+
+        playerComboBox.addValueChangeListener(
+            e -> {
+              var usersPicked = e.getValue().stream().toList();
+              var usersPickedTickets =
+                  ticketsList.stream().filter(t -> usersPicked.contains(t.getPlayer())).toList();
+              resultsGrid.setItems(usersPickedTickets);
+            });
+
+        comboBoxesHorizontalLayout.add(playerComboBox);
+        add(comboBoxesHorizontalLayout);
+
         decorateGrid();
+
+        poolInfoSpan.setText(
+                pool.getName()
+                + " Pool • "
+                + players.size()
+                + " Players • Pool Amount: $"
+                + (pool.getAmount() * players.size()));
 
         resultsGrid.setItems(ticketsList);
 
@@ -164,18 +226,55 @@ public class ResultsView extends VerticalLayout
     }
   }
 
-  void addScore(NflGame g) {
-    var optional = gameScoreService.findScore(g.getId());
+  private void changeWeek(NflWeek weekIn) {
 
-    if (optional.isPresent()) {
-      var gameScore = optional.get();
-      g.setHomeScore(gameScore.getHomeScore());
-      g.setAwayScore(gameScore.getAwayScore());
+    if (weekIn != null && (pool.getWeek().getWeekNum() < weekIn.getWeekNum())) {
+      createErrorNotification(new Span("Week not started"));
+      comboBox.setValue(week);
     } else {
-      g.setHomeScore(null);
-      g.setAwayScore(null);
+      if (weekIn == null) {
+        var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
+        week = pools.getFirst().getWeek();
+      } else week = weekIn;
+
+      resultsGrid.removeAllColumns();
+      weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, week);
+      ticketsList = ticketScorerService.findAndScoreTickets(pool, week);
+
+      var players = ticketsList.stream().map(Ticket::getPlayer).toList();
+      playerComboBox.setItems(players);
+      playerComboBox.select(players);
+
+      poolInfoSpan.setText(
+          pool.getName()
+              + " Pool "
+              + players.size()
+              + " Players • Pool Amount: $"
+              + (pool.getAmount() * players.size()));
+
+      resultsGrid.setItems(ticketsList);
+      decorateGrid();
     }
   }
+
+  private List<NflWeek> computeWeekValue(NflWeek[] values, @NotNull NflWeek week) {
+    return Arrays.stream(values)
+        .filter(w -> w.getWeekNum() > 0 && w.getWeekNum() <= week.getWeekNum())
+        .toList();
+  }
+
+  //  void addScore(NflGame g) {
+  //    var optional = gameScoreService.findScore(g.getId());
+  //
+  //    if (optional.isPresent()) {
+  //      var gameScore = optional.get();
+  //      g.setHomeScore(gameScore.getHomeScore());
+  //      g.setAwayScore(gameScore.getAwayScore());
+  //    } else {
+  //      g.setHomeScore(null);
+  //      g.setAwayScore(null);
+  //    }
+  //  }
 
   private void addItem(NflGame game) {
     resultsGrid
@@ -240,7 +339,7 @@ public class ResultsView extends VerticalLayout
   }
 
   private void decorateGrid() {
-    var games = nflGameService.getWeeklyGamesForPool(pool);
+    var games = nflGameService.getWeeklyGamesForPool(pool, week);
 
     decoratePoolGrid();
 
@@ -255,6 +354,25 @@ public class ResultsView extends VerticalLayout
       var diff = optional.get() - ticket.getTieBreaker();
       return ticket.getSheet().getTieBreaker() + "-" + Math.abs(diff);
     } else return "" + ticket.getSheet().getTieBreaker();
+  }
+
+  @Override
+  public void setParameter(BeforeEvent event, @OptionalParameter String _ignored) {
+    Location location = event.getLocation();
+
+    var optionalWeekParameter = location.getQueryParameters().getSingleParameter("week");
+
+    if (optionalWeekParameter.isPresent()) week = NflWeek.valueOf(optionalWeekParameter.get());
+    else {
+      if (CollectionUtils.isEmpty(player.getPoolIdNames())) {
+        add(createErrorNotificationAndGoHome("Cannot find pool with supplied poolId."));
+      } else {
+        var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
+        week = pools.getFirst().getWeek();
+      }
+    }
+
+    createUI();
   }
 
   class GameGrid implements TicketShowGrid {

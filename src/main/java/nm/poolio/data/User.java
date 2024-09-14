@@ -44,6 +44,8 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   boolean payAsYouGo;
 
   int creditAmount;
+  @Transient List<PoolIdName> poolIdNames;
+  @Transient Integer funds;
 
   @Size(min = 2, max = 255)
   @NotNull
@@ -94,8 +96,4 @@ public class User extends AbstractEntity implements AvatarImageBytes {
     if (StringUtils.isEmpty(phone)) return "";
     else return PhoneNumberUtils.formatPhoneNumber(phone);
   }
-
-  @Transient List<PoolIdName> poolIdNames;
-  @Transient Integer funds;
-
 }

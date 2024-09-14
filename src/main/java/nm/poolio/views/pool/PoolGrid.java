@@ -1,6 +1,5 @@
 package nm.poolio.views.pool;
 
-import static nm.poolio.utils.VaddinUtils.ADMIN_ICON;
 import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
 import static nm.poolio.utils.VaddinUtils.INCLUDE_THURSDAY;
 import static nm.poolio.utils.VaddinUtils.LEAGUE_ICON;
@@ -59,22 +58,22 @@ public interface PoolGrid extends PoolioGrid<Pool> {
     createColumn(Pool::getStatus, createIconSpan(STATUS_ICON, "Status"));
     createColumn(Pool::getAmount, createIconSpan(AMOUNT_ICON, "Amount"));
 
-//    getGrid()
-//        .addColumn(
-//            new ComponentRenderer<>(
-//                Button::new,
-//                (button, pool) -> {
-//                  button.addThemeVariants(
-//                      ButtonVariant.LUMO_ICON,
-//                      ButtonVariant.LUMO_SUCCESS,
-//                      ButtonVariant.LUMO_TERTIARY);
-//                  button.addClickListener(e -> openAdminDialog(pool));
-//                  button.setPrefixComponent(ADMIN_ICON.create());
-//                  button.setText(pool.getAdmins().size() + " Admins");
-//                  button.getElement().getStyle().set("color", "blue");
-//                }))
-//        .setHeader(createIconSpan(ADMIN_ICON, "Admins"))
-//        .setAutoWidth(true);
+    //    getGrid()
+    //        .addColumn(
+    //            new ComponentRenderer<>(
+    //                Button::new,
+    //                (button, pool) -> {
+    //                  button.addThemeVariants(
+    //                      ButtonVariant.LUMO_ICON,
+    //                      ButtonVariant.LUMO_SUCCESS,
+    //                      ButtonVariant.LUMO_TERTIARY);
+    //                  button.addClickListener(e -> openAdminDialog(pool));
+    //                  button.setPrefixComponent(ADMIN_ICON.create());
+    //                  button.setText(pool.getAdmins().size() + " Admins");
+    //                  button.getElement().getStyle().set("color", "blue");
+    //                }))
+    //        .setHeader(createIconSpan(ADMIN_ICON, "Admins"))
+    //        .setAutoWidth(true);
 
     createColumn(Pool::getLeague, createIconSpan(LEAGUE_ICON, "League"));
     createColumn(Pool::isIncludeThursday, createIconSpan(INCLUDE_THURSDAY, "Thursday"));

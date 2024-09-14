@@ -1,6 +1,8 @@
 package nm.poolio.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import org.springframework.cache.Cache;
@@ -12,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableCaching
 @Configuration
-public class CacheConfig {
+public class CacheConfig implements Serializable {
+  @Serial private static final long serialVersionUID = 1011954453227284372L;
 
   private static CacheManager cacheManager;
 
@@ -23,6 +26,13 @@ public class CacheConfig {
 
   @Bean
   public CacheManager cacheManager(Caffeine caffeine) {
+    CaffeineCacheManager caffeineCacheManager = getCaffeineCacheManager(caffeine);
+
+    cacheManager = caffeineCacheManager;
+    return cacheManager;
+  }
+
+  private CaffeineCacheManager getCaffeineCacheManager(Caffeine caffeine) {
     CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
 
     var names = Arrays.stream(CacheName.values()).map(Enum::name).toList();
@@ -30,8 +40,6 @@ public class CacheConfig {
     caffeineCacheManager.setCacheNames(names);
 
     caffeineCacheManager.setCaffeine(caffeine);
-
-    cacheManager = caffeineCacheManager;
     return caffeineCacheManager;
   }
 

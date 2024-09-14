@@ -1,5 +1,7 @@
 package nm.poolio.enitities.score;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GameScoreService {
+public class GameScoreService implements Serializable {
+  @Serial private static final long serialVersionUID = 1154614513034023197L;
   private final GameScoreRepository repository;
   private final CacheConfig cacheConfig;
 

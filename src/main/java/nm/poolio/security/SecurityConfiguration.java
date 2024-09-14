@@ -27,7 +27,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                 .requestMatchers(
                     new AntPathRequestMatcher("/images/*.png"),
                     new AntPathRequestMatcher("/icons/nfl/*.svg"),
-                    new AntPathRequestMatcher("/images/*.jpeg"))
+                    new AntPathRequestMatcher("/images/*.jpeg"),
+                    new AntPathRequestMatcher("/icons/*.ico"))
                 .permitAll());
 
     // Icons from the line-awesome addon

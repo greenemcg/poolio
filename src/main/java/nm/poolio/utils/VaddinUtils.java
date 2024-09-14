@@ -10,6 +10,7 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 
 public class VaddinUtils {
 
+  public static final LineAwesomeIcon SPLIT_ICON = LineAwesomeIcon.COLUMNS_SOLID;
   public static final LineAwesomeIcon MONEY_POT_ICON = LineAwesomeIcon.HAND_HOLDING_USD_SOLID;
   public static final LineAwesomeIcon EMAIL_ICON = LineAwesomeIcon.AT_SOLID;
   public static final LineAwesomeIcon CREDIT_ICON = LineAwesomeIcon.CREDIT_CARD_SOLID;

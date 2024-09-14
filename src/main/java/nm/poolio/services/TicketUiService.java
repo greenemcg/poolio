@@ -1,6 +1,5 @@
 package nm.poolio.services;
 
-import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +79,7 @@ public class TicketUiService {
     games.forEach(g -> poolSheet.getGamePicks().put(g.getId(), null));
     ticket.setSheet(poolSheet);
 
-   // var jsonbNote = JsonbNote.builder().note("C").created(Instant.now()).user("Test").build();
+    // var jsonbNote = JsonbNote.builder().note("C").created(Instant.now()).user("Test").build();
 
     ticket.setTransaction(createTransaction(pool, player, note));
 

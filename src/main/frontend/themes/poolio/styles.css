@@ -2,7 +2,7 @@
 
 
 vaadin-grid::part(header-cell) {
-   background-color: floralwhite;
+    background-color: floralwhite;
     font-size: medium;
     font-weight: bold;
     color: black;

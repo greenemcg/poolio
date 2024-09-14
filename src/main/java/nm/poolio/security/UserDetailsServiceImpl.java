@@ -2,10 +2,8 @@ package nm.poolio.security;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import nm.poolio.data.User;
-import nm.poolio.data.UserRepository;
 import nm.poolio.services.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

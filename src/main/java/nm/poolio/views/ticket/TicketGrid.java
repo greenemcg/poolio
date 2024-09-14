@@ -40,7 +40,6 @@ public interface TicketGrid extends PoolioGrid<Ticket> {
                 """;
   }
 
-
   void viewTicket(Long ticketId);
 
   private Renderer<Ticket> createUserRenderer() {

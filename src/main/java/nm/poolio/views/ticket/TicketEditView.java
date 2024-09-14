@@ -114,7 +114,7 @@ public class TicketEditView extends VerticalLayout
   }
 
   private void createTicketUI() {
-    add(createHeaderBadges(pool, ticket));
+    add(createHeaderBadgesTop(pool, ticket));
 
     var games = nflGameService.getWeeklyGamesForPool(pool);
 

@@ -42,7 +42,7 @@ public interface UserGrid extends PoolioGrid<User> {
         .setTextAlign(ColumnTextAlign.START);
 
     createColumn(User::getFunds, createIconSpan(AMOUNT_ICON, "Funds"))
-            .setComparator(User::getFunds);
+        .setComparator(User::getFunds);
 
     createColumn(User::getCreditAmount, createIconSpan(CREDIT_ICON, "Credit Amt"))
         .setComparator(User::getCreditAmount);

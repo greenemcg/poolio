@@ -14,12 +14,10 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public interface PoolioNotification {
-  default Notification createRemoveMe(String message) {
+  default Notification createErrorNotificationAndGoHome(String message) {
     Div text = new Div(new Text(message));
     Notification notification = createErrorNotification(text);
     notification.addDetachListener(openedChangeEvent -> UI.getCurrent().navigate("home"));
-
-    UI.getCurrent().navigate("home");
     return notification;
   }
 

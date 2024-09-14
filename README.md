@@ -1,7 +1,7 @@
+
 HEmal thurs
 mano a mano 
 and bets 
-
 
 SIlly Builder
 
@@ -17,6 +17,8 @@ add change passwd
 logging to file and check statements so can grep and then elastic search
 
 BobsNo passwd for non log in users
+
+add build time 
 
 
 # Poolio

@@ -1,3 +1,6 @@
+app:
+  allowBets: false
+
 spring:
   datasource:
     password: golf9c

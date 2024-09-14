@@ -17,7 +17,8 @@ interface TicketRepository extends JpaRepository<Ticket, Long>, JpaSpecification
 
   List<Ticket> findByPoolAndSeasonAndWeek(Pool pool, Season season, NflWeek week);
 
-  List<Ticket> findByPoolAndSeasonAndWeekAndWinningTransactionNotNull(Pool pool, Season season, NflWeek week);
+  List<Ticket> findByPoolAndSeasonAndWeekAndWinningTransactionNotNull(
+      Pool pool, Season season, NflWeek week);
 
   Optional<Ticket> findByPlayerAndId(User player, Long id);
 

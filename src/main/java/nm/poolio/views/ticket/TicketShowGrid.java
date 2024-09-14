@@ -45,8 +45,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
 
   private void createWinnerText(Boolean pickCorrect, Style style) {
     if (pickCorrect == null) style.set("font-style", "oblique");
-    else if (pickCorrect) style.set("font-weight", "bold");
-    else style.set("text-decoration", "line-through");
+    else if (!pickCorrect) style.set("text-decoration", "line-through");
   }
 
   private Component createStylesTeamComponent(
@@ -76,7 +75,10 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
       if (pickedTeam == teamToCheck) {
         Span confirmed2 =
             new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
-        confirmed2.getElement().getThemeList().add("badge success pill");
+        confirmed2.getElement().getStyle().set("font-weight", "bold");
+
+
+
         createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
         return confirmed2;
       } else {

@@ -127,7 +127,7 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
     adminComboBox = new MultiSelectComboBox<>("Admins");
 
     adminComboBox.setItems(userService.findAdmins());
-    adminComboBox.select();
+   // adminComboBox.select();
     adminComboBox.setItemLabelGenerator(User::getName);
 
     return adminComboBox;
@@ -137,7 +137,7 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
     playersComboBox = new MultiSelectComboBox<>("Players");
 
     playersComboBox.setItems(userService.findPlayers());
-    playersComboBox.select();
+   // playersComboBox.select();
     playersComboBox.setItemLabelGenerator(User::getName);
 
     return playersComboBox;
@@ -271,12 +271,5 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
 
     return new Component[] {name, league, week, status, amount, payAsYouGoUser, maxPlayersPerWeek};
 
-    //        var layout = new VerticalLayout(name, league, week, status, amount, payAsYouGoUser,
-    // includeThursday);
-    //
-    //        layout.setPadding(false);
-    //        layout.setSpacing(false);
-    //
-    //        return layout;
   }
 }

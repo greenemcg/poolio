@@ -75,9 +75,7 @@ public abstract class AbstractEntity {
     }
   }
 
-
   public Instant getModifiedSortTime() {
-    return ( modifiedDate != null ) ? modifiedDate : createdDate;
+    return (modifiedDate != null) ? modifiedDate : createdDate;
   }
-
 }

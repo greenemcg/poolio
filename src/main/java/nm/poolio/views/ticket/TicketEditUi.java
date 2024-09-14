@@ -112,7 +112,7 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
 
   private void createNotFoundInDbDialogAndGoHome(HasComponents hasComponents) {
     setErrorFound(true);
-    hasComponents.add(createRemoveMe("Cannot find pool in the Poolio Database"));
+    hasComponents.add(createErrorNotificationAndGoHome("Cannot find pool in the Poolio Database"));
   }
 
   default @Nullable Pool findPool(User player, Long poolId) {
@@ -166,11 +166,20 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
     }
   }
 
-  default HorizontalLayout createHeaderBadges(Pool pool, Ticket ticket) {
+  default HorizontalLayout createHeaderBadgesTop(Pool pool, Ticket ticket) {
     var layout = new HorizontalLayout();
 
     createPoolBadge(pool, layout);
     createTicketBadge(ticket, layout);
+
+    return layout;
+  }
+
+  default HorizontalLayout createHeaderBadgesBottom(Ticket ticket) {
+    var layout = new HorizontalLayout();
+    layout.add(createBadge(new Span("TieBreaker: " + ticket.getTieBreaker())));
+    layout.add(createBadge(new Span("Rank: " + ticket.getRankString())));
+    layout.add(createBadge(new Span("Score: " + ticket.getScoreString())));
 
     return layout;
   }

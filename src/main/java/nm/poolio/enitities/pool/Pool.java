@@ -45,7 +45,7 @@ public class Pool extends AbstractEntity implements AvatarImageBytes {
       name = "pool_players",
       joinColumns = @JoinColumn(name = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
-  @OrderBy(value="name")
+  @OrderBy(value = "name")
   Set<User> players;
 
   @ManyToMany(fetch = FetchType.EAGER)

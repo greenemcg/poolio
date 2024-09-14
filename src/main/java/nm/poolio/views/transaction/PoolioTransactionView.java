@@ -92,7 +92,7 @@ public class PoolioTransactionView extends VerticalLayout
     amount.setMax(1000);
     amount.setRequired(true);
     UserComboBox userComboBox = new UserComboBox();
-    userComboBox.decorate(targetUser, userService.findUsersWithRoleUser(), "User");
+    userComboBox.decorate(targetUser, userService.findAll(), "User");
     targetUser.setRequired(true);
 
     type.setPrefixComponent(MONEY_TYPE_ICON.create());

@@ -19,7 +19,6 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,16 +67,17 @@ public class AdminView extends VerticalLayout
   Ticket ticket;
 
   public AdminView(
-          PoolService poolService,
-          TicketUiService ticketUiService,
-          TicketService ticketService,
-          NflGameService nflGameService, AuthenticatedUser authenticatedUser) {
+      PoolService poolService,
+      TicketUiService ticketUiService,
+      TicketService ticketService,
+      NflGameService nflGameService,
+      AuthenticatedUser authenticatedUser) {
     this.poolService = poolService;
     this.ticketUiService = ticketUiService;
     this.ticketService = ticketService;
     this.nflGameService = nflGameService;
-      this.authenticatedUser = authenticatedUser;
-      var layout = createTicketSelectBox();
+    this.authenticatedUser = authenticatedUser;
+    var layout = createTicketSelectBox();
 
     add(new H3("Admin Ticket Editor"));
     add(layout);
@@ -190,10 +190,12 @@ public class AdminView extends VerticalLayout
       userName = authenticatedUser.get().get().getName();
     }
 
-    String note = "Admin: %s Created ticket for user: %s pool: %s-%s".formatted(userName, player.getName(), pool.getName(), pool.getWeek());
+    String note =
+        "Admin: %s created ticket for user: %s pool: %s-%s"
+            .formatted(userName, player.getName(), pool.getName(), pool.getWeek());
     var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
 
-    return ticketUiService.createTicket(createTicket(pool, player, week), pool, player, null);
+    return ticketUiService.createTicket(createTicket(pool, player, week), pool, player, jsonbNote);
   }
 
   private void onChangePool(Pool p) {

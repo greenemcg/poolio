@@ -32,6 +32,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 import nm.poolio.data.User;
+import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.views.admin.AdminView;
 import nm.poolio.views.bet.BetView;
@@ -48,13 +49,18 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 public class MainLayout extends AppLayout {
   private final AuthenticatedUser authenticatedUser;
   private final AccessAnnotationChecker accessChecker;
+  private final PoolService poolService;
 
   private H1 viewTitle;
   private User user;
 
-  public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
+  public MainLayout(
+      AuthenticatedUser authenticatedUser,
+      AccessAnnotationChecker accessChecker,
+      PoolService poolService) {
     this.authenticatedUser = authenticatedUser;
     this.accessChecker = accessChecker;
+    this.poolService = poolService;
 
     Optional<User> maybeUser = authenticatedUser.get();
     maybeUser.ifPresent(value -> user = value);
@@ -98,7 +104,7 @@ public class MainLayout extends AppLayout {
     if (accessChecker.hasAccess(PoolView.class))
       nav.addItem(new SideNavItem("Pools", PoolView.class, POOL_ICON.create()));
 
-    if (accessChecker.hasAccess(BetView.class))
+    if (poolService.getAllowBets() && accessChecker.hasAccess(BetView.class))
       nav.addItem(new SideNavItem("Bets", BetView.class, BET_ICON.create()));
 
     if (accessChecker.hasAccess(UserView.class))

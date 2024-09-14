@@ -26,7 +26,7 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
 
   default void decoratePoolGrid() {
     getGrid()
-        .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getAwayTeam())))
+        .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getAwayTeam(), game)))
         .setHeader(createIconSpan(AWAY_ICON, "Away"))
         .setAutoWidth(true)
         .setTextAlign(ColumnTextAlign.CENTER);
@@ -34,7 +34,7 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
     createColumn(NflGame::getAwayScore, createIconSpan(AWAY_ICON, "Score"));
 
     getGrid()
-        .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getHomeTeam())))
+        .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getHomeTeam(), game)))
         .setHeader(createIconSpan(HOME_ICON, "Home"))
         .setAutoWidth(true)
         .setTextAlign(ColumnTextAlign.CENTER);

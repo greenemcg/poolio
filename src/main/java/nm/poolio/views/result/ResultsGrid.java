@@ -31,7 +31,6 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
         .withProperty("extraData", this::getWinningsString);
   }
 
-
   private String getWinningsString(Ticket t) {
     return "Winnings: 0";
   }

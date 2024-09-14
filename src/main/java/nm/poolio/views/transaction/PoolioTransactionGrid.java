@@ -14,6 +14,8 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import java.time.format.DateTimeFormatter;
 import javax.annotation.Nullable;
+
+import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.vaadin.PoolioGrid;
@@ -45,7 +47,7 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
             "fullName",
             t ->
                 ((t == null || t.getPayAsYouGoUser() == null)
-                    ? "No User"
+                    ?  null
                     : t.getPayAsYouGoUser().getName()));
   }
 
@@ -53,7 +55,8 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
 
     getGrid()
         .addColumn(
-            new ComponentRenderer<>(transaction -> createUserComponent(transaction.getCreditUser())))
+            new ComponentRenderer<>(
+                transaction -> createUserComponent(transaction.getCreditUser())))
         .setHeader(createIconSpan(USER_ICON, "Credit", LineAwesomeIcon.MINUS_SOLID))
         .setAutoWidth(true)
         .setComparator(t -> t.getCreditUser().getName());
@@ -67,14 +70,15 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
 
     if (getUser() == null || getUser().isPayAsYouGo())
       getGrid()
-          .addColumn(createPayAsYouGoRenderer())
-          .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Fund Manager"))
+          .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
+          .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
           .setAutoWidth(true);
 
     createColumn(PoolioTransaction::getAmount, createIconSpan(AMOUNT_ICON, "Amt"))
-        .setComparator(t -> t.getAmount());
+        .setComparator(PoolioTransaction::getAmount);
     createColumn(PoolioTransaction::getType, createIconSpan(MONEY_TYPE_ICON, "Type"))
-        .setTextAlign(ColumnTextAlign.START).setComparator(t-> t.getType().name());
+        .setTextAlign(ColumnTextAlign.START)
+        .setComparator(t -> t.getType().name());
 
     getGrid()
         .addColumn(
@@ -82,7 +86,8 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
                 PoolioTransaction::getCreatedLocalDateTime,
                 () -> DateTimeFormatter.ofPattern("MMM d, h:mm a")))
         .setHeader(createIconSpan(CREATED_ICON, "Created (EST)"))
-        .setAutoWidth(true).setComparator(t -> t.getCreatedDate());
+        .setAutoWidth(true)
+        .setComparator(AbstractEntity::getCreatedDate);
 
     createColumn(PoolioTransaction::getNote, createIconSpan(NOTES_ICON, "Note"))
         .setAutoWidth(true)

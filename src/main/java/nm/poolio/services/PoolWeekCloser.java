@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
@@ -39,9 +40,16 @@ public class PoolWeekCloser implements NoteCreator {
     }
 
     winners.forEach(
-        w -> {
+        ticket -> {
           PoolioTransaction poolioTransaction = new PoolioTransaction();
-          poolioTransaction.setDebitUser(w.getPlayer()); // pay as you go
+
+          var winningPlayer = ticket.getPlayer();
+
+          if (winningPlayer.isPayAsYouGo()) {
+            poolioTransaction.setDebitUser(ticket.getPool().getPayAsYouGoUser());
+            poolioTransaction.setPayAsYouGoUser(winningPlayer);
+          } else poolioTransaction.setDebitUser(winningPlayer);
+
           poolioTransaction.setCreditUser(pool.getBankUser());
           final var amount = (pool.getAmount() * scoredTickets.size()) / winners.size();
           poolioTransaction.setAmount(amount);
@@ -50,17 +58,25 @@ public class PoolWeekCloser implements NoteCreator {
           JsonbNote note =
               buildNote(
                   createHalfWinnerString(winners.size())
-                      + "Winner Pool: %s - %s Amount: $%d"
-                          .formatted(pool.getName(), pool.getWeek(), amount));
+                      + "Winner Pool: %s - %s Amount: $%d "
+                          .formatted(pool.getName(), pool.getWeek(), amount)
+                      + createPayAyYouGoString(winningPlayer, ticket.getPool()));
+
           poolioTransaction.setNotes(List.of(note));
 
           var saveTrans = poolioTransactionService.save(poolioTransaction);
-          w.setWinningTransaction(saveTrans);
-          ticketService.save(w);
+          ticket.setWinningTransaction(saveTrans);
+          ticketService.save(ticket);
         });
   }
 
   private String createHalfWinnerString(int size) {
     return (size < 2) ? "" : "1/" + size + " ";
+  }
+
+  private String createPayAyYouGoString(User winningPlayer, Pool pool) {
+    return (winningPlayer.isPayAsYouGo())
+        ? " - Paid PasAsYouGo User: %s ".formatted(pool.getPayAsYouGoUser().getName())
+        : "";
   }
 }

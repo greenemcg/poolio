@@ -12,9 +12,7 @@ import nm.poolio.model.enums.NflTeam;
 public interface PoolioAvatar {
   default Avatar createNflTeamAvatar(NflTeam nflTeam, AvatarVariant variant) {
     Avatar avatar = new Avatar(nflTeam.name());
-     avatar.setImage("/icons/nfl/" + nflTeam.name() + ".svg");
-   // avatar.setImage("/icons/ncaa/" + nflTeam.name() + ".png");
-
+    avatar.setImage("/icons/nfl/" + nflTeam.name() + ".svg");
     avatar.addThemeVariants(variant);
     return avatar;
   }
