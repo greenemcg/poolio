@@ -69,7 +69,7 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   @JsonIgnore
   @Lob
   @JdbcTypeCode(Types.VARBINARY)
-  @Column(length = 1000000)
+  @ Column(length = 1000000)
   private byte[] profilePicture;
 
   public @Email String getEmail() {
@@ -91,6 +91,7 @@ public class User extends AbstractEntity implements AvatarImageBytes {
     else roles.remove(Role.ADMIN);
   }
 
+  @JsonIgnore
   @Transient
   public String getPhoneFmt() {
     if (StringUtils.isEmpty(phone)) return "";

@@ -3,9 +3,11 @@ package nm.poolio.views.result;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nm.poolio.enitities.ticket.Ticket;
 
 @RequiredArgsConstructor
+@Slf4j
 public class TicketRanker {
   private final List<Ticket> ticketsSortedByFullScore;
 
@@ -24,7 +26,10 @@ public class TicketRanker {
             index -> {
               int score = ticketsSortedByFullScore.get(index).getFullScore();
 
-              if (index + 1 < ticketsSortedByFullScore.size()) process(index, score);
+              log.info("score={}", score);
+
+              if (index + 1 < ticketsSortedByFullScore.size())
+                process(index, score);
               else processLast(index, score);
             });
   }
@@ -37,13 +42,18 @@ public class TicketRanker {
       setRankInTicket(index);
       tieCount++;
     } else {
-      if (!tie && tieCount > 0) {
-        rank += tieCount;
-        tieCount = 0;
-      }
 
       setRankInTicket(index);
-      rank++;
+
+      if ( tieCount > 0) {
+        rank += tieCount +1;
+        tieCount = 0;
+      } else {
+        rank++;
+      }
+
+
+
       tie = false;
     }
   }
@@ -59,6 +69,8 @@ public class TicketRanker {
   }
 
   private void setRankInTicket(int index) {
+    log.info("rank={}", rank);
+
     ticketsSortedByFullScore.get(index).setRank(rank);
     ticketsSortedByFullScore.get(index).setRankString((tie ? "T" : "") + rank);
   }

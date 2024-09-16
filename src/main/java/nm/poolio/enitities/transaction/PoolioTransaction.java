@@ -1,5 +1,6 @@
 package nm.poolio.enitities.transaction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -53,10 +54,12 @@ public class PoolioTransaction extends AbstractEntity {
   @Enumerated(EnumType.STRING)
   PoolioTransactionType type;
 
+  @JsonIgnore
   @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "notes", columnDefinition = "jsonb")
   private List<JsonbNote> notes;
 
+  @JsonIgnore
   @Transient
   public String getNote() {
     return (CollectionUtils.isEmpty(notes)) ? null : notes.getFirst().getNote();

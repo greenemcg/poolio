@@ -2,12 +2,55 @@ package nm.poolio.views.result;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 import nm.poolio.enitities.ticket.Ticket;
 import org.junit.jupiter.api.Test;
 
-class TicketRankerTest {
+class TicketRankerTest implements FileUtil {
+  @Test
+  void testWithJsonData() throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    var jsonInput = readFromFileToString("tickets.json");
+
+    List<Ticket> tickets =
+        mapper.readValue(
+            jsonInput, mapper.getTypeFactory().constructCollectionType(List.class, Ticket.class));
+
+    new TicketRanker(tickets).rank();
+
+    assertEquals("1", tickets.get(0).getRankString());
+
+    IntStream.range(1, 6)
+        .forEach(
+            index -> {
+              assertEquals("T2", tickets.get(index).getRankString());
+            });
+
+    IntStream.range(7, 12)
+        .forEach(
+            index -> {
+              assertEquals("T8", tickets.get(index).getRankString());
+            });
+
+    IntStream.range(13, 18)
+        .forEach(
+            index -> {
+              assertEquals("T14", tickets.get(index).getRankString());
+            });
+
+    assertEquals("19", tickets.get(18).getRankString());
+
+    tickets.forEach(t -> System.out.println(t.getRankString()));
+  }
+
   @Test
   void rankNoTies() {
     var tickets = List.of(createTicket(100), createTicket(50), createTicket(10), createTicket(0));

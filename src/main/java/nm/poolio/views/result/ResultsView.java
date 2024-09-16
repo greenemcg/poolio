@@ -64,6 +64,7 @@ public class ResultsView extends VerticalLayout
         PoolioNotification,
         UserPoolFinder,
         HasUrlParameter<String> {
+ private final static String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
   private final TicketService ticketService;
@@ -79,7 +80,6 @@ public class ResultsView extends VerticalLayout
   List<NflGame> weeklyGames;
   ComboBox<NflWeek> comboBox = new ComboBox<>("Change Week");
   MultiSelectComboBox<User> playerComboBox = new MultiSelectComboBox<>("Select Players");
-
   Span poolInfoSpan = new Span("Pool Value: $");
   private NflWeek week;
 
@@ -213,11 +213,7 @@ public class ResultsView extends VerticalLayout
         decorateGrid();
 
         poolInfoSpan.setText(
-                pool.getName()
-                + " Pool • "
-                + players.size()
-                + " Players • Pool Amount: $"
-                + (pool.getAmount() * players.size()));
+                POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
 
         resultsGrid.setItems(ticketsList);
 
@@ -241,16 +237,18 @@ public class ResultsView extends VerticalLayout
       weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, week);
       ticketsList = ticketScorerService.findAndScoreTickets(pool, week);
 
-      var players = ticketsList.stream().map(Ticket::getPlayer).toList();
+      var players =
+          ticketsList.stream()
+              .map(Ticket::getPlayer)
+              .sorted(Comparator.comparing(User::getName))
+              .toList();
+
       playerComboBox.setItems(players);
       playerComboBox.select(players);
 
+
       poolInfoSpan.setText(
-          pool.getName()
-              + " Pool "
-              + players.size()
-              + " Players • Pool Amount: $"
-              + (pool.getAmount() * players.size()));
+              POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
 
       resultsGrid.setItems(ticketsList);
       decorateGrid();
@@ -262,19 +260,6 @@ public class ResultsView extends VerticalLayout
         .filter(w -> w.getWeekNum() > 0 && w.getWeekNum() <= week.getWeekNum())
         .toList();
   }
-
-  //  void addScore(NflGame g) {
-  //    var optional = gameScoreService.findScore(g.getId());
-  //
-  //    if (optional.isPresent()) {
-  //      var gameScore = optional.get();
-  //      g.setHomeScore(gameScore.getHomeScore());
-  //      g.setAwayScore(gameScore.getAwayScore());
-  //    } else {
-  //      g.setHomeScore(null);
-  //      g.setAwayScore(null);
-  //    }
-  //  }
 
   private void addItem(NflGame game) {
     resultsGrid

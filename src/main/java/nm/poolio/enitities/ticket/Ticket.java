@@ -1,5 +1,6 @@
 package nm.poolio.enitities.ticket;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -77,11 +78,13 @@ public class Ticket extends AbstractEntity {
   @Column(name = "sheet", columnDefinition = "jsonb")
   private PoolSheet sheet;
 
+  @JsonIgnore
   @Transient
   public Integer getTieBreaker() {
     return sheet != null ? sheet.getTieBreaker() : null;
   }
 
+  @JsonIgnore
   @Transient
   public String getPicksString() {
     return sheet != null ? createPicksString(sheet.getGamePicks()) : null;

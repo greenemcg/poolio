@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -61,6 +62,8 @@ public class TicketEditView extends VerticalLayout
   private final NflGameService nflGameService;
   @Getter private final TicketService ticketService;
   private final TicketUiService ticketUiService;
+
+  IntegerField tieBreakerFiled;
 
   Pool pool;
   Ticket ticket;
@@ -129,12 +132,15 @@ public class TicketEditView extends VerticalLayout
     games.forEach(g -> formLayout.add(createGameRadioButton(g)));
 
     add(formLayout);
-    add(createTieBreakerField(ticket));
+    tieBreakerFiled = createTieBreakerField(ticket);
+    add(tieBreakerFiled);
     add(createSubmitButton(e -> saveTicket()));
   }
 
   private void saveTicket() {
     try {
+      ticket.getSheet().setTieBreaker(tieBreakerFiled.getValue());
+
       var savedTicket = ticketService.save(ticket);
       log.debug("Saved ticket id: {}", savedTicket.getId());
       boolean ticketComplete = ticketService.isTicketComplete(savedTicket);
@@ -158,7 +164,7 @@ public class TicketEditView extends VerticalLayout
           verticalLayout.add(missingPicks);
         }
 
-        if (ticket.getSheet().getTieBreaker() == null) {
+        if (tieBreakerFiled.getValue() == null) {
           var tieBreaker = new Div(TIE_BREAKER_ICON.create());
           tieBreaker.add(new Span(" Missing tie breaker"));
           verticalLayout.add(tieBreaker);

@@ -1,5 +1,6 @@
 package nm.poolio.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -66,6 +67,7 @@ public abstract class AbstractEntity {
     return super.equals(that);
   }
 
+  @JsonIgnore
   public LocalDateTime getCreatedLocalDateTime() {
     try {
       ZoneId zone = ZoneId.of("America/New_York");
@@ -75,6 +77,7 @@ public abstract class AbstractEntity {
     }
   }
 
+  @JsonIgnore
   public Instant getModifiedSortTime() {
     return (modifiedDate != null) ? modifiedDate : createdDate;
   }

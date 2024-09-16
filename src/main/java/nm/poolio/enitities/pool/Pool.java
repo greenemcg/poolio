@@ -102,6 +102,7 @@ public class Pool extends AbstractEntity implements AvatarImageBytes {
   @Enumerated(EnumType.STRING)
   private PoolStatus status;
 
+  @JsonIgnore
   @Transient
   public String getPayAsYouGoUserName() {
     return (payAsYouGoUser != null) ? payAsYouGoUser.getName() : "";

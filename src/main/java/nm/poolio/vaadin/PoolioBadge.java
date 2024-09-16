@@ -32,6 +32,6 @@ public interface PoolioBadge extends PoolioAvatar {
 
   default void createTicketBadge(Ticket ticket, HasComponents layout) {
     layout.add(createUserAvatar(ticket.getPlayer(), AvatarVariant.LUMO_SMALL));
-    layout.add(createBadge(new Span(" " + ticket.getPlayer().getName())));
+   // layout.add(createBadge(new Span(" " + ticket.getPlayer().getName())));
   }
 }

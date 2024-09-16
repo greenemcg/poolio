@@ -13,6 +13,7 @@ import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -34,6 +35,7 @@ import java.util.Optional;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.security.AuthenticatedUser;
+import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.views.admin.AdminView;
 import nm.poolio.views.bet.BetView;
 import nm.poolio.views.home.HomeView;
@@ -46,7 +48,7 @@ import nm.poolio.views.user.UserView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 /** The main view is a top-level placeholder for other views. */
-public class MainLayout extends AppLayout {
+public class MainLayout extends AppLayout implements PoolioAvatar {
   private final AuthenticatedUser authenticatedUser;
   private final AccessAnnotationChecker accessChecker;
   private final PoolService poolService;
@@ -129,13 +131,7 @@ public class MainLayout extends AppLayout {
     Footer layout = new Footer();
 
     if (user != null) {
-      Avatar avatar = new Avatar(user.getName());
-      avatar.setColorIndex(Math.toIntExact(user.getId()));
-      StreamResource resource =
-          new StreamResource(
-              "profile-pic", () -> new ByteArrayInputStream(user.getImageResource()));
-      avatar.setImageResource(resource);
-      avatar.setThemeName("small");
+      Avatar avatar = createUserAvatar(user,  AvatarVariant.LUMO_SMALL);
       avatar.getElement().setAttribute("tabindex", "-1");
 
       MenuBar userMenu = new MenuBar();

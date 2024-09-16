@@ -82,7 +82,7 @@ public class TicketView extends VerticalLayout
                 case CLOSED, PENDING, PAID -> layout.add(createViewButton(p, ticket));
               }
             } else {
-              if (p.getPlayers().size() > p.getMaxPlayersPerWeek()) {
+              if (p.getPlayers().size() > p.getMaxPlayersPerWeek() * 100) { // todo get tickets
                 Span pending =
                     new Span(
                         "Cannot create new Ticket. Pool %sWeek :%d is Full with %d Players"

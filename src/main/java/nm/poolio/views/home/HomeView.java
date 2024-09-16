@@ -149,6 +149,7 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
               "How much you wanna make a bet I can throw a football over them mountains?... Yeah... Coach woulda put me in fourth quarter, we would've been state champions. No doubt. No doubt in my mind."));
 
       Anchor loginLink = new Anchor("login", "Sign in");
+      loginLink.setId("home-login-link");
       add(loginLink);
     }
 
