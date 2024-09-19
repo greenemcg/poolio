@@ -2,6 +2,7 @@ package nm.poolio.views.home;
 
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -25,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.Role;
 import nm.poolio.data.User;
@@ -47,6 +49,9 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   private final PoolioTransactionService poolioTransactionService;
   @Getter Grid<PoolioTransaction> grid = createGrid(PoolioTransaction.class);
   @Getter User user;
+
+  @Setter Column<PoolioTransaction> temporalAmountColumn;
+  @Setter Column sequenceColumn;
 
   public HomeView(
       AuthenticatedUser authenticatedUser,
@@ -170,5 +175,8 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
     decorateTransactionGrid();
 
     grid.setItems(poolioTransactionService.findAllPoolioTransactionsForUser(user));
+
+    temporalAmountColumn.setVisible(false);
+    sequenceColumn.setVisible(false);
   }
 }

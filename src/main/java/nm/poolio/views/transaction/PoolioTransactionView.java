@@ -10,6 +10,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -17,8 +19,13 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.transaction.NoteCreator;
@@ -43,6 +50,9 @@ public class PoolioTransactionView extends VerticalLayout
   private final PoolioTransactionService service;
   private final UserService userService;
 
+  @Setter Column temporalAmountColumn;
+  @Setter Column sequenceColumn;
+
   Binder<PoolioTransaction> binder = new Binder<>(PoolioTransaction.class);
   Dialog transactionDialog = new Dialog();
 
@@ -54,6 +64,8 @@ public class PoolioTransactionView extends VerticalLayout
 
   ComboBox<User> targetUser = new ComboBox<>();
   ComboBox<PoolioTransactionType> type = new ComboBox<>("Type", PoolioTransactionType.cashTypes());
+
+  ComboBox<User> comboBox = new ComboBox<>("View User");
 
   TextArea transactionNotes = new TextArea();
 
@@ -70,18 +82,78 @@ public class PoolioTransactionView extends VerticalLayout
     createDialog(
         transactionDialog, e -> onSaveTransaction(binder.getBean()), createTransactionDialog());
 
+    HorizontalLayout comboBoxesHorizontalLayout = new HorizontalLayout();
+    comboBoxesHorizontalLayout.setAlignItems(Alignment.BASELINE);
+
     Button newItemButton =
         new Button(
             "NewTransaction",
             TRANSACTION_ICON.create(),
             e -> openPoolioTransactionDialog(new PoolioTransaction()));
-    add(newItemButton);
+    comboBoxesHorizontalLayout.add(newItemButton);
 
     decorateGrid();
 
     allPoolioTransactions = service.findAllPoolioTransactions();
 
+    Set<User> userSet = new HashSet<>();
+    allPoolioTransactions.forEach(
+        t -> {
+          userSet.add(t.getDebitUser());
+          userSet.add(t.getCreditUser());
+        });
+
+    List<User> users = userSet.stream().sorted(Comparator.comparing(User::getName)).toList();
+
+    comboBox.setItems(users);
+    comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
+    comboBox.addValueChangeListener(e -> inspectUser(e.getValue()));
+    comboBox.setItemLabelGenerator(User::getName);
+    comboBox.setClearButtonVisible(true);
+
+    comboBoxesHorizontalLayout.add(comboBox);
+
+    add(comboBoxesHorizontalLayout);
+
     add(grid);
+  }
+
+  private void inspectUser(User user) {
+    if (user == null) {
+      temporalAmountColumn.setVisible(false);
+      sequenceColumn.setVisible(false);
+      grid.setItems(allPoolioTransactions);
+    } else createUserInGrid(user);
+  }
+
+  private void createUserInGrid(User user) {
+    temporalAmountColumn.setVisible(true);
+    sequenceColumn.setVisible(true);
+
+    var transactions =
+        allPoolioTransactions.stream()
+            .filter(t -> hasUser(t, user))
+            .sorted(Comparator.comparing(PoolioTransaction::getCreatedDate))
+            .toList();
+
+    AtomicInteger temporalAmount = new AtomicInteger();
+    AtomicInteger sequence = new AtomicInteger(1);
+
+    transactions.forEach(
+        t -> {
+          if (t.getCreditUser().equals(user)) temporalAmount.addAndGet(-t.getAmount());
+          else if (t.getDebitUser().equals(user)) temporalAmount.addAndGet(t.getAmount());
+
+          t.setSequence(sequence.getAndIncrement());
+
+          t.setTemporalAmount(temporalAmount.get());
+        });
+
+    grid.setItems(transactions);
+  }
+
+  private boolean hasUser(PoolioTransaction t, User user) {
+    return t.getCreditUser().equals(user) || t.getDebitUser().equals(user);
   }
 
   private Component[] createTransactionDialog() {

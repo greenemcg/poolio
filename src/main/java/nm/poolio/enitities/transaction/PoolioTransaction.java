@@ -31,6 +31,9 @@ import org.springframework.util.CollectionUtils;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "poolio_transaction")
 public class PoolioTransaction extends AbstractEntity {
+  @Transient Integer temporalAmount;
+  @Transient Integer sequence;
+
   @NotNull
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "debit_user_id")

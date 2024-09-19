@@ -8,6 +8,7 @@ import static nm.poolio.utils.VaddinUtils.USER_ICON;
 import static nm.poolio.utils.VaddinUtils.createIconSpan;
 
 import com.vaadin.flow.component.grid.ColumnTextAlign;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
@@ -25,6 +26,10 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
   default @Nullable User getUser() {
     return null;
   }
+
+  void setTemporalAmountColumn(Column<PoolioTransaction> column);
+
+  void setSequenceColumn(Column<PoolioTransaction> column);
 
   private Renderer<PoolioTransaction> createCreditUserRenderer() {
     return LitRenderer.<PoolioTransaction>of(getUserTemplateExpression())
@@ -47,11 +52,17 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
             "fullName",
             t ->
                 ((t == null || t.getPayAsYouGoUser() == null)
-                    ?  null
+                    ? null
                     : t.getPayAsYouGoUser().getName()));
   }
 
   default void decorateTransactionGrid() {
+
+    var sequenceColumn =
+        createColumn(
+                PoolioTransaction::getSequence, createIconSpan(LineAwesomeIcon.HASHTAG_SOLID, ""))
+            .setComparator(PoolioTransaction::getSequence);
+    setSequenceColumn(sequenceColumn);
 
     getGrid()
         .addColumn(
@@ -76,6 +87,14 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
 
     createColumn(PoolioTransaction::getAmount, createIconSpan(AMOUNT_ICON, "Amt"))
         .setComparator(PoolioTransaction::getAmount);
+
+    var amountColumn =
+        createColumn(
+                PoolioTransaction::getTemporalAmount,
+                createIconSpan(LineAwesomeIcon.HISTORY_SOLID, "Sum"))
+            .setComparator(PoolioTransaction::getTemporalAmount);
+    setTemporalAmountColumn(amountColumn);
+
     createColumn(PoolioTransaction::getType, createIconSpan(MONEY_TYPE_ICON, "Type"))
         .setTextAlign(ColumnTextAlign.START)
         .setComparator(t -> t.getType().name());
