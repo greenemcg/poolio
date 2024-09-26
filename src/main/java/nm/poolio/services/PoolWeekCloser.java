@@ -58,8 +58,8 @@ public class PoolWeekCloser implements NoteCreator {
           JsonbNote note =
               buildNote(
                   createHalfWinnerString(winners.size())
-                      + "Winner Pool: %s - %s Amount: $%d "
-                          .formatted(pool.getName(), pool.getWeek(), amount)
+                      + "Winner Pool: %s-%s "
+                          .formatted(pool.getName(), pool.getWeek())
                       + createPayAyYouGoString(winningPlayer, ticket.getPool()));
 
           poolioTransaction.setNotes(List.of(note));
