@@ -75,7 +75,7 @@ public class GameBet extends AbstractEntity {
   private Instant expiryDate;
 
   public User getProposer() {
-    return proposerTransaction.getDebitUser();
+    return proposerTransaction.getCreditUser();
   }
 
   public Component getHumanReadableString() {

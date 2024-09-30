@@ -162,10 +162,10 @@ public class BetView extends VerticalLayout
             dateTimePicker.getValue().atZone(ZoneId.of("America/New_York")).toInstant());
 
         PoolioTransaction poolioTransaction = new PoolioTransaction();
-        poolioTransaction.setDebitUser(player);
-        poolioTransaction.setCreditUser(pool.getBankUser()); // add bet banker
+        poolioTransaction.setCreditUser(player);
+        poolioTransaction.setDebitUser(pool.getBankUser()); // add bet banker
         poolioTransaction.setAmount(bean.getAmount());
-        poolioTransaction.setType(PoolioTransactionType.GAME_BET_PURCHASE);
+        poolioTransaction.setType(PoolioTransactionType.GAME_BET_PROPOSAL);
         poolioTransaction.setNotes(
             List.of(
                 buildNote(

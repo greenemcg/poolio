@@ -13,9 +13,9 @@ spring:
   application:
     name: Poolio
   datasource:
-    password: poolio
+    password: golf9c
     url: jdbc:postgresql://localhost:5432/poolio
-    username: poolio
+    username: mike
 #      password: golf9c
 #      url: jdbc:postgresql://poolio.local:5432/poolio
 #      username: mike
@@ -27,6 +27,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   mustache:
     check-template-location: false
   sql:
