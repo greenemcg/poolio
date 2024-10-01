@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Season {
-  S_2024("2024");
+    S_2024("2024");
 
-  @Getter final String display;
+    @Getter
+    final String display;
 
-  public static Season getCurrent() {
-    return S_2024;
-  }
+    public static Season getCurrent() {
+        return S_2024;
+    }
 }

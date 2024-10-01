@@ -1,46 +1,70 @@
 package nm.poolio.services;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.executable.ValidateOnExecution;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.bet.GameBet;
+import nm.poolio.enitities.bet.GameBetService;
+import nm.poolio.enitities.transaction.NoteCreator;
 import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
+import nm.poolio.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class NflBetService {
+public class NflBetService implements NoteCreator {
+    private final PoolioTransactionService poolioTransactionService;
+    private final UserService userService;
+    private final NflGameService nflGameService;
+    private final GameBetService gameBetService;
     @Getter
-    @Value("${poolio.bet.banker:Bet Banker}")
+    private final AuthenticatedUser authenticatedUser;
+    @Getter
+    @Value("${poolio.bet.banker:bet_banker}")
     private String betBanker;
 
-   private final PoolioTransactionService poolioTransactionService;
-   private final UserService userService;
-
-
     @Transactional
-    public PoolioTransaction createAcceptProposalTransaction(@NotNull User player, @NotNull GameBet gameBet, @NotNull Integer betAmount) {
+    public PoolioTransaction createAcceptProposalTransaction(@NotNull User player,
+                                                             @NotNull GameBet gameBet,
+                                                             @NotNull Integer betAmount) {
 
         var banker = userService.findByUserName(getBetBanker());
 
-        PoolioTransaction transaction = new PoolioTransaction();
-        transaction.setDebitUser(player);
-        transaction.setCreditUser(gameBet.getProposer());
-        transaction.setAmount(betAmount);
-        transaction.setType(PoolioTransactionType.ACCEPT_PROPOSAL);
+        PoolioTransaction poolioTransaction = new PoolioTransaction();
+        poolioTransaction.setDebitUser(banker);
+        poolioTransaction.setCreditUser(player);
+        poolioTransaction.setAmount(betAmount);
+        poolioTransaction.setType(PoolioTransactionType.ACCEPT_PROPOSAL);
 
-        transaction.setGameBet(gameBet);
-        return poolioTransactionService.save(transaction);
+        var nflGame = nflGameService.findGameById(gameBet.getGameId());
 
 
+        poolioTransaction.setNotes(
+                List.of(
+                        buildNote(
+                                "%s at %s - Amount: %d Spread: %d"
+                                        .formatted(
+                                                nflGame.getAwayTeam().name(),
+                                                nflGame.getHomeTeam().name(),
+                                                betAmount,
+                                                gameBet.getSpread()))));
+
+        var saved = poolioTransactionService.save(poolioTransaction);
+
+        gameBet.getAcceptorTransactions().add(saved);
+        gameBetService.save(gameBet);
+        log.info("Created transaction: {}", saved);
+
+        return saved;
     }
 
 }

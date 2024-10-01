@@ -19,6 +19,7 @@ import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.dom.ElementFactory;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.bet.GameBet;
 import nm.poolio.enitities.transaction.PoolioTransaction;
@@ -39,6 +40,7 @@ import java.time.format.DateTimeFormatter;
 import static nm.poolio.utils.VaddinUtils.SPLIT_ICON;
 
 @RequiredArgsConstructor
+@Slf4j
 public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNotification {
     private final User player;
     private final VerticalLayout rootLayout;
@@ -331,9 +333,8 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
         // poolioTransactionService.save(transaction);
         amountDialog.close();
 
-
-
         createSucessNotification(new Span("Bet Accepted"));
+        log.info("Accepted bet: {}", transaction);
     }
 
     void createNameValueElements(String name, String value, Element element) {

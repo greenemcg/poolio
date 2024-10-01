@@ -1,9 +1,5 @@
 package nm.poolio.views.user;
 
-import static nm.poolio.utils.VaddinUtils.*;
-import static org.vaadin.lineawesome.LineAwesomeIcon.SAVE_SOLID;
-import static org.vaadin.lineawesome.LineAwesomeIcon.WINDOW_CLOSE_SOLID;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -23,7 +19,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -36,6 +31,12 @@ import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.views.MainLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
+
+import static nm.poolio.utils.VaddinUtils.*;
+import static org.vaadin.lineawesome.LineAwesomeIcon.SAVE_SOLID;
+import static org.vaadin.lineawesome.LineAwesomeIcon.WINDOW_CLOSE_SOLID;
 
 @PageTitle("Users \uD83D\uDC64")
 @Route(value = "user", layout = MainLayout.class)
@@ -83,7 +84,7 @@ public class UserView extends VerticalLayout implements UserGrid, NoteCreator, P
         jumpToUserComboBox.setItemLabelGenerator(User::getName);
         jumpToUserComboBox.setClearButtonVisible(true);
         gridActionHeader.add(jumpToUserComboBox);
-        add( gridActionHeader);
+        add(gridActionHeader);
 
         binder.bindInstanceFields(this);
         createDialog();

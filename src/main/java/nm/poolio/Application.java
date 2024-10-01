@@ -10,24 +10,26 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @Theme(value = "poolio")
 @ServletComponentScan
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
+@EnableScheduling
 public class Application implements AppShellConfigurator {
-  public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
-  @Bean
-  AuditorAware<String> auditorProvider() {
-    return new AuditorAwareImpl();
-  }
+    @Bean
+    AuditorAware<String> auditorProvider() {
+        return new AuditorAwareImpl();
+    }
 
-  @Override
-  public void configurePage(AppShellSettings settings) {
-    settings.addMetaTag("author", "Michael C Greene greenemcg@gmail.com");
-    settings.addLink("shortcut icon", "icons/favicon.ico");
-  }
+    @Override
+    public void configurePage(AppShellSettings settings) {
+        settings.addMetaTag("author", "Michael C Greene greenemcg@gmail.com");
+        settings.addLink("shortcut icon", "icons/favicon.ico");
+    }
 }

@@ -1,25 +1,11 @@
 package nm.poolio.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.sql.Types;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import nm.poolio.enitities.pool.PoolIdName;
@@ -28,73 +14,85 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.sql.Types;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(
-    name = "application_user",
-    uniqueConstraints = {
-      @UniqueConstraint(name = "user_name_uniq", columnNames = "userName"),
-      @UniqueConstraint(name = "user_name_uniq", columnNames = "name")
-    })
+        name = "application_user",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "user_name_uniq", columnNames = "userName"),
+                @UniqueConstraint(name = "user_name_uniq", columnNames = "name")
+        })
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
 public class User extends AbstractEntity implements AvatarImageBytes {
-  @Setter @Getter @Transient String tempPassword;
+    @Setter
+    @Getter
+    @Transient
+    String tempPassword;
 
-  boolean payAsYouGo;
+    boolean payAsYouGo;
 
-  int creditAmount;
-  @Transient List<PoolIdName> poolIdNames;
-  @Transient Integer funds;
+    int creditAmount;
+    @Transient
+    List<PoolIdName> poolIdNames;
+    @Transient
+    Integer funds;
 
-  @Size(min = 2, max = 255)
-  @NotNull
-  private String userName;
+    @Size(min = 2, max = 255)
+    @NotNull
+    private String userName;
 
-  @NotNull
-  @Size(min = 2, max = 255)
-  private String name;
+    @NotNull
+    @Size(min = 2, max = 255)
+    private String name;
 
-  @Email private String email;
+    @Email
+    private String email;
 
-  @Pattern(regexp = "(^$|[0-9]{10})")
-  private String phone;
+    @Pattern(regexp = "(^$|[0-9]{10})")
+    private String phone;
 
-  @JsonIgnore private String hashedPassword;
+    @JsonIgnore
+    private String hashedPassword;
 
-  @Enumerated(EnumType.STRING)
-  @ElementCollection(fetch = FetchType.EAGER)
-  private Set<Role> roles = new HashSet<>(List.of(Role.USER));
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>(List.of(Role.USER));
 
-  @JsonIgnore
-  @Lob
-  @JdbcTypeCode(Types.VARBINARY)
-  @ Column(length = 1000000)
-  private byte[] profilePicture;
+    @JsonIgnore
+    @Lob
+    @JdbcTypeCode(Types.VARBINARY)
+    @Column(length = 1000000)
+    private byte[] profilePicture;
 
-  public @Email String getEmail() {
-    return email;
-  }
+    public @Email String getEmail() {
+        return email;
+    }
 
-  public void setEmail(@Email String email) {
-    this.email = email;
-  }
+    public void setEmail(@Email String email) {
+        this.email = email;
+    }
 
-  @Transient
-  public boolean getAdmin() {
-    return this.roles.stream().anyMatch(r -> r.equals(Role.ADMIN));
-  }
+    @Transient
+    public boolean getAdmin() {
+        return this.roles.stream().anyMatch(r -> r.equals(Role.ADMIN));
+    }
 
-  @Transient
-  public void setAdmin(boolean adminFlag) {
-    if (adminFlag) roles.add(Role.ADMIN);
-    else roles.remove(Role.ADMIN);
-  }
+    @Transient
+    public void setAdmin(boolean adminFlag) {
+        if (adminFlag) roles.add(Role.ADMIN);
+        else roles.remove(Role.ADMIN);
+    }
 
-  @JsonIgnore
-  @Transient
-  public String getPhoneFmt() {
-    if (StringUtils.isEmpty(phone)) return "";
-    else return PhoneNumberUtils.formatPhoneNumber(phone);
-  }
+    @JsonIgnore
+    @Transient
+    public String getPhoneFmt() {
+        if (StringUtils.isEmpty(phone)) return "";
+        else return PhoneNumberUtils.formatPhoneNumber(phone);
+    }
 }
