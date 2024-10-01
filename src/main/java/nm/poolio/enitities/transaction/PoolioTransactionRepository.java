@@ -14,6 +14,6 @@ interface PoolioTransactionRepository
   @Query("select sum(amount) from PoolioTransaction where debitUser = ?1")
   Integer calculateDebitAmount(User user);
 
-  List<PoolioTransaction> findByDebitUserOrCreditUserOrPayAsYouGoUserOrderByCreatedByAsc(
+  List<PoolioTransaction> findByDebitUserOrCreditUserOrPayAsYouGoUser(
       User credituser, User debituser, User ayAsYouGoUser);
 }

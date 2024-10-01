@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -174,7 +175,9 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   private void decorateGrid() {
     decorateTransactionGrid();
 
-    grid.setItems(poolioTransactionService.findAllPoolioTransactionsForUser(user));
+    var trans = poolioTransactionService.findAllPoolioTransactionsForUser(user);
+    trans.sort(Comparator.comparing(PoolioTransaction::getCreatedDate).reversed());
+    grid.setItems(trans);
 
     temporalAmountColumn.setVisible(false);
     sequenceColumn.setVisible(false);

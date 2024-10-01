@@ -25,6 +25,7 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
+import nm.poolio.services.NflBetService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
@@ -43,6 +44,7 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
     private final VerticalLayout rootLayout;
     private final NflGameService nflGameService;
     private final PoolioTransactionService poolioTransactionService;
+    private final NflBetService nflBetService;
 
     Dialog amountDialog;
     Integer partialBet;
@@ -325,10 +327,12 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
 
     private void saveToDb(GameBet gameBet, @NotNull Integer betAmount) {
 
-        //var transaction = poolioTransactionService.createTransaction(player, gameBet, betAmount);
+        var transaction = nflBetService.createAcceptProposalTransaction(player, gameBet, betAmount);
         // poolioTransactionService.save(transaction);
-
         amountDialog.close();
+
+
+
         createSucessNotification(new Span("Bet Accepted"));
     }
 

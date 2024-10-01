@@ -48,12 +48,13 @@ import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.Season;
 import nm.poolio.security.AuthenticatedUser;
+import nm.poolio.services.NflBetService;
 import nm.poolio.services.NflGameService;
+import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.views.MainLayout;
 import org.springframework.util.CollectionUtils;
-import org.vaadin.lineawesome.LineAwesomeIcon;
 
 @PageTitle("Bets \uD83C\uDFB0")
 @Route(value = "bet", layout = MainLayout.class)
@@ -68,6 +69,8 @@ public class BetView extends VerticalLayout
   @Getter private final AuthenticatedUser authenticatedUser;
 
   private final ComponentRenderer<Component, GameBet> personCardRenderer;
+  private final UserService userService;
+  private final NflBetService nflBetService;
 
   Binder<GameBet> binder = new Binder<>(GameBet.class);
   Dialog betDialog = new Dialog();
@@ -87,14 +90,18 @@ public class BetView extends VerticalLayout
       AuthenticatedUser authenticatedUser,
       PoolService poolService,
       NflGameService nflGameService,
-      PoolioTransactionService poolioTransactionService) {
+      PoolioTransactionService poolioTransactionService,
+      UserService userService,
+      NflBetService nflBetService) {
     this.service = service;
     this.nflGameService = nflGameService;
     this.poolioTransactionService = poolioTransactionService;
     this.authenticatedUser = authenticatedUser;
     player = authenticatedUser.get().orElseThrow();
+    this.nflBetService = nflBetService;
     betProposalRenderer =
-        new BetProposalRenderer(player, this, nflGameService, poolioTransactionService);
+        new BetProposalRenderer(
+            player, this, nflGameService, poolioTransactionService, nflBetService);
 
     personCardRenderer = new ComponentRenderer<>(betProposalRenderer::render);
     setHeight("100%");
@@ -141,6 +148,7 @@ public class BetView extends VerticalLayout
       list.setRenderer(personCardRenderer);
       add(list);
     }
+    this.userService = userService;
   }
 
   private void onSaveBet(GameBet bean) {
@@ -161,9 +169,11 @@ public class BetView extends VerticalLayout
         bean.setExpiryDate(
             dateTimePicker.getValue().atZone(ZoneId.of("America/New_York")).toInstant());
 
+        var banker = userService.findByUserName(nflBetService.getBetBanker());
+
         PoolioTransaction poolioTransaction = new PoolioTransaction();
         poolioTransaction.setCreditUser(player);
-        poolioTransaction.setDebitUser(pool.getBankUser()); // add bet banker
+        poolioTransaction.setDebitUser(banker); // add bet banker
         poolioTransaction.setAmount(bean.getAmount());
         poolioTransaction.setType(PoolioTransactionType.GAME_BET_PROPOSAL);
         poolioTransaction.setNotes(
