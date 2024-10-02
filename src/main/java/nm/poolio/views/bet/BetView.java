@@ -32,6 +32,7 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.NflGame;
+import nm.poolio.model.enums.BetStatus;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.Season;
 import nm.poolio.security.AuthenticatedUser;
@@ -116,7 +117,7 @@ public class BetView extends VerticalLayout
             binder.bindInstanceFields(this);
             pool = userPools.getFirst();
             var games = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
-            var openBets = service.findOpenBets();
+            var openBets = service.findAvailableBets();
             log.info("Open Bets: {}", openBets.size());
 
             if (CollectionUtils.isEmpty(games)) {
@@ -178,7 +179,7 @@ public class BetView extends VerticalLayout
                 poolioTransaction.setNotes(
                         List.of(
                                 buildNote(
-                                        "%s at %s - Amount: %d Spread: %d Team-Picked: %s"
+                                        "%s at %s - Amount: $%d Spread: %d Pick: %s"
                                                 .formatted(
                                                         nflGame.getAwayTeam().name(),
                                                         nflGame.getHomeTeam().name(),
@@ -212,7 +213,7 @@ public class BetView extends VerticalLayout
                     try {
                         saveToDb(bet);
                         betDialog.close();
-                        gameBetVirtualList.setItems(service.findOpenBets());
+                        gameBetVirtualList.setItems(service.findAvailableBets());
                     } catch (Exception e) {
                         log.error("Cannot save to DB", e);
                         createErrorNotification(new Span(e.getMessage()));
@@ -224,6 +225,7 @@ public class BetView extends VerticalLayout
     }
 
     private void saveToDb(GameBet bet) {
+        bet.setStatus(BetStatus.OPEN);
         var saved = service.save(bet);
         createSucessNotification(new Span("Successfully created new proposed Bet"));
         log.info("Saved Bet {}", saved.getGameId());

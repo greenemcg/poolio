@@ -10,6 +10,7 @@ import lombok.Setter;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.enitities.transaction.PoolioTransaction;
+import nm.poolio.model.enums.BetStatus;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
 import nm.poolio.model.enums.Season;
@@ -28,49 +29,56 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "nfl_game_bet")
 public class GameBet extends AbstractEntity {
-    // if a tie we set the two transactions above to amount zero and add note
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "proposer_transaction_id")
-    PoolioTransaction proposerTransaction;
-    @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private PoolioTransaction proposerTransaction;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "game_bet_acceptors",
             joinColumns = @JoinColumn(name = "game_bet_id"),
             inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-    Set<PoolioTransaction> acceptorTransactions = new HashSet<>();
-    @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Set<PoolioTransaction> acceptorTransactions = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "game_bet_winners",
             joinColumns = @JoinColumn(name = "game_bet_id"),
             inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-    Set<PoolioTransaction> winningTransactions;
+    private Set<PoolioTransaction> winningTransactions;
+
     @NotNull
     private String gameId;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private NflWeek week;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Season season;
+
     @NotNull
     private Integer spread;
+
     @NotNull
     private Integer amount;
+
     @NotNull
     private Boolean proposerCanEditTeam;
+
     @NotNull
     private Boolean betCanBeSplit;
+
     @NotNull
-    private Boolean betOpen = true;
+    @Enumerated(EnumType.STRING)
+    private BetStatus status;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private NflTeam teamPicked;
+
     private Instant acceptanceDate;
     private Instant expiryDate;
 
@@ -79,29 +87,15 @@ public class GameBet extends AbstractEntity {
     }
 
     public Component getHumanReadableString() {
-        var str = gameId; // remove from class
-
-        if (str.indexOf("_") > 0) {
-            str = str.substring(0, str.indexOf("_"));
-        }
-
-        if (str.indexOf("at") > 0) {
-            str = str.replace("at", " at ");
-        }
-
-        VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.add(new Span("Game: " + str + " " + week));
-        verticalLayout.add(
-                new Span("Team picked: " + teamPicked + " Spread: " + spread + " Amount: $" + amount));
+        String str = gameId.split("_")[0].replace("at", " at ");
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(new Span("Game: " + str + " " + week));
+        layout.add(new Span("Team picked: " + teamPicked + " Spread: " + spread + " Amount: $" + amount));
 
         ZoneId zone = ZoneId.of("America/New_York");
-        var localDateTime = LocalDateTime.ofInstant(expiryDate, zone);
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(expiryDate, zone);
+        layout.add(new Span("Bet expires if no takers: " + DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime)));
 
-        verticalLayout.add(
-                new Span(
-                        "Bet expires if no takers: "
-                                + DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime)));
-
-        return verticalLayout;
+        return layout;
     }
 }

@@ -6,6 +6,7 @@ public enum PoolioTransactionType {
     POOL_PURCHASE,
     GAME_BET_PROPOSAL,
     GAME_BET_PURCHASE,
+    GAME_BET_REFUND,
     POOL_WINNER,
     ACCEPT_PROPOSAL;
 

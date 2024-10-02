@@ -28,7 +28,7 @@ class GameBetServiceTest {
     }
 
     @Test
-    void findOpenBets_returnsOpenBets() {
+    void findOpenBets_returnsAvailableBets() {
         GameBet bet1 = mock(GameBet.class);
         GameBet bet2 = mock(GameBet.class);
         when(repository.findByBetOpenIsTrueAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(any(Instant.class)))
@@ -40,7 +40,7 @@ class GameBetServiceTest {
         when(bet2.getAmount()).thenReturn(100);
         when(bet2.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum()).thenReturn(50);
 
-        List<GameBet> openBets = gameBetService.findOpenBets();
+        List<GameBet> openBets = gameBetService.findAvailableBets();
 
         assertEquals(2, openBets.size());
         assertTrue(openBets.contains(bet1));
@@ -48,7 +48,7 @@ class GameBetServiceTest {
     }
 
     @Test
-    void findOpenBets_excludesClosedBets() {
+    void findAvailableBets_excludesClosedBets() {
         GameBet bet1 = mock(GameBet.class);
         GameBet bet2 = mock(GameBet.class);
         when(repository.findByBetOpenIsTrueAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(any(Instant.class)))
@@ -60,7 +60,7 @@ class GameBetServiceTest {
         when(bet2.getAmount()).thenReturn(100);
         when(bet2.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum()).thenReturn(100);
 
-        List<GameBet> openBets = gameBetService.findOpenBets();
+        List<GameBet> openBets = gameBetService.findAvailableBets();
 
         assertEquals(0, openBets.size());
     }
