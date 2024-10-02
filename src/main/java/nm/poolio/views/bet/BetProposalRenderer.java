@@ -10,8 +10,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -31,6 +29,7 @@ import nm.poolio.services.NflGameService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.vaadin.PoolioNotification;
+import org.springframework.util.CollectionUtils;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.time.LocalDateTime;
@@ -48,29 +47,25 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
     private final PoolioTransactionService poolioTransactionService;
     private final NflBetService nflBetService;
 
-    Dialog amountDialog;
-    Integer partialBet;
+    private Dialog amountDialog;
+    private Integer partialBet;
 
     private Component[] createAmountDialog(GameBet gameBet) {
         SplitAmounts amounts = computeSplitBetAmounts(gameBet);
 
-        H4 h4 = new H4("Chose Amount To Bet");
-
-        IntegerField integerField = new IntegerField();
-        integerField.setLabel("Amount");
+        IntegerField integerField = new IntegerField("Amount");
         integerField.setHelperText("Bet 1 to " + amounts.availableToBetAmount);
         integerField.setMin(1);
         integerField.setMax(amounts.availableToBetAmount);
-
         integerField.addBlurListener(e -> partialBet = integerField.getValue());
 
-        return new Component[]{h4, integerField};
+        return new Component[]{new H4("Choose Amount To Bet"), integerField};
     }
 
     void openChooseAmountDialog(GameBet gameBet, NflGame nflGame) {
-        if (gameBet.getProposer().equals(player))
+        if (gameBet.getProposer().equals(player)) {
             createErrorNotification(new Span("Cannot place bet on your own proposal"));
-        else {
+        } else {
             amountDialog = new Dialog();
             createDialog(amountDialog, e -> onSetAmount(gameBet, nflGame), createAmountDialog(gameBet));
             amountDialog.open();
@@ -82,17 +77,11 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
             var amounts = computeSplitBetAmounts(gameBet);
             var funds = poolioTransactionService.getFunds(player);
 
-            if (partialBet > funds)
-                createErrorNotification(
-                        new Span(
-                                "You do not have enough funds: $%d to place bet amount: $%d"
-                                        .formatted(funds, partialBet)));
-            else if (partialBet > amounts.availableToBetAmount)
-                createErrorNotification(
-                        new Span(
-                                "Your bet amount: $%d is greater than ticket bet amount available: $%d"
-                                        .formatted(partialBet, amounts.availableToBetAmount)));
-            else {
+            if (partialBet > funds) {
+                createErrorNotification(new Span("You do not have enough funds: $%d to place bet amount: $%d".formatted(funds, partialBet)));
+            } else if (partialBet > amounts.availableToBetAmount) {
+                createErrorNotification(new Span("Your bet amount: $%d is greater than ticket bet amount available: $%d".formatted(partialBet, amounts.availableToBetAmount)));
+            } else {
                 openAcceptBetConfirmDialog(gameBet, nflGame, partialBet);
             }
         } else {
@@ -101,76 +90,51 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
     }
 
     SplitAmounts computeSplitBetAmounts(GameBet gameBet) {
-        int totalBetsSum =
-                gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
-
+        int totalBetsSum = gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
         return new SplitAmounts(totalBetsSum, gameBet.getAmount() - totalBetsSum);
     }
 
     NflTeam getNflTeamNotPicked(GameBet gameBet, NflGame nflGame) {
-        return (nflGame.getAwayTeam() == gameBet.getTeamPicked())
-                ? nflGame.getHomeTeam()
-                : nflGame.getAwayTeam();
+        return (nflGame.getAwayTeam() == gameBet.getTeamPicked()) ? nflGame.getHomeTeam() : nflGame.getAwayTeam();
     }
 
     String createSpreadString(GameBet gameBet, NflTeam otherTeamNotPicked, NflGame nflGame) {
-        return (otherTeamNotPicked == nflGame.getAwayTeam())
-                ? getSpreadString(-1 * gameBet.getSpread())
-                : getSpreadString(gameBet.getSpread());
+        return (otherTeamNotPicked == nflGame.getAwayTeam()) ? getSpreadString(-1 * gameBet.getSpread()) : getSpreadString(gameBet.getSpread());
     }
 
     String getSpreadString(Integer spread) {
-        if (spread.equals(0)) return "PICK-EM";
-
-        if (spread > 0) return "+" + spread;
-
-        return spread.toString();
+        return spread.equals(0) ? "PICK-EM" : (spread > 0 ? "+" + spread : spread.toString());
     }
 
-    private Button createAcceptButton(
-            GameBet gameBet, NflTeam otherTeamNotPicked, String spreadString, NflGame nflGame) {
+    private boolean playerAlreadyMadeBet(GameBet gameBet) {
+        return gameBet.getAcceptorTransactions().stream().anyMatch(t -> t.getCreditUser().equals(player));
+    }
 
-        if (gameBet.getProposer().equals(player)) {
-            var b = new Button("Your Proposal");
+    private Button createAcceptButton(GameBet gameBet, NflTeam otherTeamNotPicked, String spreadString, NflGame nflGame) {
+        if (playerAlreadyMadeBet(gameBet)) {
+            Button b = new Button("You have already accepted this bet");
+            b.setEnabled(false);
+            return b;
+        } else if (gameBet.getProposer().equals(player)) {
+            Button b = new Button("Your Proposal");
             b.setEnabled(false);
             return b;
         } else {
-
             var funds = poolioTransactionService.getFunds(player);
-
             if (Boolean.TRUE.equals(gameBet.getBetCanBeSplit())) {
                 var amounts = computeSplitBetAmounts(gameBet);
-
-                var amountUserCanBet = amounts.availableToBetAmount;
-
-                if (funds < amountUserCanBet) {
-                    amountUserCanBet = funds;
-                }
-
-                var b =
-                        new Button(
-                                "Accept this Bet for $%d to $%d taking %s (%s)"
-                                        .formatted(1, amountUserCanBet, otherTeamNotPicked, spreadString),
-                                LineAwesomeIcon.VOTE_YEA_SOLID.create(),
-                                e -> openChooseAmountDialog(gameBet, nflGame));
+                var amountUserCanBet = Math.min(funds, amounts.availableToBetAmount);
+                Button b = new Button("Accept this Bet for $%d to $%d taking %s (%s)".formatted(1, amountUserCanBet, otherTeamNotPicked, spreadString), LineAwesomeIcon.VOTE_YEA_SOLID.create(), e -> openChooseAmountDialog(gameBet, nflGame));
                 b.setThemeName("primary");
                 return b;
             } else {
                 partialBet = null;
-
                 Button b;
-
                 if (gameBet.getAmount() > funds) {
-                    b = new Button("You do not have enough funds");
-                    b.setPrefixComponent(LineAwesomeIcon.SAD_TEAR_SOLID.create());
+                    b = new Button("You do not have enough funds", LineAwesomeIcon.SAD_TEAR_SOLID.create());
                     b.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
                 } else {
-                    b =
-                            new Button(
-                                    "Accept this Bet for $%d taking %s (%s)"
-                                            .formatted(gameBet.getAmount(), otherTeamNotPicked, spreadString),
-                                    LineAwesomeIcon.VOTE_YEA_SOLID.create(),
-                                    e -> openAcceptBetConfirmDialog(gameBet, nflGame, gameBet.getAmount()));
+                    b = new Button("Accept this Bet for $%d taking %s (%s)".formatted(gameBet.getAmount(), otherTeamNotPicked, spreadString), LineAwesomeIcon.VOTE_YEA_SOLID.create(), e -> openAcceptBetConfirmDialog(gameBet, nflGame, gameBet.getAmount()));
                     b.setThemeName("primary");
                 }
                 return b;
@@ -189,74 +153,44 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
         verticalLayout.setSpacing(false);
         verticalLayout.setPadding(false);
 
-        HorizontalLayout proposerLayout = new HorizontalLayout();
-        proposerLayout.add(createProposerDiv(gameBet));
-        verticalLayout.add(proposerLayout);
-
-        HorizontalLayout gameLayout = new HorizontalLayout();
-        gameLayout.add(createGamePickedDiv(gameBet, nflGame));
-        gameLayout.add(createNflTeamAvatar(gameBet.getTeamPicked(), AvatarVariant.LUMO_SMALL));
-        verticalLayout.add(gameLayout);
-
-        HorizontalLayout amountGameTimeLayout = new HorizontalLayout();
-        amountGameTimeLayout.add(createAmountGameTimeDiv(gameBet, nflGame));
-        verticalLayout.add(amountGameTimeLayout);
+        verticalLayout.add(new HorizontalLayout(createProposerDiv(gameBet)));
+        verticalLayout.add(new HorizontalLayout(createGamePickedDiv(gameBet, nflGame), createNflTeamAvatar(gameBet.getTeamPicked(), AvatarVariant.LUMO_SMALL)));
+        verticalLayout.add(new HorizontalLayout(createAmountGameTimeDiv(gameBet, nflGame)));
 
         if (gameBet.getBetCanBeSplit()) {
-            HorizontalLayout splitAmountLayout = new HorizontalLayout();
-            splitAmountLayout.add(SPLIT_ICON.create());
-            splitAmountLayout.add(createSplitDiv(gameBet));
-            verticalLayout.add(splitAmountLayout);
+            verticalLayout.add(new HorizontalLayout(SPLIT_ICON.create(), createSplitDiv(gameBet)));
         }
 
-        Button acceptBetButton = buildAcceptButton(gameBet, nflGame);
-        verticalLayout.add(acceptBetButton);
-
+        verticalLayout.add(buildAcceptButton(gameBet, nflGame));
         cardLayout.add(userAvatar, verticalLayout);
         return cardLayout;
     }
 
     private Button buildAcceptButton(GameBet gameBet, NflGame nflGame) {
         NflTeam otherTeamNotPicked = getNflTeamNotPicked(gameBet, nflGame);
-
         String spreadString = createSpreadString(gameBet, otherTeamNotPicked, nflGame);
-
         Button acceptBetButton = createAcceptButton(gameBet, otherTeamNotPicked, spreadString, nflGame);
-
-        if (acceptBetButton.isEnabled() && !acceptBetButton.getThemeNames().contains("error"))
-            acceptBetButton.setSuffixComponent(
-                    createNflTeamAvatar(otherTeamNotPicked, AvatarVariant.LUMO_SMALL));
-
+        if (acceptBetButton.isEnabled() && !acceptBetButton.getThemeNames().contains("error")) {
+            acceptBetButton.setSuffixComponent(createNflTeamAvatar(otherTeamNotPicked, AvatarVariant.LUMO_SMALL));
+        }
         return acceptBetButton;
     }
 
     private Div createAmountGameTimeDiv(GameBet gameBet, NflGame nflGame) {
         Div amountGameTimeDiv = new Div();
-        var amountDivElement = amountGameTimeDiv.getElement();
-
         var amountLabel = gameBet.getBetCanBeSplit() ? "Bet Total" : "Bet Amount";
-
-        createNameValueElements(amountLabel, "$" + gameBet.getAmount(), amountDivElement);
-        createSpacerElement(amountDivElement);
-        createNameValueElements(
-                "Game Time",
-                DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(nflGame.getLocalDateTime()) + " EST",
-                amountDivElement);
+        createNameValueElements(amountLabel, "$" + gameBet.getAmount(), amountGameTimeDiv.getElement());
+        createSpacerElement(amountGameTimeDiv.getElement());
+        createNameValueElements("Game Time", DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(nflGame.getLocalDateTime()) + " EST", amountGameTimeDiv.getElement());
         return amountGameTimeDiv;
     }
 
     private Div createProposerDiv(GameBet gameBet) {
         Div div = new Div();
         createNameValueElements("Proposer", gameBet.getProposer().getName(), div.getElement());
-
-        ZoneId zone = ZoneId.of("America/New_York");
-        var localDateTime = LocalDateTime.ofInstant(gameBet.getExpiryDate(), zone);
-
-        createNameValueElements(
-                "Proposal Expiration",
-                DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime),
-                div.getElement());
-
+        createSpacerElement(div.getElement());
+        var localDateTime = LocalDateTime.ofInstant(gameBet.getExpiryDate(), ZoneId.of("America/New_York"));
+        createNameValueElements("Proposal Expiration", DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime), div.getElement());
         return div;
     }
 
@@ -264,81 +198,73 @@ public class BetProposalRenderer implements PoolioAvatar, PoolioDialog, PoolioNo
         Div div = new Div();
         createNameValueElements("Game", createGameWithSpreadString(gameBet, nflGame), div.getElement());
         createSpacerElement(div.getElement());
-        createNameValueElements(
-                gameBet.getProposer().getName() + " Picked",
-                gameBet.getTeamPicked().name(),
-                div.getElement());
+        createNameValueElements(gameBet.getProposer().getName() + " Picked", gameBet.getTeamPicked().name(), div.getElement());
         return div;
     }
 
     private Div createSplitDiv(GameBet gameBet) {
+        Div mainDiv = new Div();
+        var sumTotalBets = gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
+        createNameValueElements("Amount Available", "$" + (gameBet.getAmount() - sumTotalBets), mainDiv.getElement());
+
         Div div = new Div();
-
-        var sumTotalBets =
-                gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
-        createNameValueElements(
-                "Amount Available", "$" + (gameBet.getAmount() - sumTotalBets), div.getElement());
-
-        return div;
+        if (CollectionUtils.isEmpty(gameBet.getAcceptorTransactions())) {
+            createNameValueElements("No Bets Placed", "", div.getElement());
+        } else {
+            createNameValueElements("Players: ", "", div.getElement());
+            gameBet.getAcceptorTransactions().forEach(t -> {
+                createNameValueElements("", t.getCreditUser().getName(), div.getElement());
+                createNameValueElements("", "$" + t.getAmount(), div.getElement());
+                createSpacerElement(div.getElement());
+            });
+        }
+        mainDiv.add(div);
+        return mainDiv;
     }
 
     private String createGameWithSpreadString(GameBet gameBet, NflGame nflGame) {
-        return nflGame.getAwayTeam()
-                + " at "
-                + nflGame.getHomeTeam()
-                + " ("
-                + getSpreadString(gameBet.getSpread())
-                + ")";
+        return nflGame.getAwayTeam() + " at " + nflGame.getHomeTeam() + " (" + getSpreadString(gameBet.getSpread()) + ")";
     }
 
     private void openAcceptBetConfirmDialog(GameBet gameBet, NflGame nflGame, @NotNull Integer betAmount) {
-
         if (gameBet.getProposer().equals(player)) {
             createErrorNotification(new Span("Cannot place bet on your own proposal"));
         } else {
-
-            HorizontalLayout layout = new HorizontalLayout();
-            layout.setAlignItems(Alignment.CENTER);
-            layout.setJustifyContentMode(JustifyContentMode.CENTER);
-
             ConfirmDialog dialog = new ConfirmDialog();
             dialog.setHeader("Accept Bet : Are you sure");
             NflTeam otherTeamNotPicked = getNflTeamNotPicked(gameBet, nflGame);
             String spreadString = createSpreadString(gameBet, otherTeamNotPicked, nflGame);
-
-            String message =
-                    "Accept this Bet for $%d taking %s (%s)"
-                            .formatted(betAmount, otherTeamNotPicked, spreadString);
-
-            dialog.setText(message);
-
+            dialog.setText("Accept this Bet for $%d taking %s (%s)".formatted(betAmount, otherTeamNotPicked, spreadString));
             dialog.setCancelable(true);
-
             dialog.setConfirmText("Accept Bet from " + gameBet.getProposer().getName());
             dialog.setConfirmButtonTheme("primary");
-            dialog.addConfirmListener(
-                    event -> {
-                        dialog.close();
-                        saveToDb(gameBet, betAmount);
-                    });
-
-            rootLayout.add(layout);
+            dialog.addConfirmListener(event -> {
+                dialog.close();
+                saveToDb(gameBet, betAmount);
+            });
+            rootLayout.add(new HorizontalLayout());
             dialog.open();
         }
     }
 
     private void saveToDb(GameBet gameBet, @NotNull Integer betAmount) {
-
         var transaction = nflBetService.createAcceptProposalTransaction(player, gameBet, betAmount);
-        // poolioTransactionService.save(transaction);
-        amountDialog.close();
+
+        if (amountDialog != null)
+            amountDialog.close();
 
         createSucessNotification(new Span("Bet Accepted"));
         log.info("Accepted bet: {}", transaction);
     }
 
-    void createNameValueElements(String name, String value, Element element) {
-        element.appendChild(ElementFactory.createStrong(name + ": "));
+    void createNameValueElements(@NotNull String name, @NotNull String value, @NotNull Element element) {
+        String delimiter = ": ";
+
+        if (name.isEmpty() || value.isEmpty()) {
+            delimiter = "";
+        }
+
+        element.appendChild(ElementFactory.createStrong(name + delimiter));
         element.appendChild(ElementFactory.createLabel(value + " "));
     }
 

@@ -1,21 +1,26 @@
 package nm.poolio.views.bet;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
@@ -67,9 +72,10 @@ public class BetView extends VerticalLayout
     @Getter
     private final AuthenticatedUser authenticatedUser;
 
-    private final ComponentRenderer<Component, GameBet> personCardRenderer;
+    private ComponentRenderer<Component, GameBet> personCardRenderer;
     private final UserService userService;
     private final NflBetService nflBetService;
+    private final PoolService poolService;
 
     Binder<GameBet> binder = new Binder<>(GameBet.class);
     Dialog betDialog = new Dialog();
@@ -98,21 +104,42 @@ public class BetView extends VerticalLayout
         this.authenticatedUser = authenticatedUser;
         player = authenticatedUser.get().orElseThrow();
         this.nflBetService = nflBetService;
+        this.userService = userService;
+        this.poolService = poolService;
+
+        setHeight("100%");
+
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.add("Open Bets \uD83D\uDCD6", new LazyComponent(this::getComponentGameBetComponentRenderer));
+        tabSheet.add("Your Bets \uD83D\uDCB0", new LazyComponent(
+                () -> new Text("This is the Payment tab content")));
+        tabSheet.add("Shipping", new LazyComponent(
+                () -> new Text("This is the Shipping tab content")));
+        add(tabSheet);
+
+
+        //   getComponentGameBetComponentRenderer();
+    }
+
+    private VerticalLayout getComponentGameBetComponentRenderer() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setWidth("100%");
+
         betProposalRenderer =
                 new BetProposalRenderer(
                         player, this, nflGameService, poolioTransactionService, nflBetService);
 
         personCardRenderer = new ComponentRenderer<>(betProposalRenderer::render);
-        setHeight("100%");
+
 
         var userPools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
         var funds = poolioTransactionService.getFunds(player);
 
         if (funds < 1) {
-            add(createNoFundsNotification());
+            layout.add(createNoFundsNotification());
         } else if (userPools.isEmpty()) {
-            add(createNoPoolNotification());
+            layout.add(createNoPoolNotification());
         } else {
             binder.bindInstanceFields(this);
             pool = userPools.getFirst();
@@ -123,7 +150,7 @@ public class BetView extends VerticalLayout
             if (CollectionUtils.isEmpty(games)) {
                 Span noGamesAvailableToBet = new Span("No Games available to Bet");
                 noGamesAvailableToBet.getElement().getThemeList().add("badge contrast primary");
-                add(noGamesAvailableToBet);
+                layout.add(noGamesAvailableToBet);
             } else {
 
                 createDialog(betDialog, e -> onSaveBet(binder.getBean()), createGameBetDialogLayout(games));
@@ -131,24 +158,28 @@ public class BetView extends VerticalLayout
                 Button proposeNewBetButton =
                         new Button(
                                 "Propose New Bet", BET_ICON.create(), e -> openBetProposalDialog(new GameBet()));
-                add(proposeNewBetButton);
+                layout.add(proposeNewBetButton);
             }
 
             HorizontalLayout horizontalLayout = new HorizontalLayout();
+            horizontalLayout.setWidth("100%");
             horizontalLayout.add(new H3("Open Game bet Proposals"));
             Span pending = new Span("Your Funds: $" + funds);
             pending.getElement().getThemeList().add("badge success");
             horizontalLayout.add(pending);
 
-            add(horizontalLayout);
+            layout.add(horizontalLayout);
 
             gameBetVirtualList.getElement().getStyle().set("background-color", "rgba(0, 0, 0, 0.1)");
-            // list.setMaxHeight("300px");
+            gameBetVirtualList.setWidth(700, Unit.PIXELS);
+            gameBetVirtualList.setHeight(600, Unit.PIXELS);
+
             gameBetVirtualList.setItems(openBets);
             gameBetVirtualList.setRenderer(personCardRenderer);
-            add(gameBetVirtualList);
+            layout.add(gameBetVirtualList);
         }
-        this.userService = userService;
+
+        return layout;
     }
 
     private void onSaveBet(GameBet gameBet) {
@@ -291,4 +322,17 @@ public class BetView extends VerticalLayout
         var h4 = new H4("Propose Bet");
         return new Component[]{h4, game, teamPicked, amount, spread, betCanBeSplit, dateTimePicker};
     }
+
+
+    public class LazyComponent extends Div {
+        public LazyComponent(
+                SerializableSupplier<? extends Component> supplier) {
+            addAttachListener(e -> {
+                if (getElement().getChildCount() == 0) {
+                    add(supplier.get());
+                }
+            });
+        }
+    }
+
 }
