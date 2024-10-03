@@ -13,7 +13,6 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.NflGame;
-import nm.poolio.model.enums.BetStatus;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Value;

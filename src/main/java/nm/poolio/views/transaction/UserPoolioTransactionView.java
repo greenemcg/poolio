@@ -1,6 +1,5 @@
 package nm.poolio.views.transaction;
 
-
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
@@ -11,6 +10,4 @@ import nm.poolio.views.MainLayout;
 @Route(value = "userTransactions", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 @Slf4j
-public class UserPoolioTransactionView {
-
-}
+public class UserPoolioTransactionView {}

@@ -1,8 +1,8 @@
 package nm.poolio.model.enums;
 
 public enum BetStatus {
-    OPEN,
-    CLOSED,
-    PENDING,
-    PAID
+  OPEN,
+  CLOSED,
+  PENDING,
+  PAID
 }

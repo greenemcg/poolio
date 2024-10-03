@@ -1,14 +1,13 @@
 package nm.poolio.model;
 
+import java.time.Instant;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.Instant;
 
 @Data
 @Builder
 public class JsonbNote {
-    String note;
-    String user;
-    Instant created;
+  String note;
+  String user;
+  Instant created;
 }

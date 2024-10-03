@@ -16,6 +16,7 @@ import nm.poolio.model.enums.NflWeek;
 import nm.poolio.model.enums.Season;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -60,7 +61,7 @@ public class GameBet extends AbstractEntity {
     private Season season;
 
     @NotNull
-    private Integer spread;
+    private BigDecimal spread;
 
     @NotNull
     private Integer amount;

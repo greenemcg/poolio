@@ -30,22 +30,25 @@ public class NflBetCleaner implements GameBetCommon, NoteCreator {
   public void cleanBets() {
     var openBets = gameBetService.findOpenBets();
 
-    openBets.forEach(b -> {
-      boolean isProposalOpen = isProposalOpen(b);
-      boolean isExpired = b.getExpiryDate().isBefore(Instant.now());
+    openBets.forEach(
+        b -> {
+          boolean isProposalOpen = isProposalOpen(b);
+          boolean isExpired = b.getExpiryDate().isBefore(Instant.now());
 
-      if (isProposalOpen && !isExpired) return;
+          if (isProposalOpen && !isExpired) return;
 
-      if (isProposalOpen) {
-        refund(b);
-        b.setStatus(CollectionUtils.isEmpty(b.getAcceptorTransactions()) ? BetStatus.CLOSED : BetStatus.PENDING);
-      } else {
-        b.setStatus(BetStatus.PENDING);
-      }
+          if (isProposalOpen) {
+            refund(b);
+            b.setStatus(
+                CollectionUtils.isEmpty(b.getAcceptorTransactions())
+                    ? BetStatus.CLOSED
+                    : BetStatus.PENDING);
+          } else {
+            b.setStatus(BetStatus.PENDING);
+          }
 
-      gameBetService.save(b);
-    });
-
+          gameBetService.save(b);
+        });
   }
 
   private void refund(GameBet b) {

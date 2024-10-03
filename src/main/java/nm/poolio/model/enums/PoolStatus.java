@@ -1,8 +1,8 @@
 package nm.poolio.model.enums;
 
 public enum PoolStatus {
-    CLOSED,
-    OPEN,
-    PENDING,
-    PAID
+  CLOSED,
+  OPEN,
+  PENDING,
+  PAID
 }
