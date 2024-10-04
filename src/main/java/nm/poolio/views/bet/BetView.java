@@ -110,14 +110,14 @@ public class BetView extends VerticalLayout
 
     TabSheet tabSheet = new TabSheet();
     tabSheet.add("Open Bets \uD83D\uDCD6", new LazyComponent(this::createOpenBetsTab));
-    tabSheet.add("Your Bets \uD83D\uDCB0", new LazyComponent(this::createBetGrid));
+    tabSheet.add("Your Proposals \uD83D\uDCB0", new LazyComponent(this::createBetGrid));
     add(tabSheet);
     this.gameBetService = gameBetService;
   }
 
   private VerticalLayout createBetGrid() {
     VerticalLayout layout = new VerticalLayout();
-    layout.setWidth(900, Unit.PIXELS);
+    layout.setWidth(1200, Unit.PIXELS);
     layout.add(gameBetGrid);
 
     var list = gameBetService.findOpenBets();
@@ -175,8 +175,8 @@ public class BetView extends VerticalLayout
       layout.add(horizontalLayout);
 
       gameBetVirtualList.getElement().getStyle().set("background-color", "rgba(0, 0, 0, 0.1)");
-      gameBetVirtualList.setWidth(700, Unit.PIXELS);
-      gameBetVirtualList.setHeight(600, Unit.PIXELS);
+      gameBetVirtualList.setWidth(600, Unit.PIXELS);
+      gameBetVirtualList.setHeight(900, Unit.PIXELS);
 
       gameBetVirtualList.setItems(openBets);
       gameBetVirtualList.setRenderer(personCardRenderer);

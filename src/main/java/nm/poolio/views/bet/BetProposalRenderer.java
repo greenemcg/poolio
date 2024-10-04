@@ -258,14 +258,7 @@ public class BetProposalRenderer
     return mainDiv;
   }
 
-  private String createGameWithSpreadString(GameBet gameBet, NflGame nflGame) {
-    return nflGame.getAwayTeam()
-        + " at "
-        + nflGame.getHomeTeam()
-        + " ("
-        + getSpreadString(gameBet.getSpread())
-        + ")";
-  }
+
 
   private void openAcceptBetConfirmDialog(
       GameBet gameBet, NflGame nflGame, @NotNull Integer betAmount) {

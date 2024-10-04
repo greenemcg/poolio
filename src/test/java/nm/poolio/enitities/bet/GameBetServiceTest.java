@@ -14,9 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class GameBetServiceTest {
-
   @Mock private GameBetRepository repository;
-
   @InjectMocks private GameBetService gameBetService;
 
   @BeforeEach
