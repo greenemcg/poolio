@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.AvatarImageBytes;
 import nm.poolio.data.User;
@@ -20,7 +21,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.sql.Types;
 import java.util.Set;
 
-@Data
+@Data()
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(
