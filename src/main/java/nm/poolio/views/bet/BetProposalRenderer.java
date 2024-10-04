@@ -47,8 +47,8 @@ public class BetProposalRenderer
   private final NflGameService nflGameService;
   private final PoolioTransactionService poolioTransactionService;
   private final NflBetService nflBetService;
+  private final Dialog amountDialog;
 
-  private Dialog amountDialog;
   private Integer partialBet;
 
   private Component[] createAmountDialog(GameBet gameBet) {
@@ -59,6 +59,7 @@ public class BetProposalRenderer
     integerField.setMin(1);
     integerField.setMax(amounts.availableToBetAmount());
     integerField.addBlurListener(e -> partialBet = integerField.getValue());
+    integerField.setManualValidation(true);
 
     return new Component[] {new H4("Choose Amount To Bet"), integerField};
   }
@@ -67,7 +68,8 @@ public class BetProposalRenderer
     if (gameBet.getProposer().equals(player))
       createErrorNotification(new Span("Cannot place bet on your own proposal"));
     else {
-      amountDialog = new Dialog();
+      amountDialog.removeAll();
+      amountDialog.getFooter().removeAll();
       createDialog(amountDialog, e -> onSetAmount(gameBet, nflGame), createAmountDialog(gameBet));
       amountDialog.open();
     }

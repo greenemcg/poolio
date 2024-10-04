@@ -56,7 +56,7 @@ public class NflBetService implements NoteCreator {
     poolioTransaction.setNotes(
         List.of(
             buildNote(
-                "%s at %s - Amount: %d Spread: %d Team:"
+                "%s at %s - Amount: %d Spread: %s Team:"
                     .formatted(
                         nflGame.getAwayTeam().name(),
                         nflGame.getHomeTeam().name(),
