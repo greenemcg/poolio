@@ -28,8 +28,9 @@ public class NflBetCleaner implements GameBetCommon, NoteCreator {
 
   @Scheduled(cron = "0 */5 * * * *")
   public void cleanBets() {
-    var openBets = gameBetService.findOpenBets();
 
+    var openBets = gameBetService.findOpenBets();
+      log.debug("Cleaning bets found {} open bets", openBets.size());
     openBets.forEach(
         b -> {
           boolean isProposalOpen = isProposalOpen(b);
