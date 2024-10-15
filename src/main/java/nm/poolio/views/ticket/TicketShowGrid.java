@@ -65,7 +65,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
         nflGame.setHomeScore(gameScore.getHomeScore());
         nflGame.setAwayScore(gameScore.getAwayScore());
 
-        var winner = nflGame.getWinner();
+        var winner = nflGame.findWinner();
         pickedCorrectly = winner == teamToCheck;
       }
 

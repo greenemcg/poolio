@@ -15,8 +15,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.dom.ElementFactory;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,11 +24,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.bet.GameBet;
-import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
-import nm.poolio.services.NflBetService;
+import nm.poolio.services.bets.NflBetService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
@@ -96,14 +93,6 @@ public class BetProposalRenderer
     } else {
       createErrorNotification(new Span("Did not select amount to bet"));
     }
-  }
-
-
-
-  NflTeam getNflTeamNotPicked(GameBet gameBet, NflGame nflGame) {
-    return (nflGame.getAwayTeam() == gameBet.getTeamPicked())
-        ? nflGame.getHomeTeam()
-        : nflGame.getAwayTeam();
   }
 
   String createSpreadString(GameBet gameBet, NflTeam otherTeamNotPicked, NflGame nflGame) {
@@ -237,24 +226,15 @@ public class BetProposalRenderer
 
   private Div createSplitDiv(GameBet gameBet) {
     Div mainDiv = new Div();
-    var sumTotalBets =
-        gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
     createNameValueElements(
-        "Amount Available", "$" + (gameBet.getAmount() - sumTotalBets), mainDiv.getElement());
+        "Amount Available", createAmountAvailableString(gameBet), mainDiv.getElement());
 
     Div div = new Div();
     if (CollectionUtils.isEmpty(gameBet.getAcceptorTransactions())) {
       createNameValueElements("No Bets Placed", "", div.getElement());
     } else {
       createNameValueElements("Players: ", "", div.getElement());
-      gameBet
-          .getAcceptorTransactions()
-          .forEach(
-              t -> {
-                createNameValueElements("", t.getCreditUser().getName(), div.getElement());
-                createNameValueElements("", "$" + t.getAmount(), div.getElement());
-                createSpacerElement(div.getElement());
-              });
+      createPlayersDiv(div, gameBet);
     }
     mainDiv.add(div);
     return mainDiv;
@@ -294,22 +274,6 @@ public class BetProposalRenderer
 
     createSucessNotification(new Span("Bet Accepted"));
     log.info("Accepted bet: {}", transaction);
-  }
-
-  void createNameValueElements(
-      @NotNull String name, @NotNull String value, @NotNull Element element) {
-    String delimiter = ": ";
-
-    if (name.isEmpty() || value.isEmpty()) {
-      delimiter = "";
-    }
-
-    element.appendChild(ElementFactory.createStrong(name + delimiter));
-    element.appendChild(ElementFactory.createLabel(value + " "));
-  }
-
-  void createSpacerElement(Element element) {
-    element.appendChild(ElementFactory.createEmphasis(" • "));
   }
 
 

@@ -80,7 +80,7 @@ public interface PoolioGrid<T> extends PoolioAvatar {
 
     span.setTitle(team.getFullName());
 
-    var winningTeam = game.getWinner();
+    var winningTeam = game.findWinner();
 
     if (winningTeam != null && winningTeam != NflTeam.TBD) {
       if (winningTeam == team) {

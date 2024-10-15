@@ -6,9 +6,12 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="76da30a0-9195-4a89-a80a-f031cfa61157" />
+          <factory-entry name="entityManagerFactory" value="4b11180c-4cee-456d-ac15-3f95e29a4e7c" />
+          <factory-entry name="poolio" value="4b11180c-4cee-456d-ac15-3f95e29a4e7c" />
         </datasource-mapping>
-        <naming-strategy-map />
+        <naming-strategy-map>
+          <unit-entry name="entityManagerFactory" />
+        </naming-strategy-map>
       </configuration>
     </facet>
   </component>

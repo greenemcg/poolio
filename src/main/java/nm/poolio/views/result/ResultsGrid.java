@@ -20,17 +20,6 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
     return getResultsGrid();
   }
 
-  private Renderer<Ticket> createUserRendererOld() {
-    return LitRenderer.<Ticket>of(getUserTemplateExpression())
-        .withProperty("pictureUrl", pojo -> createUserPictureUrl(pojo.getPlayer()))
-        .withProperty("fullName", t -> t.getPlayer().getName())
-        .withProperty("extraData", this::getWinningsString);
-  }
-
-  private String getWinningsString(Ticket t) {
-    return "Winnings: 0";
-  }
-
   default String createTieBreakerString(Ticket ticket) {
     return "" + ticket.getSheet().getTieBreaker();
   }
@@ -46,9 +35,6 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
 
     createColumn(Ticket::getScore, createIconSpan(SCORE_ICON, "Pts"))
         .setComparator(Ticket::getFullScore);
-
-    //    createColumn(Ticket::getFullScore, createIconSpan(SCORE_ICON, "Full"))  // For Debug
-    //            .setComparator(Ticket::getFullScore);
 
     this.getResultsGrid()
         .addColumn(new ComponentRenderer<>(ticket -> new Span(createTieBreakerString(ticket))))

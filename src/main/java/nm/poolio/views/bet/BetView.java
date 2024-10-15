@@ -18,8 +18,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -28,6 +28,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ import nm.poolio.model.enums.BetStatus;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.Season;
 import nm.poolio.security.AuthenticatedUser;
-import nm.poolio.services.NflBetService;
+import nm.poolio.services.bets.NflBetService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioAvatar;
@@ -62,15 +63,10 @@ import org.springframework.util.CollectionUtils;
 
 @PageTitle("Bets \uD83C\uDFB0")
 @Route(value = "bet", layout = MainLayout.class)
-@RolesAllowed("ADMIN")
+@RolesAllowed({"ADMIN", "USER"})
 @Slf4j
 public class BetView extends VerticalLayout
-    implements UserPoolFinder,
-        PoolioDialog,
-        NoteCreator,
-        PoolioAvatar,
-        NflBetGrid,
-        PoolioNotification {
+    implements UserPoolFinder, PoolioDialog, NoteCreator, PoolioAvatar, PoolioNotification {
 
   private final GameBetService service;
   @Getter private final NflGameService nflGameService;
@@ -80,19 +76,20 @@ public class BetView extends VerticalLayout
   private final UserService userService;
   private final NflBetService nflBetService;
   private final PoolService poolService;
-    private final User player;
+  private final User player;
   private final AmountDialog amountDialog; // used to get current week
   Binder<GameBet> binder = new Binder<>(GameBet.class);
   Dialog betDialog = new Dialog();
   ComboBox<NflGame> game = new ComboBox<>();
   ComboBox<NflTeam> teamPicked = new ComboBox<>();
-  BigDecimalField spread = new BigDecimalField("Home Team Spread");
+  NumberField spreadDouble = new NumberField("Home Team Spread");
   IntegerField amount = new IntegerField("Amount");
   Checkbox betCanBeSplit = new Checkbox();
   DateTimePicker expiryDate = new DateTimePicker();
   BetProposalRenderer betProposalRenderer;
   VirtualList<GameBet> gameBetVirtualList = new VirtualList<>();
-  Grid<GameBet> gameBetGrid = new Grid<>();
+  //  @Getter Grid<GameBet> proposalBetGrid = new Grid<>();
+  //  @Getter Grid<GameBet> playerBetGrid = new Grid<>();
   private Pool pool;
 
   public BetView(
@@ -112,29 +109,28 @@ public class BetView extends VerticalLayout
     this.nflBetService = nflBetService;
     this.userService = userService;
     this.poolService = poolService;
-    decorateTransactionGrid();
+    // decorateTransactionGrid();
 
     setHeight("100%");
 
     TabSheet tabSheet = new TabSheet();
     tabSheet.add("Open Bets \uD83D\uDCD6", new LazyComponent(this::createOpenBetsTab));
-    tabSheet.add("Your Proposals \uD83D\uDCB0", new LazyComponent(this::createBetGrid));
+    tabSheet.add("Your Proposals \uD83D\uDCB0", new LazyComponent(this::createProposalBetGrid));
+    tabSheet.add("Your Game Bets \uD83C\uDFC8", new LazyComponent(this::createPlayerBetGrid));
     add(tabSheet);
     this.gameBetService = gameBetService;
 
     amountDialog = new AmountDialog();
   }
 
-  private VerticalLayout createBetGrid() {
-    VerticalLayout layout = new VerticalLayout();
-    layout.setWidth(1200, Unit.PIXELS);
-    layout.add(gameBetGrid);
+  private VerticalLayout createPlayerBetGrid() {
+    var p = new Bets();
+    return p.render();
+  }
 
-    var list = gameBetService.findOpenBets();
-    gameBetGrid.setItems(list);
-    gameBetGrid.setWidth("100%");
-
-    return layout;
+  private VerticalLayout createProposalBetGrid() {
+    var p = new Proposals();
+    return p.render();
   }
 
   private VerticalLayout createOpenBetsTab() {
@@ -145,7 +141,8 @@ public class BetView extends VerticalLayout
         new BetProposalRenderer(
             player, this, nflGameService, poolioTransactionService, nflBetService, amountDialog);
 
-      ComponentRenderer<Component, GameBet> personCardRenderer = new ComponentRenderer<>(betProposalRenderer::render);
+    ComponentRenderer<Component, GameBet> personCardRenderer =
+        new ComponentRenderer<>(betProposalRenderer::render);
 
     var userPools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
@@ -174,9 +171,9 @@ public class BetView extends VerticalLayout
           .bind(GameBet::getAmount, GameBet::setAmount);
 
       binder
-          .forField(spread)
+          .forField(spreadDouble)
           .withValidator(this::validateSpread, "Spread is invalid")
-          .bind(GameBet::getSpread, GameBet::setSpread);
+          .bind(GameBet::getSpreadDouble, GameBet::setSpreadDouble);
 
       binder
           .forField(expiryDate)
@@ -230,7 +227,7 @@ public class BetView extends VerticalLayout
     var bean = binder.getBean();
 
     if (bean != null && bean.getGame() != null) {
-      if ( expiryLocalDateTime.isAfter(bean.getGame().getLocalDateTime())) {
+      if (expiryLocalDateTime.isAfter(bean.getGame().getLocalDateTime())) {
         createWarningNotification(new Span("Expire Date must be before Game Start"));
         return false;
       }
@@ -244,30 +241,35 @@ public class BetView extends VerticalLayout
     return true;
   }
 
-  private boolean validateSpread(BigDecimal bigDecimal) {
-    if (bigDecimal == null) {
+  private boolean validateSpread(Double doubleValue) {
+    if (doubleValue == null) {
       return false;
     }
 
-    int value = bigDecimal.intValue();
+    int intValue = doubleValue.intValue();
 
-    if (value > GameBet.MAX_SPREAD) {
+    if (intValue > GameBet.MAX_SPREAD) {
       createWarningNotification(new Span("Max Bet Spread is: %d".formatted(GameBet.MAX_SPREAD)));
       return false;
     }
 
-    if (value < GameBet.MIN_SPREAD) {
+    if (intValue < GameBet.MIN_SPREAD) {
       createWarningNotification(new Span("Min Bet Spread is: %d".formatted(GameBet.MIN_SPREAD)));
       return false;
     }
 
+    BigDecimal bigDecimal = new BigDecimal(doubleValue);
+    bigDecimal = bigDecimal.setScale(1, RoundingMode.UNNECESSARY);
+
     BigDecimal fractionalPart = bigDecimal.remainder(BigDecimal.ONE);
     log.info("Fractional Part: {}", fractionalPart);
 
-    if (!fractionalPart.equals(BigDecimal.ZERO) && !fractionalPart.toString().equals("0.5")) {
+    if (!fractionalPart.equals(BigDecimal.ZERO) && !fractionalPart.toString().endsWith("0.5")) {
       createWarningNotification(new Span("Hook must be .5"));
       return false;
     }
+
+    binder.getBean().setSpread(bigDecimal);
 
     return true;
   }
@@ -395,7 +397,7 @@ public class BetView extends VerticalLayout
     game.setRenderer(
         new ComponentRenderer<>(
             nflGame ->
-                new Span(nflGame.getHomeTeam().name() + " vs " + nflGame.getAwayTeam().name())));
+                new Span(nflGame.getAwayTeam().name() + " at " + nflGame.getHomeTeam().name())));
     game.addValueChangeListener(
         e -> {
           NflGame game = e.getValue();
@@ -421,11 +423,10 @@ public class BetView extends VerticalLayout
     teamPicked.setClearButtonVisible(true);
     teamPicked.setEnabled(false);
 
-    spread.setRequired(true);
-    spread.setWidth("80%");
-    spread.setPrefixComponent(SPREAD_ICON.create());
+    spreadDouble.setRequired(true);
+    spreadDouble.setWidth("80%");
+    spreadDouble.setPrefixComponent(SPREAD_ICON.create());
 
-    amount.setRequired(true);
     amount.setPrefixComponent(AMOUNT_ICON.create());
 
     expiryDate.setLabel("Expire Date " + "if No Takers (EST)");
@@ -438,13 +439,13 @@ public class BetView extends VerticalLayout
     betCanBeSplit.setLabelComponent(createIconSpan(SPLIT_ICON, "Bet Can Be Split"));
 
     var h4 = new H4("Propose Bet");
-    return new Component[] {h4, game, teamPicked, amount, spread, betCanBeSplit, expiryDate};
+    return new Component[] {h4, game, teamPicked, amount, spreadDouble, betCanBeSplit, expiryDate};
   }
 
-  @Override
-  public Grid<GameBet> getGrid() {
-    return gameBetGrid;
-  }
+  //  @Override
+  //  public Grid<GameBet> getGrid() {
+  //    return proposalBetGrid;
+  //  }
 
   public static class LazyComponent extends Div {
     public LazyComponent(SerializableSupplier<? extends Component> supplier) {
@@ -465,6 +466,51 @@ public class BetView extends VerticalLayout
     public void close() {
       super.close();
       gameBetVirtualList.setItems(service.findAvailableBets());
+    }
+  }
+
+  @Getter
+  class Proposals implements NflBetProposalGrid {
+    Grid<GameBet> proposalBetGrid = new Grid<>();
+
+    @Override
+    public NflGameService getNflGameService() {
+      return nflGameService;
+    }
+
+    VerticalLayout render() {
+      VerticalLayout layout = new VerticalLayout();
+      layout.setWidth(1600, Unit.PIXELS);
+      layout.add(proposalBetGrid);
+      decorateGrid();
+      var list = gameBetService.findBetProposals(player);
+      proposalBetGrid.setItems(list);
+      proposalBetGrid.setWidth("100%");
+
+      return layout;
+    }
+  }
+
+  @Getter
+  class Bets implements NflBetPlayersGrid {
+    Grid<GameBet> playerBetGrid = new Grid<>();
+
+    @Override
+    public NflGameService getNflGameService() {
+      return nflGameService;
+    }
+
+    VerticalLayout render() {
+      VerticalLayout layout = new VerticalLayout();
+      layout.setWidth(1600, Unit.PIXELS);
+      layout.add(playerBetGrid);
+      decorateGrid();
+
+      var list = gameBetService.findBetsForPlayer(player);
+      playerBetGrid.setItems(list);
+      playerBetGrid.setWidth("100%");
+
+      return layout;
     }
   }
 }

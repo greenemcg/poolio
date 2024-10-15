@@ -71,7 +71,11 @@ public class GameBet extends AbstractEntity {
 
   @Min(MIN_SPREAD)
   @Max(MAX_SPREAD)
-  @NotNull private BigDecimal spread;
+  @NotNull
+  private BigDecimal spread;
+
+  @Transient
+  private Double spreadDouble;
 
   @Min(MIN_AMOUNT)
   @Max(MAX_AMOUNT)
@@ -79,7 +83,6 @@ public class GameBet extends AbstractEntity {
   private Integer amount;
 
   @NotNull private Boolean proposerCanEditTeam;
-
   @NotNull private Boolean betCanBeSplit;
 
   @NotNull
@@ -92,6 +95,15 @@ public class GameBet extends AbstractEntity {
 
   private Instant acceptanceDate;
   private Instant expiryDate;
+
+  public String getExpirationString() {
+    if (expiryDate == null) {
+      return "";
+    }
+    ZoneId zone = ZoneId.of("America/New_York");
+    var localDateTime = LocalDateTime.ofInstant(expiryDate, zone);
+    return DateTimeFormatter.ofPattern("MMM d, h:mm a").format(localDateTime);
+  }
 
   public void setGame(NflGame game) {
     this.gameId = game.getId();

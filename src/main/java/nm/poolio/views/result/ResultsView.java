@@ -273,7 +273,7 @@ public class ResultsView extends VerticalLayout
                     nflGame.setHomeScore(gameScore.getHomeScore());
                     nflGame.setAwayScore(gameScore.getAwayScore());
 
-                    var winner = nflGame.getWinner();
+                    var winner = nflGame.findWinner();
 
                     // todo add this to nfl game view and share code
 

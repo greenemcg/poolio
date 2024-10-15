@@ -12,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.annotation.Nullable;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -62,7 +64,7 @@ public abstract class AbstractEntity {
   }
 
   @JsonIgnore
-  public LocalDateTime getCreatedLocalDateTime() {
+  public @Nullable LocalDateTime getCreatedLocalDateTime() {
     try {
       ZoneId zone = ZoneId.of("America/New_York");
       return LocalDateTime.ofInstant(createdDate, zone);

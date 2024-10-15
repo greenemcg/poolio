@@ -4,8 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nm.poolio.data.User;
 import nm.poolio.model.enums.BetStatus;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,22 @@ public class GameBetService implements Serializable, GameBetCommon {
   public List<GameBet> findOpenBets() {
     return repository.findByStatus(BetStatus.OPEN);
   }
+
+  public List<GameBet> findPendingBets() {
+    return repository.findByStatus(BetStatus.PENDING);
+  }
+
+  public List<GameBet> findBetProposals(User player) {
+    return repository.findByProposerTransactionCreditUserOrderByCreatedDateDesc(player);
+  }
+
+
+  public List<GameBet> findBetsForPlayer(User player) {
+   var r = repository.findByAcceptorTransactionId(player.getId());
+
+   return r;
+  }
+
 
   public GameBet save(GameBet gameBet) {
     return repository.save(gameBet);

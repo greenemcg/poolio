@@ -27,7 +27,7 @@ public class TicketScorer {
               var nflGame =
                   games.stream().filter(g -> g.getId().equals(gameKey)).findAny().orElse(null);
               if (nflGame != null && teamPicked != null) {
-                var winner = nflGame.getWinner();
+                var winner = nflGame.findWinner();
 
                 if (teamPicked.equals(winner)) {
                   score += 10;

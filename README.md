@@ -20,6 +20,9 @@ BobsNo passwd for non log in users
 
 add build time 
 
+Edit Credit amount on APP
+
+
 
 # Poolio
 
