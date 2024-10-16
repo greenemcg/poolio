@@ -26,7 +26,6 @@ hs_err_pid*
 replay_pid*
 /avatar-images/
 /.idea/
-/src/
 /node_modules/
 poolio.iml
 tsconfig.json
