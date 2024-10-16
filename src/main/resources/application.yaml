@@ -14,11 +14,11 @@ spring:
     name: Poolio
   datasource:
     password: poolio
-    url: jdbc:postgresql://localhost:5432/poolio
+    url: jdbc:postgresql://lappy.local:5432/poolio
     username: poolio
-#      password: golf9c
-#      url: jdbc:postgresql://poolio.local:5432/poolio
-#      username: mike
+#    password: golf9c
+#    url: jdbc:postgresql://poolio.local:5432/poolio
+#    username: mike
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -53,5 +53,3 @@ management:
     web:
       exposure:
         include: '*'
-
-

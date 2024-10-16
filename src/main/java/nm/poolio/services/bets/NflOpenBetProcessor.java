@@ -1,20 +1,18 @@
 package nm.poolio.services.bets;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nm.poolio.enitities.bet.GameBet;
 import nm.poolio.enitities.bet.GameBetCommon;
 import nm.poolio.enitities.bet.GameBetService;
 import nm.poolio.enitities.transaction.NoteCreator;
-import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.enums.BetStatus;
 import nm.poolio.security.AuthenticatedUser;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Component
@@ -25,10 +23,11 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
   private final PoolioTransactionService poolioTransactionService;
   @Getter private final AuthenticatedUser authenticatedUser;
 
-  void process() {
-
+  @Transactional
+ public void process() {
     var openBets = gameBetService.findOpenBets();
-      log.debug("Found {} open bets", openBets.size());
+    log.debug("Found {} open bets", openBets.size());
+
     openBets.forEach(
         b -> {
           boolean isProposalOpen = isProposalOpen(b);
@@ -37,7 +36,8 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
           if (isProposalOpen && !isExpired) return;
 
           if (isProposalOpen) {
-            refund(b);
+            var t = refund(b, poolioTransactionService, PoolioTransactionType.GAME_BET_REFUND);
+            b.getResultTransactions().add(t);
             b.setStatus(
                 CollectionUtils.isEmpty(b.getAcceptorTransactions())
                     ? BetStatus.CLOSED
@@ -48,30 +48,5 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
 
           gameBetService.save(b);
         });
-  }
-
-  private void refund(GameBet b) {
-    int refundAmount = calculateRefund(b);
-
-    if (refundAmount == 0) {
-      log.info("No refund needed for bet {}", b);
-      return;
-    }
-
-    var refund = new PoolioTransaction();
-    refund.setAmount(refundAmount);
-    refund.setCreditUser(b.getProposerTransaction().getDebitUser());
-    refund.setDebitUser(b.getProposerTransaction().getCreditUser());
-    refund.setType(PoolioTransactionType.GAME_BET_REFUND);
-
-    if (CollectionUtils.isEmpty(refund.getNotes())) {
-      refund.setNotes(new ArrayList<>());
-    }
-
-    poolioTransactionService.save(refund);
-  }
-
-  private int calculateRefund(GameBet b) {
-    return b.getBetCanBeSplit() ? b.getAmount() - findTaken(b) : b.getAmount();
   }
 }

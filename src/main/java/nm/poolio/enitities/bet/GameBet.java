@@ -57,7 +57,7 @@ public class GameBet extends AbstractEntity {
       name = "game_bet_winners",
       joinColumns = @JoinColumn(name = "game_bet_id"),
       inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-  private Set<PoolioTransaction> winningTransactions;
+  private Set<PoolioTransaction> resultTransactions = new HashSet<>();
 
   @NotNull private String gameId;
 
