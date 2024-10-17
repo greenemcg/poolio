@@ -49,6 +49,8 @@ public interface PoolioGrid<T> extends PoolioAvatar {
     grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
     grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
+    grid.setEmptyStateText("No Records found.");
+
     return grid;
   }
 
