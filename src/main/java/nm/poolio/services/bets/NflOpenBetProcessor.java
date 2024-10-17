@@ -37,7 +37,7 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
 
           if (isProposalOpen) {
             var t = refund(b, poolioTransactionService, PoolioTransactionType.GAME_BET_REFUND);
-            b.getResultTransactions().add(t);
+            b.getResultTransactions().addAll(t);
             b.setStatus(
                 CollectionUtils.isEmpty(b.getAcceptorTransactions())
                     ? BetStatus.CLOSED

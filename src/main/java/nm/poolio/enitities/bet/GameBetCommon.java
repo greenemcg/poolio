@@ -1,6 +1,8 @@
 package nm.poolio.enitities.bet;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
@@ -21,7 +23,7 @@ public interface GameBetCommon {
     return gameBet.getAcceptorTransactions().stream().mapToInt(PoolioTransaction::getAmount).sum();
   }
 
-  default PoolioTransaction refund(
+  default List<PoolioTransaction> refund(
       GameBet b,
       PoolioTransactionService poolioTransactionService,
       PoolioTransactionType transactionType) {
@@ -41,17 +43,21 @@ public interface GameBetCommon {
       refund.setNotes(new ArrayList<>());
     }
 
-    b.getAcceptorTransactions()
-        .forEach(t -> refundAcceptor(t, b, poolioTransactionService, transactionType));
+    var transactions =
+        b.getAcceptorTransactions().stream()
+            .map(t -> refundAcceptor(t, b, poolioTransactionService, transactionType))
+            .toList();
 
-    return poolioTransactionService.save(refund);
+    transactions.add(poolioTransactionService.save(refund));
+
+    return transactions;
   }
 
   private PoolioTransaction refundAcceptor(
       PoolioTransaction t,
       GameBet gameBet,
       PoolioTransactionService poolioTransactionService,
-      PoolioTransactionType transactionType){
+      PoolioTransactionType transactionType) {
 
     var refund = new PoolioTransaction();
     refund.setAmount(t.getAmount());
@@ -64,7 +70,5 @@ public interface GameBetCommon {
     }
 
     return poolioTransactionService.save(refund);
-
   }
-
 }
