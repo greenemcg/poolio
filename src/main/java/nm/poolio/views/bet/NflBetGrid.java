@@ -6,32 +6,52 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
-import java.time.format.DateTimeFormatter;
-import nm.poolio.data.AbstractEntity;
+import nm.poolio.data.User;
 import nm.poolio.enitities.bet.GameBet;
-import nm.poolio.model.NflGame;
+import nm.poolio.model.enums.NflTeam;
 import nm.poolio.services.NflGameService;
 import nm.poolio.vaadin.PoolioGrid;
-import org.vaadin.lineawesome.LineAwesomeIcon;
 
 public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
 
   NflGameService getNflGameService();
 
+  User getPlayer();
+
   private Component createOtherTeamPickedSpan(GameBet gameBet) {
-    NflGame game = getNflGameService().findGameById(gameBet.getGameId());
-    return new Span(getNflTeamNotPicked(gameBet, game).toString());
+    var t = getNflTeamNotPicked(gameBet, gameBet.getGame());
+
+    var winningTeam = gameBet.getGame().findWinnerSpread(gameBet.getSpread());
+
+    if (winningTeam == NflTeam.TBD) {
+      return new Span(t.toString());
+    }
+
+    if (winningTeam == NflTeam.TIE) {
+      Span span = new Span();
+      span.getStyle().set("font-style", "italic");
+      span.add(t.toString() + "-TIE");
+      return span;
+    }
+
+    Span span = new Span();
+    if (winningTeam == t) {
+      span.getStyle().set("font-weight", "bold");
+      span.add(t.toString() + "-WIN");
+    } else {
+      span.getStyle().set("text-decoration", "line-through");
+      span.add(t.toString());
+    }
+    return span;
   }
 
   private Component createGameSpan(GameBet gameBet) {
-    NflGame game = getNflGameService().findGameById(gameBet.getGameId());
-    String message =
-        createGameWithSpreadString(gameBet, game)
-            + " - "
-            + DateTimeFormatter.ofPattern("MMM d, h:mm a").format(game.getLocalDateTime());
+    var game = gameBet.getGame();
+    Span span = new Span();
 
-    return new Span(message);
+    span.add(createGameWithSpreadString(gameBet, game));
+
+    return span;
   }
 
   private Component createPlayersComponent(GameBet gameBet) {
@@ -46,18 +66,26 @@ public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
 
   default void decorateTransactionGrid(boolean isProposal) {
 
+    getGrid().setDetailsVisibleOnClick(false);
+
     if (!isProposal)
       getGrid()
           .addColumn(
               new ComponentRenderer<>(
                   transaction -> createUserComponent(transaction.getProposer())))
           .setHeader(createIconSpan(BET_ICON, "Proposer"))
-          .setAutoWidth(true);
+          .setAutoWidth(true)
+          .setFrozen(true)
+          .setFlexGrow(0);
 
     if (isProposal)
       getGrid()
-          .addColumn(
-              new ComponentRenderer<>(transaction -> new Span("$" + transaction.getAmount())))
+          .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + gameBet.getAmount())))
+          .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
+          .setAutoWidth(true);
+    else
+      getGrid()
+          .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + getPlayerAmount(gameBet))))
           .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
           .setAutoWidth(true);
 
@@ -71,10 +99,9 @@ public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
     else
       getGrid()
           .addColumn(new ComponentRenderer<>(this::createOtherTeamPickedSpan))
-          .setHeader(createIconSpan(POOLIO_ICON, "Your Pick"))
+          .setHeader(createIconSpan(POOLIO_ICON, "Pick"))
           .setAutoWidth(true);
 
-    createColumn(GameBet::getWeek, createIconSpan(WEEK_ICON, "Week"));
     createColumn(GameBet::getStatus, createIconSpan(STATUS_ICON, "Status"));
 
     getGrid()
@@ -90,17 +117,16 @@ public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
           .addColumn(new ComponentRenderer<>(this::amountAvailSpan))
           .setHeader(createIconSpan(GAMES_ICON, "$ Avail"))
           .setAutoWidth(true);
+  }
 
-    createColumn(
-        GameBet::getExpirationString, createIconSpan(LineAwesomeIcon.CLOCK_SOLID, "Expires (EST)"));
+  private Integer getPlayerAmount(GameBet gameBet) {
 
-    getGrid()
-        .addColumn(
-            new LocalDateTimeRenderer<>(
-                GameBet::getCreatedLocalDateTime,
-                () -> DateTimeFormatter.ofPattern("MMM d, h:mm a")))
-        .setHeader(createIconSpan(CREATED_ICON, "Created (EST)"))
-        .setAutoWidth(true)
-        .setComparator(AbstractEntity::getCreatedDate);
+    var o =
+        gameBet.getAcceptorTransactions().stream()
+            .filter(t -> t.getCreditUser().equals(getPlayer()))
+            .findFirst()
+            .map(t -> t.getAmount());
+
+    return o.orElse(-1);
   }
 }

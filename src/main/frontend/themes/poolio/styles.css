@@ -8,3 +8,10 @@ vaadin-grid::part(header-cell) {
     color: black;
 }
 
+vaadin-input-field-label-font-weight {
+    font-weight: bold;
+}
+label {
+    font-weight: bold;
+}
+

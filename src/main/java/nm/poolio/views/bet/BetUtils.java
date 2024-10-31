@@ -1,5 +1,6 @@
 package nm.poolio.views.bet;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.dom.ElementFactory;
@@ -41,7 +42,22 @@ public interface BetUtils {
   default String createGameWithSpreadString(GameBet gameBet, NflGame nflGame) {
     return String.format(
         "%s at %s (%s)",
-        nflGame.getAwayTeam(), nflGame.getHomeTeam(), getSpreadString(gameBet.getSpread()));
+        getTeamAndScore(nflGame.getAwayTeam(), nflGame),
+        getTeamAndScore(nflGame.getHomeTeam(), nflGame),
+        getSpreadString(gameBet.getSpread()));
+  }
+
+  private Integer getScore(NflTeam team, NflGame game) {
+    if (team.equals(game.getAwayTeam())) return game.getAwayScore();
+    else return game.getHomeScore();
+  }
+
+  private String getTeamAndScore(NflTeam team, NflGame game) {
+    if (game.getScore().isEmpty()) {
+      return team.toString();
+    } else {
+      return "%s-%d".formatted(team, getScore(team, game));
+    }
   }
 
   default void createNameValueElements(
@@ -67,11 +83,34 @@ public interface BetUtils {
     }
   }
 
+  default void createPayOutsDiv(Div div, GameBet gameBet) {
+    boolean first = true;
+    for (PoolioTransaction t : gameBet.getResultTransactions()) {
+      if (!first) {
+        createSpacerElement(div.getElement());
+      }
+      first = false;
+      createNameValueElements("", t.getDebitUser().getName(),  div.getElement());
+      createNameValueElements("", "$" + t.getAmount(), div.getElement());
+    }
+  }
 
- default NflTeam getNflTeamNotPicked(GameBet gameBet, NflGame nflGame) {
+  default NflTeam getNflTeamNotPicked(GameBet gameBet, NflGame nflGame) {
     return (nflGame.getAwayTeam() == gameBet.getTeamPicked())
-            ? nflGame.getHomeTeam()
-            : nflGame.getAwayTeam();
+        ? nflGame.getHomeTeam()
+        : nflGame.getAwayTeam();
+  }
+
+  default Component createBetPlayersString(GameBet gameBet) {
+    Div div = new Div();
+    createPlayersDiv(div, gameBet);
+    return div;
+  }
+
+  default Component createBetPayOutsString(GameBet gameBet) {
+    Div div = new Div();
+    createPayOutsDiv(div, gameBet);
+    return div;
   }
 
   record SplitAmounts(int totalBetsSum, int availableToBetAmount) {}

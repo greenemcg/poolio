@@ -32,7 +32,7 @@ public class NflGameScorerService {
         return service.gameList;
     }
 
-    private void addScore(NflGame g) {
+    public void addScore(NflGame g) {
         service.addScores(g);
     }
 }
