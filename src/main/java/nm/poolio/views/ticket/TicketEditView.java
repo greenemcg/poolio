@@ -127,9 +127,15 @@ public class TicketEditView extends VerticalLayout
     games.forEach(g -> formLayout.add(createGameRadioButton(g)));
 
     add(formLayout);
+
+    HorizontalLayout horizontalLayout = new HorizontalLayout();
+    horizontalLayout.setAlignItems(Alignment.BASELINE);
+
     tieBreakerFiled = createTieBreakerField(ticket);
-    add(tieBreakerFiled);
-    add(createSubmitButton(e -> saveTicket()));
+    horizontalLayout.add(tieBreakerFiled);
+    horizontalLayout.add(createSubmitButton(e -> saveTicket()));
+
+    add(horizontalLayout);
   }
 
   private void saveTicket() {

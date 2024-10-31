@@ -43,14 +43,18 @@ public interface GameBetCommon {
       refund.setNotes(new ArrayList<>());
     }
 
-    var transactions =
-        b.getAcceptorTransactions().stream()
-            .map(t -> refundAcceptor(t, b, poolioTransactionService, transactionType))
-            .toList();
+    if( CollectionUtils.isEmpty(b.getAcceptorTransactions()))
+        return List.of(poolioTransactionService.save(refund));
+    else {
+      var transactions =
+          b.getAcceptorTransactions().stream()
+              .map(t -> refundAcceptor(t, b, poolioTransactionService, transactionType))
+              .toList();
+      transactions.add(poolioTransactionService.save(refund));
+      return transactions;
 
-    transactions.add(poolioTransactionService.save(refund));
+    }
 
-    return transactions;
   }
 
   private PoolioTransaction refundAcceptor(

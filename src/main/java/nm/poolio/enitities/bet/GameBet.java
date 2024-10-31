@@ -115,11 +115,11 @@ public class GameBet extends AbstractEntity {
   }
 
   public Component getHumanReadableString() {
-    String str = gameId.split("_")[0].replace("at", " at ");
+
     VerticalLayout layout = new VerticalLayout();
-    layout.add(new Span("Game: " + str + " " + week));
+    layout.add(new Span(createGameDetailsString()));
     layout.add(
-        new Span("Team picked: " + teamPicked + " Spread: " + spread + " Amount: $" + amount));
+        new Span(createBetDetailsString()));
 
     LocalDateTime localDateTime =
         LocalDateTime.ofInstant(expiryDate, ZoneId.of("America/New_York"));
@@ -129,5 +129,14 @@ public class GameBet extends AbstractEntity {
                 + DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime)));
 
     return layout;
+  }
+
+  public String createGameDetailsString() {
+    String str = gameId.split("_")[0].replace("at", " at ");
+    return "Game: %s %s".formatted(str, week);
+  }
+
+  public String createBetDetailsString() {
+    return "Team picked: %s Spread: %s Amount: $%d".formatted(teamPicked, spread, amount);
   }
 }

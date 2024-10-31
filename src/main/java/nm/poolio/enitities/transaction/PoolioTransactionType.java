@@ -10,6 +10,7 @@ public enum PoolioTransactionType {
   GAME_BET_WINNER,
   TIE_REFUND,
   POOL_WINNER,
+  CANCEL_PROPOSAL,
   ACCEPT_PROPOSAL;
 
   public static PoolioTransactionType[] cashTypes() {

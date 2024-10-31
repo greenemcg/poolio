@@ -20,15 +20,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.enitities.bet.GameBet;
+import nm.poolio.enitities.bet.GameBetCommon;
+import nm.poolio.enitities.bet.GameBetService;
+import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
+import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.NflGame;
+import nm.poolio.model.enums.BetStatus;
 import nm.poolio.model.enums.NflTeam;
-import nm.poolio.services.bets.NflBetService;
 import nm.poolio.services.NflGameService;
+import nm.poolio.services.bets.NflBetService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.vaadin.PoolioNotification;
@@ -38,12 +44,14 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 @RequiredArgsConstructor
 @Slf4j
 public class BetProposalRenderer
-    implements BetUtils, PoolioAvatar, PoolioDialog, PoolioNotification {
+        implements BetUtils, PoolioAvatar, PoolioDialog, PoolioNotification, GameBetCommon {
   private final User player;
   private final VerticalLayout rootLayout;
   private final NflGameService nflGameService;
   private final PoolioTransactionService poolioTransactionService;
   private final NflBetService nflBetService;
+  private final GameBetService gameBetService;
+
   private final Dialog amountDialog;
 
   private Integer partialBet;
@@ -62,9 +70,9 @@ public class BetProposalRenderer
   }
 
   void openChooseAmountDialog(GameBet gameBet, NflGame nflGame) {
-    if (gameBet.getProposer().equals(player))
+    if (gameBet.getProposer().equals(player)) {
       createErrorNotification(new Span("Cannot place bet on your own proposal"));
-    else {
+    } else {
       amountDialog.removeAll();
       amountDialog.getFooter().removeAll();
       createDialog(amountDialog, e -> onSetAmount(gameBet, nflGame), createAmountDialog(gameBet));
@@ -79,14 +87,14 @@ public class BetProposalRenderer
 
       if (partialBet > funds) {
         createErrorNotification(
-            new Span(
-                "You do not have enough funds: $%d to place bet amount: $%d"
-                    .formatted(funds, partialBet)));
+                new Span(
+                        "You do not have enough funds: $%d to place bet amount: $%d"
+                                .formatted(funds, partialBet)));
       } else if (partialBet > amounts.availableToBetAmount()) {
         createErrorNotification(
-            new Span(
-                "Your bet amount: $%d is greater than ticket bet amount available: $%d"
-                    .formatted(partialBet, amounts.availableToBetAmount())));
+                new Span(
+                        "Your bet amount: $%d is greater than ticket bet amount available: $%d"
+                                .formatted(partialBet, amounts.availableToBetAmount())));
       } else {
         openAcceptBetConfirmDialog(gameBet, nflGame, partialBet);
       }
@@ -97,18 +105,17 @@ public class BetProposalRenderer
 
   String createSpreadString(GameBet gameBet, NflTeam otherTeamNotPicked, NflGame nflGame) {
     return (otherTeamNotPicked == nflGame.getAwayTeam())
-        ? getSpreadString(gameBet.getSpread().multiply(new BigDecimal(-1)))
-        : getSpreadString(gameBet.getSpread());
+            ? getSpreadString(gameBet.getSpread().multiply(new BigDecimal(-1)))
+            : getSpreadString(gameBet.getSpread());
   }
-
 
   private boolean playerAlreadyMadeBet(GameBet gameBet) {
     return gameBet.getAcceptorTransactions().stream()
-        .anyMatch(t -> t.getCreditUser().equals(player));
+            .anyMatch(t -> t.getCreditUser().equals(player));
   }
 
   private Button createAcceptButton(
-      GameBet gameBet, NflTeam otherTeamNotPicked, String spreadString, NflGame nflGame) {
+          GameBet gameBet, NflTeam otherTeamNotPicked, String spreadString, NflGame nflGame) {
     if (playerAlreadyMadeBet(gameBet)) {
       Button b = new Button("You have already accepted this bet");
       b.setEnabled(false);
@@ -123,11 +130,11 @@ public class BetProposalRenderer
         var amounts = computeSplitBetAmounts(gameBet);
         var amountUserCanBet = Math.min(funds, amounts.availableToBetAmount());
         Button b =
-            new Button(
-                "Accept this Bet for $%d to $%d taking %s (%s)"
-                    .formatted(1, amountUserCanBet, otherTeamNotPicked, spreadString),
-                LineAwesomeIcon.VOTE_YEA_SOLID.create(),
-                e -> openChooseAmountDialog(gameBet, nflGame));
+                new Button(
+                        "Accept this Bet for $%d to $%d taking %s (%s)"
+                                .formatted(1, amountUserCanBet, otherTeamNotPicked, spreadString),
+                        LineAwesomeIcon.VOTE_YEA_SOLID.create(),
+                        e -> openChooseAmountDialog(gameBet, nflGame));
         b.setThemeName("primary");
         return b;
       } else {
@@ -138,11 +145,11 @@ public class BetProposalRenderer
           b.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         } else {
           b =
-              new Button(
-                  "Accept this Bet for $%d taking %s (%s)"
-                      .formatted(gameBet.getAmount(), otherTeamNotPicked, spreadString),
-                  LineAwesomeIcon.VOTE_YEA_SOLID.create(),
-                  e -> openAcceptBetConfirmDialog(gameBet, nflGame, gameBet.getAmount()));
+                  new Button(
+                          "Accept this Bet for $%d taking %s (%s)"
+                                  .formatted(gameBet.getAmount(), otherTeamNotPicked, spreadString),
+                          LineAwesomeIcon.VOTE_YEA_SOLID.create(),
+                          e -> openAcceptBetConfirmDialog(gameBet, nflGame, gameBet.getAmount()));
           b.setThemeName("primary");
         }
         return b;
@@ -163,18 +170,81 @@ public class BetProposalRenderer
 
     verticalLayout.add(new HorizontalLayout(createProposerDiv(gameBet)));
     verticalLayout.add(
-        new HorizontalLayout(
-            createGamePickedDiv(gameBet, nflGame),
-            createNflTeamAvatar(gameBet.getTeamPicked(), AvatarVariant.LUMO_SMALL)));
+            new HorizontalLayout(
+                    createGamePickedDiv(gameBet, nflGame),
+                    createNflTeamAvatar(gameBet.getTeamPicked(), AvatarVariant.LUMO_SMALL)));
     verticalLayout.add(new HorizontalLayout(createAmountGameTimeDiv(gameBet, nflGame)));
 
     if (gameBet.getBetCanBeSplit()) {
       verticalLayout.add(new HorizontalLayout(SPLIT_ICON.create(), createSplitDiv(gameBet)));
     }
 
-    verticalLayout.add(buildAcceptButton(gameBet, nflGame));
+    HorizontalLayout horizontalLayout = new HorizontalLayout();
+
+    horizontalLayout.add(buildAcceptButton(gameBet, nflGame));
+
+    if (gameBet.getProposer().equals(player)) {
+      Button deleteButton = createCancelButton(gameBet);
+      horizontalLayout.add(deleteButton);
+
+      Button editProposal = createEditButton(gameBet);
+      horizontalLayout.add(editProposal);
+    }
+    verticalLayout.add(horizontalLayout);
+
     cardLayout.add(userAvatar, verticalLayout);
     return cardLayout;
+  }
+
+  private Button createEditButton(GameBet gameBet) {
+    Button editProposal = new Button("Edit Proposal");
+
+    editProposal.addClickListener(
+            e -> {
+
+            });
+
+    return editProposal;
+
+
+
+  }
+
+  private Button createCancelButton(GameBet gameBet) {
+    Button deleteButton = new Button("Delete Proposal");
+    deleteButton.addClickListener(
+            e -> {
+              ConfirmDialog dialog = new ConfirmDialog();
+              dialog.setHeader("Delete Proposal : " + gameBet.createGameDetailsString());
+              dialog.setText("Bet Details: " + gameBet.createBetDetailsString());
+              dialog.setCancelable(true);
+              dialog.setConfirmText("Delete Proposal");
+              dialog.setConfirmButtonTheme("error");
+              dialog.addConfirmListener(
+                      event -> {
+                        dialog.close();
+                        List<PoolioTransaction> refunds =
+                                refund(
+                                        gameBet, poolioTransactionService, PoolioTransactionType.CANCEL_PROPOSAL);
+
+                        gameBet.getResultTransactions().addAll(refunds);
+                        gameBet.setStatus(
+                                CollectionUtils.isEmpty(gameBet.getAcceptorTransactions())
+                                        ? BetStatus.CLOSED
+                                        : BetStatus.PENDING);
+
+                        gameBetService.save(gameBet);
+
+
+                        var refundSum = refunds.stream().mapToInt(PoolioTransaction::getAmount).sum();
+
+                        createSucessNotification(
+                                new Span("Proposal Deleted: Refunded $%d".formatted(refundSum)));
+                      });
+              rootLayout.add(new HorizontalLayout());
+              dialog.open();
+            });
+    return deleteButton;
   }
 
   private Button buildAcceptButton(GameBet gameBet, NflGame nflGame) {
@@ -183,7 +253,7 @@ public class BetProposalRenderer
     Button acceptBetButton = createAcceptButton(gameBet, otherTeamNotPicked, spreadString, nflGame);
     if (acceptBetButton.isEnabled() && !acceptBetButton.getThemeNames().contains("error")) {
       acceptBetButton.setSuffixComponent(
-          createNflTeamAvatar(otherTeamNotPicked, AvatarVariant.LUMO_SMALL));
+              createNflTeamAvatar(otherTeamNotPicked, AvatarVariant.LUMO_SMALL));
     }
     return acceptBetButton;
   }
@@ -194,9 +264,9 @@ public class BetProposalRenderer
     createNameValueElements(amountLabel, "$" + gameBet.getAmount(), amountGameTimeDiv.getElement());
     createSpacerElement(amountGameTimeDiv.getElement());
     createNameValueElements(
-        "Game Time",
-        DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(nflGame.getLocalDateTime()) + " EST",
-        amountGameTimeDiv.getElement());
+            "Game Time",
+            DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(nflGame.getLocalDateTime()) + " EST",
+            amountGameTimeDiv.getElement());
     return amountGameTimeDiv;
   }
 
@@ -205,11 +275,11 @@ public class BetProposalRenderer
     createNameValueElements("Proposer", gameBet.getProposer().getName(), div.getElement());
     createSpacerElement(div.getElement());
     var localDateTime =
-        LocalDateTime.ofInstant(gameBet.getExpiryDate(), ZoneId.of("America/New_York"));
+            LocalDateTime.ofInstant(gameBet.getExpiryDate(), ZoneId.of("America/New_York"));
     createNameValueElements(
-        "Proposal Expiration",
-        DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime),
-        div.getElement());
+            "Proposal Expiration",
+            DateTimeFormatter.ofPattern("E, MMM d, h:mm a").format(localDateTime),
+            div.getElement());
     return div;
   }
 
@@ -218,16 +288,16 @@ public class BetProposalRenderer
     createNameValueElements("Game", createGameWithSpreadString(gameBet, nflGame), div.getElement());
     createSpacerElement(div.getElement());
     createNameValueElements(
-        gameBet.getProposer().getName() + " Picked",
-        gameBet.getTeamPicked().name(),
-        div.getElement());
+            gameBet.getProposer().getName() + " Picked",
+            gameBet.getTeamPicked().name(),
+            div.getElement());
     return div;
   }
 
   private Div createSplitDiv(GameBet gameBet) {
     Div mainDiv = new Div();
     createNameValueElements(
-        "Amount Available", createAmountAvailableString(gameBet), mainDiv.getElement());
+            "Amount Available", createAmountAvailableString(gameBet), mainDiv.getElement());
 
     Div div = new Div();
     if (CollectionUtils.isEmpty(gameBet.getAcceptorTransactions())) {
@@ -240,10 +310,8 @@ public class BetProposalRenderer
     return mainDiv;
   }
 
-
-
   private void openAcceptBetConfirmDialog(
-      GameBet gameBet, NflGame nflGame, @NotNull Integer betAmount) {
+          GameBet gameBet, NflGame nflGame, @NotNull Integer betAmount) {
     if (gameBet.getProposer().equals(player)) {
       createErrorNotification(new Span("Cannot place bet on your own proposal"));
     } else {
@@ -252,16 +320,16 @@ public class BetProposalRenderer
       NflTeam otherTeamNotPicked = getNflTeamNotPicked(gameBet, nflGame);
       String spreadString = createSpreadString(gameBet, otherTeamNotPicked, nflGame);
       dialog.setText(
-          "Accept this Bet for $%d taking %s (%s)"
-              .formatted(betAmount, otherTeamNotPicked, spreadString));
+              "Accept this Bet for $%d taking %s (%s)"
+                      .formatted(betAmount, otherTeamNotPicked, spreadString));
       dialog.setCancelable(true);
       dialog.setConfirmText("Accept Bet from " + gameBet.getProposer().getName());
       dialog.setConfirmButtonTheme("primary");
       dialog.addConfirmListener(
-          event -> {
-            dialog.close();
-            saveToDb(gameBet, betAmount);
-          });
+              event -> {
+                dialog.close();
+                saveToDb(gameBet, betAmount);
+              });
       rootLayout.add(new HorizontalLayout());
       dialog.open();
     }
@@ -275,6 +343,4 @@ public class BetProposalRenderer
     createSucessNotification(new Span("Bet Accepted"));
     log.info("Accepted bet: {}", transaction);
   }
-
-
 }

@@ -175,7 +175,7 @@ public class BetView extends VerticalLayout
 
     betProposalRenderer =
         new BetProposalRenderer(
-            player, this, nflGameService, poolioTransactionService, nflBetService, amountDialog);
+            player, this, nflGameService, poolioTransactionService, nflBetService, gameBetService, amountDialog);
 
     ComponentRenderer<Component, GameBet> personCardRenderer =
         new ComponentRenderer<>(betProposalRenderer::render);
