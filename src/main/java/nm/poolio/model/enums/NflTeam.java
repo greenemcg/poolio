@@ -3,6 +3,7 @@ package nm.poolio.model.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum NflTeam {
   SF("San Francisco 49ers"),
@@ -59,5 +60,5 @@ public enum NflTeam {
   //  JMU("James Madison Dukes"),
   //  CHAR("Charlotte 49'er");
 
-  @Getter final String fullName;
+  final String fullName;
 }

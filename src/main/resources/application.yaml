@@ -14,7 +14,7 @@ spring:
     name: Poolio
   datasource:
     password: poolio
-    url: jdbc:postgresql://lappy.local:5432/poolio
+    url: jdbc:postgresql://m4.local:5432/poolio
     username: poolio
 #    password: golf9c
 #    url: jdbc:postgresql://poolio.local:5432/poolio

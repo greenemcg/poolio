@@ -175,7 +175,14 @@ public class BetView extends VerticalLayout
 
     betProposalRenderer =
         new BetProposalRenderer(
-            player, this, nflGameService, poolioTransactionService, nflBetService, gameBetService, amountDialog);
+            player,
+            this,
+            nflGameService,
+            poolioTransactionService,
+            nflBetService,
+            gameBetService,
+            this,
+            amountDialog);
 
     ComponentRenderer<Component, GameBet> personCardRenderer =
         new ComponentRenderer<>(betProposalRenderer::render);
@@ -303,7 +310,7 @@ public class BetView extends VerticalLayout
     BigDecimal fractionalPart = bigDecimal.remainder(BigDecimal.ONE);
     log.info("Fractional Part: {}", fractionalPart);
 
-    if (!fractionalPart.equals(BigDecimal.ZERO) && !fractionalPart.toString().endsWith("0.5")) {
+    if (!fractionalPart.toString().equals("0.0") && !fractionalPart.toString().endsWith("0.5")) {
       createWarningNotification(new Span("Hook must be .5"));
       return false;
     }
@@ -424,6 +431,29 @@ public class BetView extends VerticalLayout
     log.info("Saved Bet {}", saved.getGameId());
   }
 
+  public void editBetProposalDialog(GameBet bet) {
+    betDialog.getHeader().removeAll();
+    betDialog.getFooter().removeAll();
+    betDialog.removeAll();
+
+    var game = nflGameService.findGameById(bet.getGameId());
+    bet.setGame(game);
+
+    teamPicked.setItems(List.of(bet.getGame().getHomeTeam(), bet.getGame().getAwayTeam()));
+   // spreadDouble.setValue(bet.getSpread().doubleValue());
+
+    var games = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
+    var c = createGameBetDialogLayout(games);
+    binder.setBean(bet);
+
+    spreadDouble.setValue(bet.getSpread().doubleValue());
+
+
+    createDialog(betDialog, e -> onSaveBet(binder.getBean()), c);
+
+    betDialog.open();
+  }
+
   public void openBetProposalDialog(GameBet bet) {
     betDialog.getHeader().removeAll();
     binder.setBean(bet);
@@ -442,6 +472,15 @@ public class BetView extends VerticalLayout
         new ComponentRenderer<>(
             nflGame ->
                 new Span(nflGame.getAwayTeam().name() + " at " + nflGame.getHomeTeam().name())));
+
+    teamPicked.setLabel("Team");
+    teamPicked.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
+    teamPicked.setPrefixComponent(POOLIO_ICON.create());
+    teamPicked.setRequired(true);
+    teamPicked.setClearButtonVisible(true);
+    teamPicked.setEnabled(false);
+    // teamPicked.setItems(List.of(game.getHomeTeam(), game.getAwayTeam()));
+
     game.addValueChangeListener(
         e -> {
           NflGame game = e.getValue();
@@ -459,13 +498,6 @@ public class BetView extends VerticalLayout
 
           binder.getBean().setGame(game);
         });
-
-    teamPicked.setLabel("Team");
-    teamPicked.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
-    teamPicked.setPrefixComponent(POOLIO_ICON.create());
-    teamPicked.setRequired(true);
-    teamPicked.setClearButtonVisible(true);
-    teamPicked.setEnabled(false);
 
     spreadDouble.setRequired(true);
     spreadDouble.setWidth("80%");

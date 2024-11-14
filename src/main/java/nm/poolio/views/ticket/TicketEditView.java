@@ -2,14 +2,12 @@ package nm.poolio.views.ticket;
 
 import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -128,14 +126,22 @@ public class TicketEditView extends VerticalLayout
 
     add(formLayout);
 
-    HorizontalLayout horizontalLayout = new HorizontalLayout();
-    horizontalLayout.setAlignItems(Alignment.BASELINE);
+    HorizontalLayout buttonLayout = new HorizontalLayout();
+    buttonLayout.setPadding(true);
+    buttonLayout.setAlignItems(Alignment.BASELINE);
 
     tieBreakerFiled = createTieBreakerField(ticket);
-    horizontalLayout.add(tieBreakerFiled);
-    horizontalLayout.add(createSubmitButton(e -> saveTicket()));
+    buttonLayout.add(tieBreakerFiled);
+    buttonLayout.add(createSubmitButton(e -> saveTicket()));
 
-    add(horizontalLayout);
+    add(buttonLayout);
+
+    HorizontalLayout spacerLayout = new HorizontalLayout();
+    spacerLayout.setPadding(true);
+    spacerLayout.setMargin(true);
+    spacerLayout.add(new Hr());
+    spacerLayout.setMinHeight(50, Unit.PIXELS);
+    add(spacerLayout);
   }
 
   private void saveTicket() {

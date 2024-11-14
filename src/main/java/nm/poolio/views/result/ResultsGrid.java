@@ -2,6 +2,7 @@ package nm.poolio.views.result;
 
 import static nm.poolio.utils.VaddinUtils.*;
 
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
@@ -25,13 +26,24 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
   }
 
   default void decoratePoolGrid() {
-    createColumn(Ticket::getRankString, createIconSpan(RANK_ICON, "Rank"));
 
     this.getResultsGrid()
-        .addColumn(new ComponentRenderer<>(ticket -> createUserComponent(ticket.getPlayer())))
-        .setHeader(createIconSpan(PLAYER_ICON, "PLayer"))
+        .addColumn(
+            new ComponentRenderer<>(
+                ticket -> createUserAvatar(ticket.getPlayer(), AvatarVariant.LUMO_XSMALL)))
+        .setHeader("ICO")
         .setAutoWidth(true)
-        .setComparator(t -> t.getPlayer().getName());
+        .setFrozen(true);
+
+    createColumn(Ticket::getRankString, createIconSpan(RANK_ICON, "Rank"));
+
+    createColumn(Ticket::findPlayerName, createIconSpan(PLAYER_ICON, "PLayer"));
+
+    //    this.getResultsGrid()
+    //        .addColumn(new ComponentRenderer<>(ticket -> createUserComponent(ticket.getPlayer())))
+    //        .setHeader(createIconSpan(PLAYER_ICON, "PLayer"))
+    //        .setAutoWidth(true)
+    //        .setComparator(t -> t.getPlayer().getName());
 
     createColumn(Ticket::getScore, createIconSpan(SCORE_ICON, "Pts"))
         .setComparator(Ticket::getFullScore);

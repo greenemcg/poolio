@@ -51,6 +51,7 @@ public class BetProposalRenderer
   private final PoolioTransactionService poolioTransactionService;
   private final NflBetService nflBetService;
   private final GameBetService gameBetService;
+  private final BetView betView;
 
   private final Dialog amountDialog;
 
@@ -201,7 +202,7 @@ public class BetProposalRenderer
 
     editProposal.addClickListener(
             e -> {
-
+                betView.editBetProposalDialog(gameBet);
             });
 
     return editProposal;

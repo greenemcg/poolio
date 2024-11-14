@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
@@ -111,6 +112,7 @@ public class TicketView extends VerticalLayout
 
     add(new H3("Tickets:"));
     add(grid);
+    
   }
 
   private static Button createEditButton(Pool p, Ticket t) {
