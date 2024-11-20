@@ -45,7 +45,8 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   @Getter User user;
 
   @Setter Column<PoolioTransaction> temporalAmountColumn;
-  @Setter Column sequenceColumn;
+  @Setter Column<PoolioTransaction> sequenceColumn;
+  @Setter Column<PoolioTransaction> payAsYouGoColumn;
 
   public HomeView(
       AuthenticatedUser authenticatedUser,

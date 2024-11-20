@@ -104,7 +104,7 @@ class NflGameTest {
     NflGame game = new NflGame();
     game.setHomeTeam(NflTeam.NE);
     game.setAwayTeam(NflTeam.NYG);
-    assertEquals("NE at NYG", game.getGameString());
+    assertEquals("NYG at NE", game.getGameString());
   }
 
   @Test

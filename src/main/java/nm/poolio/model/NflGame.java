@@ -73,7 +73,7 @@ public class NflGame {
   }
 
   public String getGameString() {
-    return String.format("%s at %s", homeTeam, awayTeam);
+    return String.format("%s at %s", awayTeam, homeTeam);
   }
 
   @JsonIgnore

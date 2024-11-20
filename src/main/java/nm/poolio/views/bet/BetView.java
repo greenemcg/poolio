@@ -125,8 +125,8 @@ public class BetView extends VerticalLayout
     setHeight("100%");
 
     TabSheet tabSheet = new TabSheet();
-    tabSheet.add("Open Bets \uD83D\uDCD6", new LazyComponent(this::createOpenBetsTab));
-    tabSheet.add("Your Proposals \uD83D\uDCB0", new LazyComponent(this::createProposalBetGrid));
+    tabSheet.add("Open Wager Proposals \uD83D\uDCD6", new LazyComponent(this::createOpenBetsTab));
+    tabSheet.add("Your Wagers \uD83D\uDCB0", new LazyComponent(this::createProposalBetGrid));
     tabSheet.add("Your Game Bets \uD83C\uDFC8", new LazyComponent(this::createPlayerBetGrid));
     add(tabSheet);
     this.gameBetService = gameBetService;
@@ -237,13 +237,13 @@ public class BetView extends VerticalLayout
 
         Button proposeNewBetButton =
             new Button(
-                "Propose New Bet", BET_ICON.create(), e -> openBetProposalDialog(new GameBet()));
+                "Propose New Wager", BET_ICON.create(), e -> openBetProposalDialog(new GameBet()));
         layout.add(proposeNewBetButton);
       }
 
       HorizontalLayout horizontalLayout = new HorizontalLayout();
       horizontalLayout.setWidth("100%");
-      horizontalLayout.add(new H3("Open Game bet Proposals"));
+      horizontalLayout.add(new H3("Open Game Wager Proposals"));
       Span pending = new Span("Your Funds: $" + funds);
       pending.getElement().getThemeList().add("badge success");
       horizontalLayout.add(pending);
@@ -251,7 +251,7 @@ public class BetView extends VerticalLayout
       layout.add(horizontalLayout);
 
       gameBetVirtualList.getElement().getStyle().set("background-color", "rgba(0, 0, 0, 0.1)");
-      gameBetVirtualList.setWidth(600, Unit.PIXELS);
+      gameBetVirtualList.setWidth(700, Unit.PIXELS);
       gameBetVirtualList.setHeight(900, Unit.PIXELS);
 
       gameBetVirtualList.setItems(openBets);
@@ -395,13 +395,13 @@ public class BetView extends VerticalLayout
     layout.setJustifyContentMode(JustifyContentMode.CENTER);
 
     ConfirmDialog dialog = new ConfirmDialog();
-    dialog.setHeader("Bet Proposal: Are you sure");
+    dialog.setHeader("Wager Proposal: Are you sure");
     dialog.setText(bet.getHumanReadableString());
 
     dialog.setCancelable(true);
     // dialog.addCancelListener(event -> setStatus("Canceled"));
 
-    dialog.setConfirmText("Propose Bet");
+    dialog.setConfirmText("Create Wager");
     dialog.setConfirmButtonTheme("primary");
     dialog.addConfirmListener(
         event -> {
@@ -440,14 +440,13 @@ public class BetView extends VerticalLayout
     bet.setGame(game);
 
     teamPicked.setItems(List.of(bet.getGame().getHomeTeam(), bet.getGame().getAwayTeam()));
-   // spreadDouble.setValue(bet.getSpread().doubleValue());
+    // spreadDouble.setValue(bet.getSpread().doubleValue());
 
     var games = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
     var c = createGameBetDialogLayout(games);
     binder.setBean(bet);
 
     spreadDouble.setValue(bet.getSpread().doubleValue());
-
 
     createDialog(betDialog, e -> onSaveBet(binder.getBean()), c);
 
@@ -493,7 +492,7 @@ public class BetView extends VerticalLayout
           expiryDate.setValue(dateTime);
           expiryDate.setEnabled(true);
 
-          teamPicked.setItems(List.of(game.getHomeTeam(), game.getAwayTeam()));
+          teamPicked.setItems(List.of(game.getAwayTeam(), game.getHomeTeam()));
           teamPicked.setEnabled(true);
 
           binder.getBean().setGame(game);
@@ -514,7 +513,7 @@ public class BetView extends VerticalLayout
 
     betCanBeSplit.setLabelComponent(createIconSpan(SPLIT_ICON, "Bet Can Be Split"));
 
-    var h4 = new H4("Propose Bet");
+    var h4 = new H4("Propose Wager");
     return new Component[] {h4, game, teamPicked, amount, spreadDouble, betCanBeSplit, expiryDate};
   }
 

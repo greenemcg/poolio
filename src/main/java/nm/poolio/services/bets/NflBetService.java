@@ -50,7 +50,7 @@ public class NflBetService implements NoteCreator {
     poolioTransaction.setDebitUser(banker);
     poolioTransaction.setCreditUser(player);
     poolioTransaction.setAmount(betAmount);
-    poolioTransaction.setType(PoolioTransactionType.ACCEPT_PROPOSAL);
+    poolioTransaction.setType(PoolioTransactionType.ACCEPT_WAGER);
 
     var nflGame = nflGameService.findGameById(gameBet.getGameId());
     var otherTeam = getOtherTeam(nflGame, gameBet.getTeamPicked());

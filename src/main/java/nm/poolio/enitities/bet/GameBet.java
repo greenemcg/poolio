@@ -74,8 +74,7 @@ public class GameBet extends AbstractEntity {
   @NotNull
   private BigDecimal spread;
 
-  @Transient
-  private Double spreadDouble;
+  @Transient private Double spreadDouble;
 
   @Min(MIN_AMOUNT)
   @Max(MAX_AMOUNT)
@@ -118,8 +117,7 @@ public class GameBet extends AbstractEntity {
 
     VerticalLayout layout = new VerticalLayout();
     layout.add(new Span(createGameDetailsString()));
-    layout.add(
-        new Span(createBetDetailsString()));
+    layout.add(new Span(createBetDetailsString()));
 
     LocalDateTime localDateTime =
         LocalDateTime.ofInstant(expiryDate, ZoneId.of("America/New_York"));
@@ -133,10 +131,16 @@ public class GameBet extends AbstractEntity {
 
   public String createGameDetailsString() {
     String str = gameId.split("_")[0].replace("at", " at ");
+    str += " (" + spread + ")";
     return "Game: %s %s".formatted(str, week);
   }
 
   public String createBetDetailsString() {
-    return "Team picked: %s Spread: %s Amount: $%d".formatted(teamPicked, spread, amount);
+    String splits = "";
+    if (betCanBeSplit) {
+      splits += "- Splits: Yes";
+    }
+
+    return "Team picked: %s Amount: $%d %s".formatted(teamPicked, amount, splits);
   }
 }

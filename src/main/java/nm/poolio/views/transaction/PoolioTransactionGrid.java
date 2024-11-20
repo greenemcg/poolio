@@ -25,6 +25,8 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
 
   void setSequenceColumn(Column<PoolioTransaction> column);
 
+  void setPayAsYouGoColumn(Column<PoolioTransaction> column);
+
   private Renderer<PoolioTransaction> createCreditUserRenderer() {
     return LitRenderer.<PoolioTransaction>of(getUserTemplateExpression())
         .withProperty("pictureUrl", pojo -> createUserPictureUrl(pojo.getCreditUser()))
@@ -73,11 +75,14 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
         .setAutoWidth(true)
         .setComparator(t -> t.getDebitUser().getName());
 
-    if (getUser() == null || getUser().isPayAsYouGo())
-      getGrid()
-          .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
-          .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
-          .setAutoWidth(true);
+    if (getUser() == null || getUser().isPayAsYouGo()) {
+      var c =
+          getGrid()
+              .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
+              .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
+              .setAutoWidth(true);
+      setPayAsYouGoColumn(c);
+    }
 
     createColumn(PoolioTransaction::getAmount, createIconSpan(AMOUNT_ICON, "Amt"))
         .setComparator(PoolioTransaction::getAmount);

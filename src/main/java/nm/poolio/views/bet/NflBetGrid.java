@@ -73,7 +73,7 @@ public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
           .addColumn(
               new ComponentRenderer<>(
                   transaction -> createUserComponent(transaction.getProposer())))
-          .setHeader(createIconSpan(BET_ICON, "Proposer"))
+          .setHeader(createIconSpan(BET_ICON, "Creator"))
           .setAutoWidth(true)
           .setFrozen(true)
           .setFlexGrow(0);
