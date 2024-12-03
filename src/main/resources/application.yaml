@@ -2,7 +2,7 @@ app:
   allowBets: true
 
 server:
-  port: 9090
+  port: 8080
   error:
     include-stacktrace: never
 spring:
@@ -14,11 +14,11 @@ spring:
     name: Poolio
   datasource:
     password: poolio
-    url: jdbc:postgresql://localhost:5432/poolio
+    url: jdbc:postgresql://m4.local:5432/poolio
     username: poolio
-#      password: golf9c
-#      url: jdbc:postgresql://poolio.local:5432/poolio
-#      username: mike
+#    password: golf9c
+#    url: jdbc:postgresql://poolio.local:5432/poolio
+#    username: mike
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -27,6 +27,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   mustache:
     check-template-location: false
   sql:

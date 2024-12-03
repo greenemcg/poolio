@@ -1,7 +1,7 @@
 package nm.poolio.enitities.pool;
 
 public interface PoolIdName {
-  Long getId();
+    Long getId();
 
-  String getName();
+    String getName();
 }

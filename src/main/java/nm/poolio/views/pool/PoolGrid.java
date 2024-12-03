@@ -1,15 +1,6 @@
 package nm.poolio.views.pool;
 
-import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
-import static nm.poolio.utils.VaddinUtils.INCLUDE_THURSDAY;
-import static nm.poolio.utils.VaddinUtils.LEAGUE_ICON;
-import static nm.poolio.utils.VaddinUtils.PAY_AS_YOU_GO;
-import static nm.poolio.utils.VaddinUtils.PLAYERS_ICON;
-import static nm.poolio.utils.VaddinUtils.PLAYER_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.STATUS_ICON;
-import static nm.poolio.utils.VaddinUtils.WEEK_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

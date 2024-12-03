@@ -2,6 +2,8 @@ package nm.poolio.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,61 +38,58 @@ public class NflGame {
 
   @JsonIgnore
   public Double getHomeScoreDouble() {
-    if (homeScore == null) return null;
-    return homeScore.doubleValue();
+    return homeScore == null ? null : homeScore.doubleValue();
   }
 
   @JsonIgnore
   public void setHomeScoreDouble(Double d) {
-    if (d == null) homeScore = null;
-    else homeScore = d.intValue();
+    homeScore = d == null ? null : d.intValue();
   }
 
   @JsonIgnore
   public Double getAwayScoreDouble() {
-    if (awayScore == null) return null;
-    return awayScore.doubleValue();
+    return awayScore == null ? null : awayScore.doubleValue();
   }
 
   @JsonIgnore
   public void setAwayScoreDouble(Double d) {
-    if (d == null) awayScore = null;
-    else awayScore = d.intValue();
+    awayScore = d == null ? null : d.intValue();
   }
 
   @JsonIgnore
   public Optional<Integer> getScore() {
-    if (homeScore == null && awayScore == null) return Optional.empty();
-    return Optional.of(homeScore + awayScore);
+    return (homeScore == null && awayScore == null)
+        ? Optional.empty()
+        : Optional.of(homeScore + awayScore);
   }
 
   @JsonIgnore
   public LocalDateTime getLocalDateTime() {
     try {
-      ZoneId zone = ZoneId.of("America/New_York");
-      return LocalDateTime.ofInstant(gameTime, zone);
+      return LocalDateTime.ofInstant(gameTime, ZoneId.of("America/New_York"));
     } catch (Exception e) {
       return null;
     }
   }
 
   public String getGameString() {
-    return String.format("%s at %s", homeTeam, awayTeam);
+    return String.format("%s at %s", awayTeam, homeTeam);
   }
 
   @JsonIgnore
-  public NflTeam getWinner() {
-    if (awayScore == null || homeScore == null) {
-      return NflTeam.TBD;
-    }
+  public @NotNull NflTeam findWinner() {
+    if (awayScore == null || homeScore == null) return NflTeam.TBD;
+    if (awayScore > homeScore) return awayTeam;
+    if (homeScore > awayScore) return homeTeam;
+    return NflTeam.TIE;
+  }
 
-    if (awayScore > homeScore) {
-      return awayTeam;
-    }
+  public @NotNull NflTeam findWinnerSpread(@NotNull BigDecimal spread) {
+    if (awayScore == null || homeScore == null) return NflTeam.TBD;
 
-    if (homeScore > awayScore) {
-      return homeTeam;
-    }
+    if (awayScore > homeScore + spread.doubleValue()) return awayTeam;
+
+    if (homeScore + spread.doubleValue() > awayScore) return homeTeam;
 
     return NflTeam.TIE;
   }

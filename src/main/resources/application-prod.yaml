@@ -1,6 +1,9 @@
 app:
   allowBets: false
 
+server:
+  port:  9090
+
 spring:
   datasource:
     password: golf9c

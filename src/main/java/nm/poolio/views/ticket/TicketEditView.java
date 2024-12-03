@@ -2,14 +2,12 @@ package nm.poolio.views.ticket;
 
 import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,12 +15,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Location;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -132,9 +125,23 @@ public class TicketEditView extends VerticalLayout
     games.forEach(g -> formLayout.add(createGameRadioButton(g)));
 
     add(formLayout);
+
+    HorizontalLayout buttonLayout = new HorizontalLayout();
+    buttonLayout.setPadding(true);
+    buttonLayout.setAlignItems(Alignment.BASELINE);
+
     tieBreakerFiled = createTieBreakerField(ticket);
-    add(tieBreakerFiled);
-    add(createSubmitButton(e -> saveTicket()));
+    buttonLayout.add(tieBreakerFiled);
+    buttonLayout.add(createSubmitButton(e -> saveTicket()));
+
+    add(buttonLayout);
+
+    HorizontalLayout spacerLayout = new HorizontalLayout();
+    spacerLayout.setPadding(true);
+    spacerLayout.setMargin(true);
+    spacerLayout.add(new Hr());
+    spacerLayout.setMinHeight(50, Unit.PIXELS);
+    add(spacerLayout);
   }
 
   private void saveTicket() {

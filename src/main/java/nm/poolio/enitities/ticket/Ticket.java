@@ -1,20 +1,8 @@
 package nm.poolio.enitities.ticket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import nm.poolio.data.AbstractEntity;
@@ -27,6 +15,8 @@ import nm.poolio.model.enums.Season;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Map;
 
 @Getter
 @Setter
@@ -94,5 +84,10 @@ public class Ticket extends AbstractEntity {
     var names = gamePicks.values().stream().map(t -> t == null ? "" : t.name()).toList();
 
     return String.join(",", names);
+  }
+
+  @Transient
+  public String findPlayerName() {
+    return player != null ? player.getName() : "";
   }
 }

@@ -1,13 +1,7 @@
 package nm.poolio.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.annotation.Nullable;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -25,6 +21,7 @@ public abstract class AbstractEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
   @SequenceGenerator(name = "idgenerator", initialValue = 10)
+  @Nullable
   private Long id;
 
   @Version private int version;
@@ -68,7 +65,7 @@ public abstract class AbstractEntity {
   }
 
   @JsonIgnore
-  public LocalDateTime getCreatedLocalDateTime() {
+  public @Nullable LocalDateTime getCreatedLocalDateTime() {
     try {
       ZoneId zone = ZoneId.of("America/New_York");
       return LocalDateTime.ofInstant(createdDate, zone);

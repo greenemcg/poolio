@@ -1,14 +1,6 @@
 package nm.poolio.views.pool;
 
-import static nm.poolio.utils.VaddinUtils.LEAGUE_ICON;
-import static nm.poolio.utils.VaddinUtils.PAY_AS_YOU_GO;
-import static nm.poolio.utils.VaddinUtils.PLAYERS_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.STATUS_ICON;
-import static nm.poolio.utils.VaddinUtils.WEEK_ICON;
-import static nm.poolio.utils.VaddinUtils.decorateIncludeThursdayCheckbox;
-import static nm.poolio.utils.VaddinUtils.decorateNameField;
-import static nm.poolio.utils.VaddinUtils.decoratePoolAmountField;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -127,7 +119,7 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
     adminComboBox = new MultiSelectComboBox<>("Admins");
 
     adminComboBox.setItems(userService.findAdmins());
-   // adminComboBox.select();
+    // adminComboBox.select();
     adminComboBox.setItemLabelGenerator(User::getName);
 
     return adminComboBox;
@@ -137,7 +129,7 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
     playersComboBox = new MultiSelectComboBox<>("Players");
 
     playersComboBox.setItems(userService.findPlayers());
-   // playersComboBox.select();
+    // playersComboBox.select();
     playersComboBox.setItemLabelGenerator(User::getName);
 
     return playersComboBox;
@@ -270,6 +262,5 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
     decorateIncludeThursdayCheckbox(includeThursday);
 
     return new Component[] {name, league, week, status, amount, payAsYouGoUser, maxPlayersPerWeek};
-
   }
 }

@@ -1,13 +1,6 @@
 package nm.poolio.views;
 
-import static nm.poolio.utils.VaddinUtils.ADMIN_ICON;
-import static nm.poolio.utils.VaddinUtils.BET_ICON;
-import static nm.poolio.utils.VaddinUtils.GAMES_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
-import static nm.poolio.utils.VaddinUtils.TICKET_ICON;
-import static nm.poolio.utils.VaddinUtils.TRANSACTION_ICON;
-import static nm.poolio.utils.VaddinUtils.USERS_ICON;
+import static nm.poolio.utils.VaddinUtils.*;
 import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
 
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -15,22 +8,15 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import java.io.ByteArrayInputStream;
 import java.util.Optional;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
@@ -131,7 +117,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     Footer layout = new Footer();
 
     if (user != null) {
-      Avatar avatar = createUserAvatar(user,  AvatarVariant.LUMO_SMALL);
+      Avatar avatar = createUserAvatar(user, AvatarVariant.LUMO_SMALL);
       avatar.getElement().setAttribute("tabindex", "-1");
 
       MenuBar userMenu = new MenuBar();

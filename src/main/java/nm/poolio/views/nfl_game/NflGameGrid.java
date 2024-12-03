@@ -1,10 +1,6 @@
 package nm.poolio.views.nfl_game;
 
-import static nm.poolio.utils.VaddinUtils.AWAY_ICON;
-import static nm.poolio.utils.VaddinUtils.GAME_TIME_ICON;
-import static nm.poolio.utils.VaddinUtils.HOME_ICON;
-import static nm.poolio.utils.VaddinUtils.WEEK_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.html.Span;

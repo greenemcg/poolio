@@ -1,28 +1,13 @@
 package nm.poolio.enitities.pool;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.sql.Types;
-import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.AvatarImageBytes;
 import nm.poolio.data.User;
@@ -33,78 +18,82 @@ import nm.poolio.model.enums.Season;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Data
+import java.sql.Types;
+import java.util.Set;
+
+@Data()
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(
-    name = "pool",
-    uniqueConstraints = {@UniqueConstraint(name = "pool_name_uniq", columnNames = "name")})
+        name = "pool",
+        uniqueConstraints = {@UniqueConstraint(name = "pool_name_uniq", columnNames = "name")})
 public class Pool extends AbstractEntity implements AvatarImageBytes {
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "pool_players",
-      joinColumns = @JoinColumn(name = "id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id"))
-  @OrderBy(value = "name")
-  Set<User> players;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "pool_players",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @OrderBy(value = "name")
+    Set<User> players;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "pool_admins",
-      joinColumns = @JoinColumn(name = "id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id"))
-  Set<User> admins;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "pool_admins",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<User> admins;
 
-  @NotNull
-  @Min(1)
-  @Max(1000)
-  private Integer amount;
+    @NotNull
+    @Min(1)
+    @Max(1000)
+    private Integer amount;
 
-  @NotNull
-  @Min(2)
-  @Max(250)
-  private Integer maxPlayersPerWeek;
+    @NotNull
+    @Min(2)
+    @Max(250)
+    private Integer maxPlayersPerWeek;
 
-  private boolean includeThursday;
+    private boolean includeThursday;
 
-  @NotNull
-  @Size(min = 2, max = 50)
-  private String name;
+    @NotNull
+    @Size(min = 2, max = 50)
+    private String name;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private League league;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private League league;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private Season season;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Season season;
 
-  @ManyToOne
-  @JoinColumn(name = "pay_as_you_go_user_id")
-  private User payAsYouGoUser;
+    @ManyToOne
+    @JoinColumn(name = "pay_as_you_go_user_id")
+    private User payAsYouGoUser;
 
-  @NotNull
-  @ManyToOne
-  @JoinColumn(name = "bank_user_id")
-  private User bankUser;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "bank_user_id")
+    private User bankUser;
 
-  @JsonIgnore
-  @Lob
-  @JdbcTypeCode(Types.VARBINARY)
-  @Column(length = 1000000)
-  private byte[] profilePicture;
+    @JsonIgnore
+    @Lob
+    @JdbcTypeCode(Types.VARBINARY)
+    @Column(length = 1000000)
+    private byte[] profilePicture;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private NflWeek week;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private NflWeek week;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private PoolStatus status;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PoolStatus status;
 
-  @JsonIgnore
-  @Transient
-  public String getPayAsYouGoUserName() {
-    return (payAsYouGoUser != null) ? payAsYouGoUser.getName() : "";
-  }
+    @JsonIgnore
+    @Transient
+    public String getPayAsYouGoUserName() {
+        return (payAsYouGoUser != null) ? payAsYouGoUser.getName() : "";
+    }
 }

@@ -1,9 +1,6 @@
 package nm.poolio.views.ticket;
 
-import static nm.poolio.utils.VaddinUtils.AWAY_ICON;
-import static nm.poolio.utils.VaddinUtils.GAME_TIME_ICON;
-import static nm.poolio.utils.VaddinUtils.HOME_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -68,7 +65,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
         nflGame.setHomeScore(gameScore.getHomeScore());
         nflGame.setAwayScore(gameScore.getAwayScore());
 
-        var winner = nflGame.getWinner();
+        var winner = nflGame.findWinner();
         pickedCorrectly = winner == teamToCheck;
       }
 
@@ -76,8 +73,6 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
         Span confirmed2 =
             new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
         confirmed2.getElement().getStyle().set("font-weight", "bold");
-
-
 
         createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
         return confirmed2;

@@ -1,11 +1,6 @@
 package nm.poolio.views.transaction;
 
-import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
-import static nm.poolio.utils.VaddinUtils.CREATED_ICON;
-import static nm.poolio.utils.VaddinUtils.MONEY_TYPE_ICON;
-import static nm.poolio.utils.VaddinUtils.NOTES_ICON;
-import static nm.poolio.utils.VaddinUtils.USER_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -15,7 +10,6 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import java.time.format.DateTimeFormatter;
 import javax.annotation.Nullable;
-
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.enitities.transaction.PoolioTransaction;
@@ -30,6 +24,8 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
   void setTemporalAmountColumn(Column<PoolioTransaction> column);
 
   void setSequenceColumn(Column<PoolioTransaction> column);
+
+  void setPayAsYouGoColumn(Column<PoolioTransaction> column);
 
   private Renderer<PoolioTransaction> createCreditUserRenderer() {
     return LitRenderer.<PoolioTransaction>of(getUserTemplateExpression())
@@ -79,11 +75,14 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
         .setAutoWidth(true)
         .setComparator(t -> t.getDebitUser().getName());
 
-    if (getUser() == null || getUser().isPayAsYouGo())
-      getGrid()
-          .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
-          .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
-          .setAutoWidth(true);
+    if (getUser() == null || getUser().isPayAsYouGo()) {
+      var c =
+          getGrid()
+              .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
+              .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
+              .setAutoWidth(true);
+      setPayAsYouGoColumn(c);
+    }
 
     createColumn(PoolioTransaction::getAmount, createIconSpan(AMOUNT_ICON, "Amt"))
         .setComparator(PoolioTransaction::getAmount);

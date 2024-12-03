@@ -1,8 +1,6 @@
 package nm.poolio.views.admin;
 
-import static nm.poolio.utils.VaddinUtils.EDIT_ICON;
-import static nm.poolio.utils.VaddinUtils.PLAYER_ICON;
-import static nm.poolio.utils.VaddinUtils.WEEK_ICON;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;

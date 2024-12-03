@@ -3,14 +3,7 @@ package nm.poolio.views.home;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -23,6 +16,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -51,7 +45,8 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   @Getter User user;
 
   @Setter Column<PoolioTransaction> temporalAmountColumn;
-  @Setter Column sequenceColumn;
+  @Setter Column<PoolioTransaction> sequenceColumn;
+  @Setter Column<PoolioTransaction> payAsYouGoColumn;
 
   public HomeView(
       AuthenticatedUser authenticatedUser,
@@ -174,7 +169,9 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   private void decorateGrid() {
     decorateTransactionGrid();
 
-    grid.setItems(poolioTransactionService.findAllPoolioTransactionsForUser(user));
+    var trans = poolioTransactionService.findAllPoolioTransactionsForUser(user);
+    trans.sort(Comparator.comparing(PoolioTransaction::getCreatedDate).reversed());
+    grid.setItems(trans);
 
     temporalAmountColumn.setVisible(false);
     sequenceColumn.setVisible(false);

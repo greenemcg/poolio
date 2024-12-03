@@ -1,13 +1,6 @@
 package nm.poolio.views.ticket;
 
-import static nm.poolio.utils.VaddinUtils.CREATED_ICON;
-import static nm.poolio.utils.VaddinUtils.PLAYER_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.TICKET_ICON;
-import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
-import static nm.poolio.utils.VaddinUtils.VIEW_ICON;
-import static nm.poolio.utils.VaddinUtils.WEEK_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

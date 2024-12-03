@@ -3,11 +3,13 @@ package nm.poolio.vaadin;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.server.StreamResource;
-import java.io.ByteArrayInputStream;
+import jakarta.validation.constraints.NotNull;
 import nm.poolio.data.AvatarImageBytes;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.model.enums.NflTeam;
+
+import java.io.ByteArrayInputStream;
 
 public interface PoolioAvatar {
   default Avatar createNflTeamAvatar(NflTeam nflTeam, AvatarVariant variant) {
@@ -21,9 +23,10 @@ public interface PoolioAvatar {
     return decorateAvatar(pool, new Avatar(pool.getName()), variant);
   }
 
-  default Avatar createUserAvatar(User user, AvatarVariant variant) {
+  default Avatar createUserAvatar(@NotNull User user, AvatarVariant variant) {
     var avatar = new Avatar(user.getName());
-    avatar.setColorIndex((int) (user.getId() % 8));
+
+    if (user.getId() != null) avatar.setColorIndex((int) (user.getId() % 8));
 
     return decorateAvatar(user, avatar, variant);
   }

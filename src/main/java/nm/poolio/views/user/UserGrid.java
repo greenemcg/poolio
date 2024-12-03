@@ -1,15 +1,6 @@
 package nm.poolio.views.user;
 
-import static nm.poolio.utils.VaddinUtils.ADMIN_ICON;
-import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
-import static nm.poolio.utils.VaddinUtils.CREDIT_ICON;
-import static nm.poolio.utils.VaddinUtils.EMAIL_ICON;
-import static nm.poolio.utils.VaddinUtils.PAY_AS_YOU_GO;
-import static nm.poolio.utils.VaddinUtils.PHONE_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.USER_ICON;
-import static nm.poolio.utils.VaddinUtils.USER_NAME_ICON;
-import static nm.poolio.utils.VaddinUtils.createIconSpan;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.ColumnTextAlign;

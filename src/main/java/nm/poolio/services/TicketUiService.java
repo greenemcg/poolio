@@ -1,7 +1,5 @@
 package nm.poolio.services;
 
-import java.util.List;
-import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
@@ -13,6 +11,9 @@ import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.JsonbNote;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

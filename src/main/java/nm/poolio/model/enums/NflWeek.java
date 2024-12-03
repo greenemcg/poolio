@@ -1,9 +1,11 @@
 package nm.poolio.model.enums;
 
-import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
+@Getter
 @RequiredArgsConstructor
 public enum NflWeek {
   WEEK_0(0),
@@ -30,7 +32,7 @@ public enum NflWeek {
   CHAMPIONSHIP(22),
   SUPER_BOWL(23);
 
-  @Getter final int weekNum;
+  final int weekNum;
 
   public static NflWeek findByWeekNum(int weekNum) {
     return Arrays.stream(NflWeek.values())

@@ -1,17 +1,8 @@
 package nm.poolio.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -69,7 +60,8 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   @JsonIgnore
   @Lob
   @JdbcTypeCode(Types.VARBINARY)
-  @ Column(length = 1000000)
+  @Column(length = 1000000)
+  @Nullable
   private byte[] profilePicture;
 
   public @Email String getEmail() {

@@ -12,12 +12,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Location;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 import java.time.Instant;
 import lombok.Getter;
@@ -34,7 +29,6 @@ import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketScorerService;
 import nm.poolio.views.MainLayout;
-import org.springframework.boot.actuate.autoconfigure.management.ThreadDumpEndpointAutoConfiguration;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 @PageTitle("Ticket View \uD83D\uDC40")
@@ -52,7 +46,6 @@ public class TicketShowView extends VerticalLayout
   private final GameScoreService gameScoreService;
   private final NflGameScorerService nflGameScorerService;
   private final TicketScorerService ticketScorerService;
-
 
   Ticket ticket;
   @Getter boolean errorFound = false;

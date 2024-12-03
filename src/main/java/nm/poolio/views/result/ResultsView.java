@@ -15,12 +15,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Location;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
@@ -64,7 +59,7 @@ public class ResultsView extends VerticalLayout
         PoolioNotification,
         UserPoolFinder,
         HasUrlParameter<String> {
- private final static String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
+  private static final String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
   private final TicketService ticketService;
@@ -213,7 +208,8 @@ public class ResultsView extends VerticalLayout
         decorateGrid();
 
         poolInfoSpan.setText(
-                POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
+            POOL_INFO_TEMPLATE.formatted(
+                pool.getName(), players.size(), pool.getAmount() * players.size()));
 
         resultsGrid.setItems(ticketsList);
 
@@ -246,9 +242,9 @@ public class ResultsView extends VerticalLayout
       playerComboBox.setItems(players);
       playerComboBox.select(players);
 
-
       poolInfoSpan.setText(
-              POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
+          POOL_INFO_TEMPLATE.formatted(
+              pool.getName(), players.size(), pool.getAmount() * players.size()));
 
       resultsGrid.setItems(ticketsList);
       decorateGrid();
@@ -277,7 +273,7 @@ public class ResultsView extends VerticalLayout
                     nflGame.setHomeScore(gameScore.getHomeScore());
                     nflGame.setAwayScore(gameScore.getAwayScore());
 
-                    var winner = nflGame.getWinner();
+                    var winner = nflGame.findWinner();
 
                     // todo add this to nfl game view and share code
 

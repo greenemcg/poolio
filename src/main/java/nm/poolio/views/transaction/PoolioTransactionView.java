@@ -1,9 +1,6 @@
 package nm.poolio.views.transaction;
 
-import static nm.poolio.utils.VaddinUtils.AMOUNT_ICON;
-import static nm.poolio.utils.VaddinUtils.MONEY_TYPE_ICON;
-import static nm.poolio.utils.VaddinUtils.NOTES_ICON;
-import static nm.poolio.utils.VaddinUtils.TRANSACTION_ICON;
+import static nm.poolio.utils.VaddinUtils.*;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -23,6 +20,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,8 +48,9 @@ public class PoolioTransactionView extends VerticalLayout
   private final PoolioTransactionService service;
   private final UserService userService;
 
-  @Setter Column temporalAmountColumn;
-  @Setter Column sequenceColumn;
+  @Setter Column<PoolioTransaction> temporalAmountColumn;
+  @Setter Column<PoolioTransaction> sequenceColumn;
+  @Setter Column<PoolioTransaction> payAsYouGoColumn;
 
   Binder<PoolioTransaction> binder = new Binder<>(PoolioTransaction.class);
   Dialog transactionDialog = new Dialog();
@@ -139,6 +138,8 @@ public class PoolioTransactionView extends VerticalLayout
     AtomicInteger temporalAmount = new AtomicInteger();
     AtomicInteger sequence = new AtomicInteger(1);
 
+    AtomicBoolean havePayAsYouGo = new AtomicBoolean(false);
+
     transactions.forEach(
         t -> {
           if (t.getCreditUser().equals(user)) temporalAmount.addAndGet(-t.getAmount());
@@ -147,7 +148,14 @@ public class PoolioTransactionView extends VerticalLayout
           t.setSequence(sequence.getAndIncrement());
 
           t.setTemporalAmount(temporalAmount.get());
+
+          if (t.getPayAsYouGoUser() != null) havePayAsYouGo.set(true);
         });
+
+    if( payAsYouGoColumn != null ) {
+      payAsYouGoColumn.setVisible(havePayAsYouGo.get());
+    }
+
 
     grid.setItems(transactions);
   }
