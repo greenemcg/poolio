@@ -65,8 +65,7 @@ public class ResultsView extends VerticalLayout
         UserPoolFinder,
         HasUrlParameter<String> {
  private final static String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
-  private final AuthenticatedUser authenticatedUser;
-  private final PoolService poolService;
+    private final PoolService poolService;
   private final TicketService ticketService;
   private final NflGameService nflGameService;
   private final GameScoreService gameScoreService;
@@ -92,8 +91,7 @@ public class ResultsView extends VerticalLayout
       NflGameScorerService nflGameScorerService,
       TicketScorerService ticketScorerService,
       PoolioTransactionService poolioTransactionService) {
-    this.authenticatedUser = authenticatedUser;
-    this.poolService = poolService;
+      this.poolService = poolService;
     this.ticketService = ticketService;
     this.nflGameService = nflGameService;
     this.gameScoreService = gameScoreService;

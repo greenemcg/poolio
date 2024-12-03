@@ -18,10 +18,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.annotation.Nullable;
+
 @MappedSuperclass
 @Getter
 @Setter
 public abstract class AbstractEntity {
+  @Nullable
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
   @SequenceGenerator(name = "idgenerator", initialValue = 10)
@@ -45,6 +48,7 @@ public abstract class AbstractEntity {
   @LastModifiedBy
   private String modifiedBy;
 
+  @Nullable
   @Column(name = "inactive_date")
   private Instant inactiveDate;
 

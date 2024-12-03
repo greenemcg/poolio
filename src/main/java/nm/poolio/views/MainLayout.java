@@ -1,13 +1,6 @@
 package nm.poolio.views;
 
-import static nm.poolio.utils.VaddinUtils.ADMIN_ICON;
-import static nm.poolio.utils.VaddinUtils.BET_ICON;
-import static nm.poolio.utils.VaddinUtils.GAMES_ICON;
-import static nm.poolio.utils.VaddinUtils.POOL_ICON;
-import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
-import static nm.poolio.utils.VaddinUtils.TICKET_ICON;
-import static nm.poolio.utils.VaddinUtils.TRANSACTION_ICON;
-import static nm.poolio.utils.VaddinUtils.USERS_ICON;
+import static nm.poolio.utils.VaddinUtils.*;
 import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
 
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -42,6 +35,7 @@ import nm.poolio.views.home.HomeView;
 import nm.poolio.views.nfl_game.NflGameView;
 import nm.poolio.views.pool.PoolView;
 import nm.poolio.views.result.ResultsView;
+import nm.poolio.views.standings.StandingsView;
 import nm.poolio.views.ticket.TicketView;
 import nm.poolio.views.transaction.PoolioTransactionView;
 import nm.poolio.views.user.UserView;
@@ -119,6 +113,8 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
 
     if (accessChecker.hasAccess(ResultsView.class))
       nav.addItem(new SideNavItem("Results", ResultsView.class, RESULTS_ICON.create()));
+
+   nav.addItem(new SideNavItem("Standings", StandingsView.class, RESULTS_ICON.create()));
 
     if (accessChecker.hasAccess(PoolioTransactionView.class))
       nav.addItem(

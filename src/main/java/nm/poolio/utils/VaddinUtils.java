@@ -26,6 +26,7 @@ public class VaddinUtils {
   public static final LineAwesomeIcon RANK_ICON = LineAwesomeIcon.LIST_OL_SOLID;
 
   public static final LineAwesomeIcon RESULTS_ICON = LineAwesomeIcon.FILE_EXCEL_SOLID;
+  public static final LineAwesomeIcon STANDINGS_ICON = LineAwesomeIcon.LIST_OL_SOLID;
   public static final LineAwesomeIcon GAME_TIME_ICON = LineAwesomeIcon.CLOCK_SOLID;
 
   public static final LineAwesomeIcon HOME_ICON = LineAwesomeIcon.HOME_SOLID;
