@@ -53,7 +53,6 @@ import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.views.MainLayout;
 import org.springframework.util.CollectionUtils;
-import org.vaadin.lineawesome.LineAwesomeIcon;
 
 @PageTitle("Bets \uD83C\uDFB0")
 @Route(value = "bet", layout = MainLayout.class)

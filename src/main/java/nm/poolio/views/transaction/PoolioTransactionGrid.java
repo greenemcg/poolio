@@ -15,7 +15,6 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import java.time.format.DateTimeFormatter;
 import javax.annotation.Nullable;
-
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.enitities.transaction.PoolioTransaction;

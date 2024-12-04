@@ -1,6 +1,7 @@
 package nm.poolio.enitities.ticket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +42,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     })
 public class Ticket extends AbstractEntity {
   @Transient int score;
+  @Transient int correct = 0;
   @Transient String scoreString;
   @Transient int fullScore; // using higher values to allow for tiebreaker
   @Transient String rankString;
@@ -51,6 +53,7 @@ public class Ticket extends AbstractEntity {
   @JoinColumn(name = "transaction_id")
   PoolioTransaction transaction;
 
+  @Nullable
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "winning_transaction_id")
   PoolioTransaction winningTransaction;

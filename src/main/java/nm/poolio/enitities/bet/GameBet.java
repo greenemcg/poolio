@@ -41,6 +41,7 @@ public class GameBet extends AbstractEntity {
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "proposer_transaction_id")
   PoolioTransaction proposerTransaction;
+
   @ManyToMany(
       fetch = FetchType.EAGER,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -49,28 +50,35 @@ public class GameBet extends AbstractEntity {
       joinColumns = @JoinColumn(name = "game_bet_id"),
       inverseJoinColumns = @JoinColumn(name = "transaction_id"))
   Set<PoolioTransaction> acceptorTransactions;
+
   @ManyToMany(
-          fetch = FetchType.EAGER,
-          cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinTable(
-          name = "game_bet_winners",
-          joinColumns = @JoinColumn(name = "game_bet_id"),
-          inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+      name = "game_bet_winners",
+      joinColumns = @JoinColumn(name = "game_bet_id"),
+      inverseJoinColumns = @JoinColumn(name = "transaction_id"))
   Set<PoolioTransaction> winningTransactions;
+
   @NotNull private String gameId;
+
   @NotNull
   @Enumerated(EnumType.STRING)
   private NflWeek week;
+
   @NotNull
   @Enumerated(EnumType.STRING)
   private Season season;
+
   @NotNull private Integer spread;
   @NotNull private Integer amount;
   @NotNull private Boolean proposerCanEditTeam;
   @NotNull private Boolean betCanBeSplit;
+
   @NotNull
   @Enumerated(EnumType.STRING)
   private NflTeam teamPicked;
+
   private Instant acceptanceDate;
   private Instant expiryDate;
 

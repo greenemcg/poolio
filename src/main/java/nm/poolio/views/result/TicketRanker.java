@@ -25,11 +25,7 @@ public class TicketRanker {
         .forEach(
             index -> {
               int score = ticketsSortedByFullScore.get(index).getFullScore();
-
-              log.info("score={}", score);
-
-              if (index + 1 < ticketsSortedByFullScore.size())
-                process(index, score);
+              if (index + 1 < ticketsSortedByFullScore.size()) process(index, score);
               else processLast(index, score);
             });
   }
@@ -45,14 +41,12 @@ public class TicketRanker {
 
       setRankInTicket(index);
 
-      if ( tieCount > 0) {
-        rank += tieCount +1;
+      if (tieCount > 0) {
+        rank += tieCount + 1;
         tieCount = 0;
       } else {
         rank++;
       }
-
-
 
       tie = false;
     }
@@ -69,8 +63,6 @@ public class TicketRanker {
   }
 
   private void setRankInTicket(int index) {
-    log.info("rank={}", rank);
-
     ticketsSortedByFullScore.get(index).setRank(rank);
     ticketsSortedByFullScore.get(index).setRankString((tie ? "T" : "") + rank);
   }

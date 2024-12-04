@@ -20,10 +20,8 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import java.io.ByteArrayInputStream;
 import java.util.Optional;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
@@ -114,7 +112,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     if (accessChecker.hasAccess(ResultsView.class))
       nav.addItem(new SideNavItem("Results", ResultsView.class, RESULTS_ICON.create()));
 
-   nav.addItem(new SideNavItem("Standings", StandingsView.class, RESULTS_ICON.create()));
+    nav.addItem(new SideNavItem("Standings", StandingsView.class, TROPHY_ICON.create()));
 
     if (accessChecker.hasAccess(PoolioTransactionView.class))
       nav.addItem(
@@ -127,7 +125,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     Footer layout = new Footer();
 
     if (user != null) {
-      Avatar avatar = createUserAvatar(user,  AvatarVariant.LUMO_SMALL);
+      Avatar avatar = createUserAvatar(user, AvatarVariant.LUMO_SMALL);
       avatar.getElement().setAttribute("tabindex", "-1");
 
       MenuBar userMenu = new MenuBar();

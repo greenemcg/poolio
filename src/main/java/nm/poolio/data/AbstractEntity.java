@@ -11,14 +11,13 @@ import jakarta.persistence.Version;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.annotation.Nullable;
 
 @MappedSuperclass
 @Getter

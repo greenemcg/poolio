@@ -69,7 +69,7 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   @JsonIgnore
   @Lob
   @JdbcTypeCode(Types.VARBINARY)
-  @ Column(length = 1000000)
+  @Column(length = 1000000)
   private byte[] profilePicture;
 
   public @Email String getEmail() {

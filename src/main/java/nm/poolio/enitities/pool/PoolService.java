@@ -8,7 +8,6 @@ import nm.poolio.cache.CacheConfig;
 import nm.poolio.cache.CacheConfig.CacheName;
 import nm.poolio.data.AvatarImageBytes;
 import nm.poolio.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.cache.annotation.CacheEvict;

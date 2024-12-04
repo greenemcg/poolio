@@ -77,8 +77,6 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
             new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
         confirmed2.getElement().getStyle().set("font-weight", "bold");
 
-
-
         createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
         return confirmed2;
       } else {

@@ -53,7 +53,6 @@ public class TicketShowView extends VerticalLayout
   private final NflGameScorerService nflGameScorerService;
   private final TicketScorerService ticketScorerService;
 
-
   Ticket ticket;
   @Getter boolean errorFound = false;
 

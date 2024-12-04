@@ -64,8 +64,8 @@ public class ResultsView extends VerticalLayout
         PoolioNotification,
         UserPoolFinder,
         HasUrlParameter<String> {
- private final static String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
-    private final PoolService poolService;
+  private static final String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
+  private final PoolService poolService;
   private final TicketService ticketService;
   private final NflGameService nflGameService;
   private final GameScoreService gameScoreService;
@@ -91,7 +91,7 @@ public class ResultsView extends VerticalLayout
       NflGameScorerService nflGameScorerService,
       TicketScorerService ticketScorerService,
       PoolioTransactionService poolioTransactionService) {
-      this.poolService = poolService;
+    this.poolService = poolService;
     this.ticketService = ticketService;
     this.nflGameService = nflGameService;
     this.gameScoreService = gameScoreService;
@@ -211,7 +211,8 @@ public class ResultsView extends VerticalLayout
         decorateGrid();
 
         poolInfoSpan.setText(
-                POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
+            POOL_INFO_TEMPLATE.formatted(
+                pool.getName(), players.size(), pool.getAmount() * players.size()));
 
         resultsGrid.setItems(ticketsList);
 
@@ -244,9 +245,9 @@ public class ResultsView extends VerticalLayout
       playerComboBox.setItems(players);
       playerComboBox.select(players);
 
-
       poolInfoSpan.setText(
-              POOL_INFO_TEMPLATE.formatted(pool.getName(), players.size(), pool.getAmount() * players.size()));
+          POOL_INFO_TEMPLATE.formatted(
+              pool.getName(), players.size(), pool.getAmount() * players.size()));
 
       resultsGrid.setItems(ticketsList);
       decorateGrid();

@@ -10,8 +10,6 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.LitRenderer;
-import com.vaadin.flow.data.renderer.Renderer;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioGrid;
@@ -24,17 +22,6 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
     return getResultsGrid();
   }
 
-  private Renderer<Ticket> createUserRendererOld() {
-    return LitRenderer.<Ticket>of(getUserTemplateExpression())
-        .withProperty("pictureUrl", pojo -> createUserPictureUrl(pojo.getPlayer()))
-        .withProperty("fullName", t -> t.getPlayer().getName())
-        .withProperty("extraData", this::getWinningsString);
-  }
-
-  private String getWinningsString(Ticket t) {
-    return "Winnings: 0";
-  }
-
   default String createTieBreakerString(Ticket ticket) {
     return "" + ticket.getSheet().getTieBreaker();
   }
@@ -44,7 +31,7 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
 
     this.getResultsGrid()
         .addColumn(new ComponentRenderer<>(ticket -> createUserComponent(ticket.getPlayer())))
-        .setHeader(createIconSpan(PLAYER_ICON, "PLayer"))
+        .setHeader(createIconSpan(PLAYER_ICON, "Player"))
         .setAutoWidth(true)
         .setComparator(t -> t.getPlayer().getName());
 

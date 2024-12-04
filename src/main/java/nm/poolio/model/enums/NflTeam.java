@@ -40,24 +40,24 @@ public enum NflTeam {
   TIE("TIE"),
   TBD("Place holder");
 
-//  CLEMSON("Clemson"),
-//  GEORGIA("Georgia"),
-//  PENN("Penn State"),
-//  WV("West Viginia"),
-//  MIAMI("Miami FL"),
-//  FL("Florida"),
-//  ND("Notre Dame"),
-//  TX_AM("Texas A and M"),
-//  NM("New Mexico"),
-//  AZ_ST("Arizona State"),
-//  USC("Univ of So. Cal"),
-//  LSU("Louisiana State Univ"),
-//  NEB("Nebraska Corn huskers"),
-//  UTEP("Texas El Paso Univ"),
-//  BOS("Boston College"),
-//  FL_ST("Florida State"),
-//  JMU("James Madison Dukes"),
-//  CHAR("Charlotte 49'er");
+  //  CLEMSON("Clemson"),
+  //  GEORGIA("Georgia"),
+  //  PENN("Penn State"),
+  //  WV("West Viginia"),
+  //  MIAMI("Miami FL"),
+  //  FL("Florida"),
+  //  ND("Notre Dame"),
+  //  TX_AM("Texas A and M"),
+  //  NM("New Mexico"),
+  //  AZ_ST("Arizona State"),
+  //  USC("Univ of So. Cal"),
+  //  LSU("Louisiana State Univ"),
+  //  NEB("Nebraska Corn huskers"),
+  //  UTEP("Texas El Paso Univ"),
+  //  BOS("Boston College"),
+  //  FL_ST("Florida State"),
+  //  JMU("James Madison Dukes"),
+  //  CHAR("Charlotte 49'er");
 
   @Getter final String fullName;
 }
