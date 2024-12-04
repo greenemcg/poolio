@@ -94,7 +94,7 @@ public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDi
 
           AtomicInteger atomicInteger = new AtomicInteger(0);
 
-          for (NflGame g : games) {
+            for (NflGame g : games) {
             if (g.getWeek() == week) break;
             else atomicInteger.set(atomicInteger.get() + 1);
           }
