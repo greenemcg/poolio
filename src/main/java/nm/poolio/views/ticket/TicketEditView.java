@@ -10,6 +10,7 @@ import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -133,8 +134,16 @@ public class TicketEditView extends VerticalLayout
 
     add(formLayout);
     tieBreakerFiled = createTieBreakerField(ticket);
-    add(tieBreakerFiled);
-    add(createSubmitButton(e -> saveTicket()));
+
+    HorizontalLayout horizontalLayout =
+        new HorizontalLayout(tieBreakerFiled, createSubmitButton(e -> saveTicket()));
+    horizontalLayout.setAlignItems(Alignment.BASELINE);
+    add(horizontalLayout);
+
+    add(new Div());
+    add(new Hr());
+    //   add(tieBreakerFiled);
+    //   add(createSubmitButton(e -> saveTicket()));
   }
 
   private void saveTicket() {
