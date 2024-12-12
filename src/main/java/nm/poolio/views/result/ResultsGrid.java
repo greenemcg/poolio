@@ -7,8 +7,6 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.LitRenderer;
-import com.vaadin.flow.data.renderer.Renderer;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioGrid;
@@ -26,7 +24,6 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
   }
 
   default void decoratePoolGrid() {
-
     this.getResultsGrid()
         .addColumn(
             new ComponentRenderer<>(

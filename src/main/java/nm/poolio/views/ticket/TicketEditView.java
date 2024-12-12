@@ -2,7 +2,10 @@ package nm.poolio.views.ticket;
 
 import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
@@ -15,7 +18,12 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.Location;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -142,6 +150,16 @@ public class TicketEditView extends VerticalLayout
     spacerLayout.add(new Hr());
     spacerLayout.setMinHeight(50, Unit.PIXELS);
     add(spacerLayout);
+
+    HorizontalLayout horizontalLayout =
+        new HorizontalLayout(tieBreakerFiled, createSubmitButton(e -> saveTicket()));
+    horizontalLayout.setAlignItems(Alignment.BASELINE);
+    add(horizontalLayout);
+
+    add(new Div());
+    add(new Hr());
+    //   add(tieBreakerFiled);
+    //   add(createSubmitButton(e -> saveTicket()));
   }
 
   private void saveTicket() {

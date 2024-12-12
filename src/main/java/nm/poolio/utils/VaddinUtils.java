@@ -10,6 +10,10 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 
 public class VaddinUtils {
 
+  public static final LineAwesomeIcon TROPHY_ICON = LineAwesomeIcon.TROPHY_SOLID;
+  public static final LineAwesomeIcon WIN_ICON = LineAwesomeIcon.THUMBS_UP_SOLID;
+  public static final LineAwesomeIcon PERCENT_ICON = LineAwesomeIcon.PERCENT_SOLID;
+
   public static final LineAwesomeIcon SPLIT_ICON = LineAwesomeIcon.COLUMNS_SOLID;
   public static final LineAwesomeIcon MONEY_POT_ICON = LineAwesomeIcon.HAND_HOLDING_USD_SOLID;
   public static final LineAwesomeIcon EMAIL_ICON = LineAwesomeIcon.AT_SOLID;
@@ -26,6 +30,7 @@ public class VaddinUtils {
   public static final LineAwesomeIcon RANK_ICON = LineAwesomeIcon.LIST_OL_SOLID;
 
   public static final LineAwesomeIcon RESULTS_ICON = LineAwesomeIcon.FILE_EXCEL_SOLID;
+  public static final LineAwesomeIcon STANDINGS_ICON = LineAwesomeIcon.LIST_OL_SOLID;
   public static final LineAwesomeIcon GAME_TIME_ICON = LineAwesomeIcon.CLOCK_SOLID;
 
   public static final LineAwesomeIcon HOME_ICON = LineAwesomeIcon.HOME_SOLID;

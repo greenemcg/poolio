@@ -10,10 +10,12 @@ public class TicketScorer {
   private final List<NflGame> games;
   int score = 0;
   int fullScore = 0;
+  int correct = 0;
 
   private void reset() {
     score = 0;
     fullScore = 0;
+    correct = 0;
   }
 
   public void score(Ticket ticket) {
@@ -32,11 +34,13 @@ public class TicketScorer {
                 if (teamPicked.equals(winner)) {
                   score += 10;
                   fullScore += 100000;
+                  correct++;
                 }
               }
             });
 
     ticket.setScore(score);
+    ticket.setCorrect(correct);
 
     var optional = games.getLast().getScore();
 

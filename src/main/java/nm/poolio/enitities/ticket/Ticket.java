@@ -1,7 +1,18 @@
 package nm.poolio.enitities.ticket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +42,7 @@ import java.util.Map;
     })
 public class Ticket extends AbstractEntity {
   @Transient int score;
+  @Transient int correct = 0;
   @Transient String scoreString;
   @Transient int fullScore; // using higher values to allow for tiebreaker
   @Transient String rankString;
@@ -41,6 +53,7 @@ public class Ticket extends AbstractEntity {
   @JoinColumn(name = "transaction_id")
   PoolioTransaction transaction;
 
+  @Nullable
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "winning_transaction_id")
   PoolioTransaction winningTransaction;

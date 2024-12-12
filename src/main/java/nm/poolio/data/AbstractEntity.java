@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -18,6 +19,7 @@ import javax.annotation.Nullable;
 @Getter
 @Setter
 public abstract class AbstractEntity {
+  @Nullable
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
   @SequenceGenerator(name = "idgenerator", initialValue = 10)
@@ -42,6 +44,7 @@ public abstract class AbstractEntity {
   @LastModifiedBy
   private String modifiedBy;
 
+  @Nullable
   @Column(name = "inactive_date")
   private Instant inactiveDate;
 

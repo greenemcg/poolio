@@ -43,22 +43,23 @@ public class GameBet extends AbstractEntity {
   @NotNull
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "proposer_transaction_id")
-  private PoolioTransaction proposerTransaction;
-
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  PoolioTransaction proposerTransaction;
+  @ManyToMany(
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinTable(
       name = "game_bet_acceptors",
       joinColumns = @JoinColumn(name = "game_bet_id"),
       inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-  private Set<PoolioTransaction> acceptorTransactions = new HashSet<>();
-
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  Set<PoolioTransaction> acceptorTransactions;
+  @ManyToMany(
+          fetch = FetchType.EAGER,
+          cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinTable(
-      name = "game_bet_winners",
-      joinColumns = @JoinColumn(name = "game_bet_id"),
-      inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-  private Set<PoolioTransaction> resultTransactions = new HashSet<>();
-
+          name = "game_bet_winners",
+          joinColumns = @JoinColumn(name = "game_bet_id"),
+          inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+  Set<PoolioTransaction> winningTransactions;
   @NotNull private String gameId;
 
   @NotNull

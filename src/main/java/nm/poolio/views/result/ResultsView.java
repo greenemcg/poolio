@@ -7,6 +7,7 @@ import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox.AutoExpandMode;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -19,10 +20,7 @@ import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +45,7 @@ import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.views.MainLayout;
 import nm.poolio.views.ticket.TicketShowGrid;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @PageTitle("Results \uD83D\uDCC3")
 @Route(value = "result", layout = MainLayout.class)
@@ -59,8 +58,7 @@ public class ResultsView extends VerticalLayout
         PoolioNotification,
         UserPoolFinder,
         HasUrlParameter<String> {
-  private static final String POOL_INFO_TEMPLATE = "%s Pool %d Players • Pool Amount: $%d";
-  private final AuthenticatedUser authenticatedUser;
+  private static final String POOL_INFO_TEMPLATE = "%s • %d Players • $%d";
   private final PoolService poolService;
   private final TicketService ticketService;
   private final NflGameService nflGameService;
@@ -76,6 +74,8 @@ public class ResultsView extends VerticalLayout
   ComboBox<NflWeek> comboBox = new ComboBox<>("Change Week");
   MultiSelectComboBox<User> playerComboBox = new MultiSelectComboBox<>("Select Players");
   Span poolInfoSpan = new Span("Pool Value: $");
+  Span poolDuplicateSpan = new Span("No Duplicates");
+  Details details = new Details();
   private NflWeek week;
 
   public ResultsView(
@@ -87,7 +87,6 @@ public class ResultsView extends VerticalLayout
       NflGameScorerService nflGameScorerService,
       TicketScorerService ticketScorerService,
       PoolioTransactionService poolioTransactionService) {
-    this.authenticatedUser = authenticatedUser;
     this.poolService = poolService;
     this.ticketService = ticketService;
     this.nflGameService = nflGameService;
@@ -98,8 +97,12 @@ public class ResultsView extends VerticalLayout
 
     setHeight("100%");
     player = authenticatedUser.get().orElseThrow();
-
     poolInfoSpan.getElement().getThemeList().add("badge success");
+    poolDuplicateSpan.getElement().getThemeList().add("badge contrast");
+
+    Span span = new Span("Duplicates");
+    span.getElement().getThemeList().add("badge contrast");
+    details.setSummary(span);
   }
 
   private void createUI() {
@@ -172,9 +175,27 @@ public class ResultsView extends VerticalLayout
 
         HorizontalLayout badgesHorizontalLayout = new HorizontalLayout();
         badgesHorizontalLayout.setPadding(false);
-        badgesHorizontalLayout.setSpacing(false);
+        badgesHorizontalLayout.setSpacing(true);
         badgesHorizontalLayout.add(poolInfoSpan);
+        badgesHorizontalLayout.add(poolDuplicateSpan);
+        badgesHorizontalLayout.add(details);
         add(badgesHorizontalLayout);
+
+        processDuplicates();
+
+        //       var duplicates = findDups();
+        //        badgesHorizontalLayout.add(poolDuplicateSpan);
+        //        badgesHorizontalLayout.add(details);
+        //
+        //         poolDuplicateSpan.setVisible(duplicates.isEmpty());
+        //        details.setVisible(!duplicates.isEmpty());
+        //        details.removeAll();
+        //        duplicates.forEach(
+        //            d -> {
+        //              var span = new Span(d);
+        //              span.getElement().getThemeList().add("badge");
+        //              details.add(span);
+        //            });
 
         HorizontalLayout comboBoxesHorizontalLayout = new HorizontalLayout();
         comboBox.setItems(computeWeekValue(NflWeek.values(), pool.getWeek()));
@@ -218,6 +239,28 @@ public class ResultsView extends VerticalLayout
     }
   }
 
+  private List<String> findDups() {
+    Map<Integer, List<String>> map = processDups(ticketsList);
+
+    return map.values().stream().filter(v -> v.size() > 1).map(this::joinNames).toList();
+  }
+
+  private String joinNames(List<String> v) {
+    return String.join(", ", v);
+  }
+
+  private Map<Integer, List<String>> processDups(List<Ticket> ticketsList) {
+    Map<Integer, List<String>> map = new HashMap<>();
+    ticketsList.forEach(
+        t -> {
+          if (!CollectionUtils.isEmpty(t.getSheet().getGamePicks()))
+            map.computeIfAbsent(t.getSheet().getGamePicks().hashCode(), k -> new ArrayList<>())
+                .add(t.getPlayer().getName());
+        });
+
+    return map;
+  }
+
   private void changeWeek(NflWeek weekIn) {
 
     if (weekIn != null && (pool.getWeek().getWeekNum() < weekIn.getWeekNum())) {
@@ -246,8 +289,37 @@ public class ResultsView extends VerticalLayout
           POOL_INFO_TEMPLATE.formatted(
               pool.getName(), players.size(), pool.getAmount() * players.size()));
 
+      processDuplicates();
+
       resultsGrid.setItems(ticketsList);
       decorateGrid();
+    }
+  }
+
+  private void processDuplicates() {
+    var duplicates = findDups();
+
+    poolDuplicateSpan.setVisible(duplicates.isEmpty());
+    details.setVisible(!duplicates.isEmpty());
+    details.removeAll();
+
+    if (!duplicates.isEmpty()) {
+      VerticalLayout content = new VerticalLayout();
+      content.setSpacing(false);
+      content.setPadding(false);
+      AtomicInteger count = new AtomicInteger();
+
+      duplicates.forEach(
+          d -> {
+            count.addAndGet(StringUtils.countOccurrencesOf(d, ",") + 1);
+
+            var span = new Div("(" + d + ")");
+            span.getElement().getThemeList().add("badge");
+            content.add(span);
+          });
+
+      details.getSummary().getElement().setText(count.get() + " Duplicates");
+      details.add(content);
     }
   }
 
