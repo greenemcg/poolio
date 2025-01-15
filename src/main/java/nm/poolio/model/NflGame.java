@@ -2,6 +2,7 @@ package nm.poolio.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -22,6 +23,8 @@ public class NflGame {
   Season season;
   String id;
   Integer week;
+
+  @Nullable Float overUnder;
 
   @JsonIgnore Integer awayScore;
   @JsonIgnore Integer homeScore;
@@ -58,9 +61,8 @@ public class NflGame {
 
   @JsonIgnore
   public Optional<Integer> getScore() {
-    return (homeScore == null && awayScore == null)
-        ? Optional.empty()
-        : Optional.of(homeScore + awayScore);
+    return Optional.ofNullable(homeScore)
+        .flatMap(h -> Optional.ofNullable(awayScore).map(a -> h + a));
   }
 
   @JsonIgnore

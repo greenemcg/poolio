@@ -72,13 +72,23 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
   private void addDrawerContent() {
     Span appNameSpan = new Span("");
     appNameSpan.add(LineAwesomeIcon.FOOTBALL_BALL_SOLID.create());
-    appNameSpan.add(" Poolio");
+
+    String title = createTitle(poolService.getAllowBets());
+
+    appNameSpan.add(title);
     appNameSpan.addClassNames(LumoUtility.FontWeight.SEMIBOLD, LumoUtility.FontSize.LARGE);
     Header header = new Header(appNameSpan);
 
     Scroller scroller = new Scroller(createNavigation());
 
     addToDrawer(header, scroller, createFooter());
+  }
+
+  private String createTitle(Boolean allowBets) {
+    String title = "Poolio";
+
+    if (allowBets) return title + " \uD83E\uDDEADEMO\uD83E\uDDEA";
+    else return title;
   }
 
   private SideNav createNavigation() {

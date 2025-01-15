@@ -20,36 +20,26 @@ public interface ResultsGrid extends PoolioGrid<Ticket>, PoolioAvatar {
   }
 
   default String createTieBreakerString(Ticket ticket) {
-    return "" + ticket.getSheet().getTieBreaker();
+    return String.valueOf(ticket.getSheet().getTieBreaker());
   }
 
   default void decoratePoolGrid() {
-    this.getResultsGrid()
-        .addColumn(
-            new ComponentRenderer<>(
-                ticket -> createUserAvatar(ticket.getPlayer(), AvatarVariant.LUMO_XSMALL)))
-        .setHeader("ICO")
-        .setAutoWidth(true)
-        .setFrozen(true);
+    getResultsGrid()
+            .addColumn(new ComponentRenderer<>(ticket -> createUserAvatar(ticket.getPlayer(), AvatarVariant.LUMO_XSMALL)))
+            .setHeader("ICO")
+            .setAutoWidth(true)
+            .setFrozen(true);
 
     createColumn(Ticket::getRankString, createIconSpan(RANK_ICON, "Rank"));
-
-    createColumn(Ticket::findPlayerName, createIconSpan(PLAYER_ICON, "PLayer"));
-
-    //    this.getResultsGrid()
-    //        .addColumn(new ComponentRenderer<>(ticket -> createUserComponent(ticket.getPlayer())))
-    //        .setHeader(createIconSpan(PLAYER_ICON, "PLayer"))
-    //        .setAutoWidth(true)
-    //        .setComparator(t -> t.getPlayer().getName());
-
+    createColumn(Ticket::findPlayerName, createIconSpan(PLAYER_ICON, "Player"));
     createColumn(Ticket::getScore, createIconSpan(SCORE_ICON, "Pts"))
-        .setComparator(Ticket::getFullScore);
+            .setComparator(Ticket::getFullScore);
 
-    this.getResultsGrid()
-        .addColumn(new ComponentRenderer<>(ticket -> new Span(createTieBreakerString(ticket))))
-        .setHeader(createIconSpan(TIE_BREAKER_ICON, "TB"))
-        .setAutoWidth(true)
-        .setTextAlign(ColumnTextAlign.CENTER)
-        .setComparator(Ticket::getTieBreaker);
+    getResultsGrid()
+            .addColumn(new ComponentRenderer<>(ticket -> new Span(createTieBreakerString(ticket))))
+            .setHeader(createIconSpan(TIE_BREAKER_ICON, "TB"))
+            .setAutoWidth(true)
+            .setTextAlign(ColumnTextAlign.CENTER)
+            .setComparator(Ticket::getTieBreaker);
   }
 }

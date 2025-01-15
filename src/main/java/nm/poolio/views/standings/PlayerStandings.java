@@ -39,4 +39,12 @@ public class PlayerStandings {
   public String getWinPercentage() {
     return PERCENT_FORMAT.format((double) totalCorrect / totalGames * 100);
   }
+
+  public String getWinnngsString() {
+    return (totalWinnings == 0) ? "" : "$" + totalWinnings;
+  }
+
+  public String findPlayerName() {
+    return player != null ? player.getName() : "";
+  }
 }

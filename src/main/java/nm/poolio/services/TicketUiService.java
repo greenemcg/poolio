@@ -10,6 +10,7 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.JsonbNote;
+import nm.poolio.model.enums.NflWeek;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
@@ -70,12 +71,12 @@ public class TicketUiService {
     return poolioTransaction;
   }
 
-  public Ticket createTicket(Ticket ticket, Pool pool, User player, JsonbNote note) {
+  public Ticket createTicket(Ticket ticket, Pool pool, User player, JsonbNote note, NflWeek week) {
 
     PoolSheet poolSheet = new PoolSheet();
 
     var games =
-        nflGameService.getWeeklyGamesThursdayFiltered(pool.getWeek(), pool.isIncludeThursday());
+        nflGameService.getWeeklyGamesThursdayFiltered(week, pool.isIncludeThursday());
 
     games.forEach(g -> poolSheet.getGamePicks().put(g.getId(), null));
     ticket.setSheet(poolSheet);

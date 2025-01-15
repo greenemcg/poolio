@@ -20,6 +20,7 @@ import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.enitities.score.GameScore;
 import nm.poolio.enitities.score.GameScoreService;
 import nm.poolio.model.NflGame;
+import nm.poolio.push.Broadcaster;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
@@ -165,6 +166,8 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
     score.setHomeScore(bean.getHomeScore());
 
     gameScoreService.save(score);
+
+    Broadcaster.broadcast("gameScore updated");
 
     grid.setItems(service.getGameList());
   }

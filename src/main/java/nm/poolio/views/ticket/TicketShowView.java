@@ -139,7 +139,7 @@ public class TicketShowView extends VerticalLayout
 
     var scores = gameScoreService.getScores(weeklyGames);
 
-    decorateTicketGrid(ticket.getSheet().getGamePicks(), scores);
+    decorateTicketGrid(ticket, scores);
     ticketGrid.setItems(weeklyGames);
 
     add(ticketGrid);

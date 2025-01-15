@@ -96,7 +96,8 @@ public class NflGameService implements Serializable {
 
     var filtered = filterByThurs(includeThurs, weekGames);
 
-    if( week.getWeekNum()== 13) { // TODO HACK for adding thursday for t-day games remove this
+    if (week.getWeekNum() == 13
+        || week.getWeekNum() == 17) { // TODO HACK for adding thursday for t-day and xmas games remove this
       filtered = weekGames;
     }
 

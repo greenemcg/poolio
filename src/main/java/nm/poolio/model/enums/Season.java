@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum Season {
   S_2024("2024");
 
+  @Getter
   final String display;
 
   Season(String display) {

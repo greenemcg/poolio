@@ -1797,7 +1797,7 @@
     "season": "S_2024",
     "id": "CINatCLE_W16_Thu_2024-225",
     "week": 16,
-    "gameTime": "2024-12-19T20:15:00.000-0500"
+    "gameTime": "2024-12-22T16:05:00.000-0500"
   },
   {
     "homeTeam": "KC",
@@ -1877,7 +1877,7 @@
     "season": "S_2024",
     "id": "LACatDEN_W16_Sun_2024-235",
     "week": 16,
-    "gameTime": "2024-12-22T16:05:00.000-0500"
+    "gameTime": "2024-12-19T20:15:00.000-0500"
   },
   {
     "homeTeam": "SEA",
@@ -2061,7 +2061,7 @@
     "season": "S_2024",
     "id": "BALatCLE_W18_Sun_2024-258",
     "week": 18,
-    "gameTime": "2025-01-05T13:00:00.000-0500"
+    "gameTime": "2025-01-04T13:00:00.000-0500"
   },
   {
     "homeTeam": "NE",
@@ -2085,7 +2085,7 @@
     "season": "S_2024",
     "id": "PITatCIN_W18_Sun_2024-261",
     "week": 18,
-    "gameTime": "2025-01-05T13:00:00.000-0500"
+    "gameTime": "2025-01-04T13:00:00.000-0500"
   },
   {
     "homeTeam": "DAL",
@@ -2101,7 +2101,7 @@
     "season": "S_2024",
     "id": "DETatMIN_W18_Sun_2024-263",
     "week": 18,
-    "gameTime": "2025-01-05T13:00:00.000-0500"
+    "gameTime": "2025-01-05T20:00:00.000-0500"
   },
   {
     "homeTeam": "TEN",
@@ -2173,6 +2173,98 @@
     "season": "S_2024",
     "id": "LARatSEA_W18_Sun_2024-272",
     "week": 18,
-    "gameTime": "2025-01-05T16:25:00.000-0500"
+    "gameTime": "2025-01-05T10:25:00.000-0500"
+  },
+
+
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "LAC",
+    "season": "S_2024",
+    "id": "2024_WildCard_1",
+    "week": 19,
+    "overUnder": 42.5,
+    "gameTime": "2025-01-11T16:30:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "PIT",
+    "season": "S_2024",
+    "id": "2024_WildCard_2",
+    "week": 19,
+    "overUnder": 43.5,
+    "gameTime": "2025-01-11T20:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "DEN",
+    "season": "S_2024",
+    "id": "2024_WildCard_3",
+    "week": 19,
+    "overUnder": 46.5,
+    "gameTime": "2025-01-12T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "GB",
+    "season": "S_2024",
+    "id": "2024_WildCard_4",
+    "week": 19,
+    "overUnder": 45.5,
+    "gameTime": "2025-01-12T16:30:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "2024_WildCard_5",
+    "week": 19,
+    "overUnder": 50.5,
+    "gameTime": "2025-01-12T20:15:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "MIN",
+    "season": "S_2024",
+    "id": "2024_WildCard_6",
+    "week": 19,
+    "overUnder": 47.5,
+    "gameTime": "2025-01-13T20:00:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "HOU",
+    "season": "S_2024",
+    "id": "2024_Divisional_1",
+    "week": 20,
+    "overUnder": 47.5,
+    "gameTime": "2025-01-18T14:30:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "WAS",
+    "season": "S_2024",
+    "id": "2024_Divisional_2",
+    "week": 20,
+    "overUnder": 47.5,
+    "gameTime": "2025-01-18T18:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "LAR",
+    "season": "S_2024",
+    "id": "2024_Divisional_3",
+    "week": 20,
+    "overUnder": 47.5,
+    "gameTime": "2025-01-19T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "BAL",
+    "season": "S_2024",
+    "id": "2024_Divisional_4",
+    "week": 20,
+    "overUnder": 47.5,
+    "gameTime": "2025-01-19T16:30:00.000-0500"
   }
 ]

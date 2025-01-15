@@ -2,10 +2,7 @@ package nm.poolio.views.ticket;
 
 import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
@@ -39,6 +36,7 @@ import nm.poolio.enitities.transaction.NoteCreator;
 import nm.poolio.model.JsonbNote;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
+import nm.poolio.model.enums.OverUnder;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketUiService;
@@ -130,7 +128,7 @@ public class TicketEditView extends VerticalLayout
         new ResponsiveStep("400px", 3),
         new ResponsiveStep("6000px", 4));
 
-    games.forEach(g -> formLayout.add(createGameRadioButton(g)));
+    games.forEach(g -> formLayout.add(createGamePick(g)));
 
     add(formLayout);
 
@@ -151,10 +149,10 @@ public class TicketEditView extends VerticalLayout
     spacerLayout.setMinHeight(50, Unit.PIXELS);
     add(spacerLayout);
 
-    HorizontalLayout horizontalLayout =
-        new HorizontalLayout(tieBreakerFiled, createSubmitButton(e -> saveTicket()));
-    horizontalLayout.setAlignItems(Alignment.BASELINE);
-    add(horizontalLayout);
+    //    HorizontalLayout horizontalLayout =
+    //        new HorizontalLayout(tieBreakerFiled, createSubmitButton(e -> saveTicket()));
+    //    horizontalLayout.setAlignItems(Alignment.BASELINE);
+    //    add(horizontalLayout);
 
     add(new Div());
     add(new Hr());
@@ -218,6 +216,50 @@ public class TicketEditView extends VerticalLayout
     return layout;
   }
 
+  private Component createGamePick(NflGame g) {
+
+    VerticalLayout verticalLayout = new VerticalLayout();
+
+    HorizontalLayout horizontalLayout = new HorizontalLayout();
+    horizontalLayout.add(createGameRadioButton(g));
+
+    verticalLayout.add(horizontalLayout);
+
+    if (g.getOverUnder() != null) {
+      var overUnder = createOverUnderField(g, ticket);
+      overUnder.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
+      verticalLayout.add(overUnder);
+    }
+
+    return verticalLayout;
+  }
+
+  //  private Component createOverUnderField(NflGame g) {
+  //   // HorizontalLayout layout = new HorizontalLayout();
+  //    RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
+  //    radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
+  //    radioGroup.setRequired(true);
+  //    radioGroup.setLabel("Total Score " + g.getOverUnder());
+  //
+  //    var value = ticket.getSheet().getOverUnderPicks().get(g.getId());
+  //
+  //    if( value != null) {
+  //      radioGroup.setValue(value);
+  //    }
+  //
+  //    radioGroup.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
+  //
+  //    return radioGroup;
+  // //   layout.add(radioGroup);
+  //
+  ////    return layout;
+  //  }
+
+  private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
+
+    ticket.getSheet().getOverUnderPicks().put(id, value);
+  }
+
   private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
     RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
     var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTime());
@@ -265,6 +307,8 @@ public class TicketEditView extends VerticalLayout
             .formatted(userName, pool.getName(), pool.getWeek());
     var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
 
-    ticket = ticketUiService.createTicket(createTicket(pool, player), pool, player, jsonbNote);
+    ticket =
+        ticketUiService.createTicket(
+            createTicket(pool, player), pool, player, jsonbNote, pool.getWeek());
   }
 }

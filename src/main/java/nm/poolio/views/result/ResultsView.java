@@ -1,6 +1,9 @@
 package nm.poolio.views.result;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
 import com.vaadin.flow.component.avatar.AvatarVariant;
@@ -17,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.shared.Registration;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
@@ -35,10 +39,13 @@ import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
+import nm.poolio.model.enums.OverUnder;
+import nm.poolio.push.Broadcaster;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketScorerService;
+import nm.poolio.utils.TicketScorer;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioBadge;
 import nm.poolio.vaadin.PoolioNotification;
@@ -78,6 +85,8 @@ public class ResultsView extends VerticalLayout
   Details details = new Details();
   private NflWeek week;
 
+  Registration broadcasterRegistration;
+
   public ResultsView(
       AuthenticatedUser authenticatedUser,
       PoolService poolService,
@@ -105,143 +114,127 @@ public class ResultsView extends VerticalLayout
     details.setSummary(span);
   }
 
+  @Override
+  protected void onAttach(AttachEvent attachEvent) {
+    UI ui = attachEvent.getUI();
+    broadcasterRegistration =
+        Broadcaster.register(
+            newMessage -> {
+              ui.access(
+                  () -> {
+                    createInfoNotification(new Span(newMessage));
+                    ui.push();
+                    createUI();
+                    createSucessNotification(new Span("Results updated"));
+                    ui.push();
+                  });
+            });
+  }
+
+  @Override
+  protected void onDetach(DetachEvent detachEvent) {
+    broadcasterRegistration.remove();
+    broadcasterRegistration = null;
+  }
+
   private void createUI() {
+    removeAll();
+
     var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
     if (pools.isEmpty()) {
       add(createNoPoolNotification());
     } else {
       pool = pools.getFirst();
-
       weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, week);
 
       if (!player.getAdmin() && Instant.now().isBefore(weeklyGames.getFirst().getGameTime())) {
         add(new H3("Games not started yet"));
         add(new Div("You can view all pics once the first game begins..."));
-
-        var tickets = ticketService.findTickets(pool, week);
-        HorizontalLayout usersLayout = new HorizontalLayout();
-        usersLayout.add(new Span(tickets.size() + " Players: "));
-        AvatarGroup avatarGroup = new AvatarGroup();
-        avatarGroup.setMaxItemsVisible(25);
-
-        var counter = new AtomicInteger(); // todo fix dup
-
-        tickets.forEach(
-            t -> {
-              AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
-              avatar.setColorIndex((int) (t.getPlayer().getId() % 8));
-              avatarGroup.add(avatar);
-            });
-
-        usersLayout.add(avatarGroup);
-
-        add(usersLayout);
-
-        var poolLayout = new HorizontalLayout();
-        poolLayout.add(createBadge(new Span("  Pot: " + tickets.size() * pool.getAmount())));
-        createPoolBadge(pool, poolLayout);
-
-        var optional = tickets.stream().filter(t -> t.getPlayer().equals(player)).findFirst();
-
-        optional.ifPresent(ticket -> createTicketBadge(ticket, poolLayout));
-
-        add(poolLayout);
-
-        if (optional.isPresent()) {
-          var ticket = optional.get();
-          GameGrid grid = new GameGrid(ticketService);
-
-          var games =
-              nflGameService.getWeeklyGamesThursdayFiltered(
-                  ticket.getWeek(), ticket.getPool().isIncludeThursday());
-
-          grid.decorateTicketGrid(ticket.getSheet().getGamePicks(), Map.of());
-          grid.ticketGrid.setItems(games);
-          add(grid.ticketGrid);
-
-        } else {
-          add(new Div("No ticket for you "));
-        }
-
+        displayPlayers();
       } else {
         ticketsList = ticketScorerService.findAndScoreTickets(pool, week);
-
-        //      ticketsList = ticketService.findTickets(pool, pool.getWeek());
-        //      TicketScorer scorer = new TicketScorer(weeklyGames);
-        //      ticketsList.forEach(scorer::score);
-        //      ticketsList.sort(Comparator.comparing(Ticket::getFullScore).reversed());
-        //      new TicketRanker(ticketsList).rank();
-
-        HorizontalLayout badgesHorizontalLayout = new HorizontalLayout();
-        badgesHorizontalLayout.setPadding(false);
-        badgesHorizontalLayout.setSpacing(true);
-        badgesHorizontalLayout.add(poolInfoSpan);
-        badgesHorizontalLayout.add(poolDuplicateSpan);
-        badgesHorizontalLayout.add(details);
-        add(badgesHorizontalLayout);
-
-        processDuplicates();
-
-        //       var duplicates = findDups();
-        //        badgesHorizontalLayout.add(poolDuplicateSpan);
-        //        badgesHorizontalLayout.add(details);
-        //
-        //         poolDuplicateSpan.setVisible(duplicates.isEmpty());
-        //        details.setVisible(!duplicates.isEmpty());
-        //        details.removeAll();
-        //        duplicates.forEach(
-        //            d -> {
-        //              var span = new Span(d);
-        //              span.getElement().getThemeList().add("badge");
-        //              details.add(span);
-        //            });
-
-        HorizontalLayout comboBoxesHorizontalLayout = new HorizontalLayout();
-        comboBox.setItems(computeWeekValue(NflWeek.values(), pool.getWeek()));
-        comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
-        comboBox.setValue(week);
-        comboBox.addValueChangeListener(e -> changeWeek(e.getValue()));
-        comboBoxesHorizontalLayout.add(comboBox);
-
-        var players =
-            ticketsList.stream()
-                .map(t -> t.getPlayer())
-                .sorted(Comparator.comparing(User::getName))
-                .toList();
-        playerComboBox.setItemLabelGenerator(User::getName);
-        playerComboBox.setItems(players);
-        playerComboBox.select(players);
-        playerComboBox.setClearButtonVisible(true);
-        playerComboBox.setAutoExpand(AutoExpandMode.HORIZONTAL);
-
-        playerComboBox.addValueChangeListener(
-            e -> {
-              var usersPicked = e.getValue().stream().toList();
-              var usersPickedTickets =
-                  ticketsList.stream().filter(t -> usersPicked.contains(t.getPlayer())).toList();
-              resultsGrid.setItems(usersPickedTickets);
-            });
-
-        comboBoxesHorizontalLayout.add(playerComboBox);
-        add(comboBoxesHorizontalLayout);
-
-        decorateGrid();
-
-        poolInfoSpan.setText(
-            POOL_INFO_TEMPLATE.formatted(
-                pool.getName(), players.size(), pool.getAmount() * players.size()));
-
-        resultsGrid.setItems(ticketsList);
-
-        add(resultsGrid);
+        displayResults();
       }
     }
   }
 
+  private void displayPlayers() {
+    var tickets = ticketService.findTickets(pool, week);
+    HorizontalLayout usersLayout = new HorizontalLayout();
+    usersLayout.add(new Span(tickets.size() + " Players: "));
+    AvatarGroup avatarGroup = new AvatarGroup();
+    avatarGroup.setMaxItemsVisible(25);
+
+    tickets.forEach(
+        t -> {
+          AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
+          avatar.setColorIndex((int) (t.getPlayer().getId() % 8));
+          avatarGroup.add(avatar);
+        });
+
+    usersLayout.add(avatarGroup);
+    add(usersLayout);
+
+    var poolLayout = new HorizontalLayout();
+    poolLayout.add(createBadge(new Span("  Pot: " + tickets.size() * pool.getAmount())));
+    createPoolBadge(pool, poolLayout);
+
+    tickets.stream()
+        .filter(t -> t.getPlayer().equals(player))
+        .findFirst()
+        .ifPresent(ticket -> createTicketBadge(ticket, poolLayout));
+
+    add(poolLayout);
+  }
+
+  private void displayResults() {
+    HorizontalLayout badgesHorizontalLayout =
+        new HorizontalLayout(poolInfoSpan, poolDuplicateSpan, details);
+    badgesHorizontalLayout.setPadding(false);
+    badgesHorizontalLayout.setSpacing(true);
+    add(badgesHorizontalLayout);
+
+    processDuplicates();
+
+    HorizontalLayout comboBoxesHorizontalLayout = new HorizontalLayout();
+    comboBox.setItems(computeWeekValue(NflWeek.values(), pool.getWeek()));
+    comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "16em");
+    comboBox.setValue(week);
+    comboBox.addValueChangeListener(e -> changeWeek(e.getValue()));
+    comboBoxesHorizontalLayout.add(comboBox);
+
+    var players =
+        ticketsList.stream()
+            .map(Ticket::getPlayer)
+            .sorted(Comparator.comparing(User::getName))
+            .toList();
+    playerComboBox.setItemLabelGenerator(User::getName);
+    playerComboBox.setItems(players);
+    playerComboBox.select(players);
+    playerComboBox.setClearButtonVisible(true);
+    playerComboBox.setAutoExpand(AutoExpandMode.HORIZONTAL);
+    playerComboBox.addValueChangeListener(e -> filterResultsByPlayers(e.getValue()));
+    comboBoxesHorizontalLayout.add(playerComboBox);
+    add(comboBoxesHorizontalLayout);
+
+    decorateGrid();
+
+    poolInfoSpan.setText(
+        String.format(
+            POOL_INFO_TEMPLATE, pool.getName(), players.size(), pool.getAmount() * players.size()));
+    resultsGrid.setItems(ticketsList);
+    add(resultsGrid);
+  }
+
+  private void filterResultsByPlayers(Set<User> usersPicked) {
+    var usersPickedTickets =
+        ticketsList.stream().filter(t -> usersPicked.contains(t.getPlayer())).toList();
+    resultsGrid.setItems(usersPickedTickets);
+  }
+
   private List<String> findDups() {
     Map<Integer, List<String>> map = processDups(ticketsList);
-
     return map.values().stream().filter(v -> v.size() > 1).map(this::joinNames).toList();
   }
 
@@ -262,16 +255,14 @@ public class ResultsView extends VerticalLayout
   }
 
   private void changeWeek(NflWeek weekIn) {
-
     if (weekIn != null && (pool.getWeek().getWeekNum() < weekIn.getWeekNum())) {
       createErrorNotification(new Span("Week not started"));
       comboBox.setValue(week);
     } else {
-      if (weekIn == null) {
-        var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
-        week = pools.getFirst().getWeek();
-      } else week = weekIn;
-
+      week =
+          weekIn == null
+              ? findPoolsForUser(player.getPoolIdNames(), poolService).getFirst().getWeek()
+              : weekIn;
       resultsGrid.removeAllColumns();
       weeklyGames = nflGameScorerService.getWeeklyGamesForPool(pool, week);
       ticketsList = ticketScorerService.findAndScoreTickets(pool, week);
@@ -281,16 +272,16 @@ public class ResultsView extends VerticalLayout
               .map(Ticket::getPlayer)
               .sorted(Comparator.comparing(User::getName))
               .toList();
-
       playerComboBox.setItems(players);
       playerComboBox.select(players);
 
       poolInfoSpan.setText(
-          POOL_INFO_TEMPLATE.formatted(
-              pool.getName(), players.size(), pool.getAmount() * players.size()));
-
+          String.format(
+              POOL_INFO_TEMPLATE,
+              pool.getName(),
+              players.size(),
+              pool.getAmount() * players.size()));
       processDuplicates();
-
       resultsGrid.setItems(ticketsList);
       decorateGrid();
     }
@@ -298,7 +289,6 @@ public class ResultsView extends VerticalLayout
 
   private void processDuplicates() {
     var duplicates = findDups();
-
     poolDuplicateSpan.setVisible(duplicates.isEmpty());
     details.setVisible(!duplicates.isEmpty());
     details.removeAll();
@@ -312,7 +302,6 @@ public class ResultsView extends VerticalLayout
       duplicates.forEach(
           d -> {
             count.addAndGet(StringUtils.countOccurrencesOf(d, ",") + 1);
-
             var span = new Div("(" + d + ")");
             span.getElement().getThemeList().add("badge");
             content.add(span);
@@ -334,47 +323,97 @@ public class ResultsView extends VerticalLayout
         .addColumn(
             new ComponentRenderer<>(
                 e -> {
-                  var value = e.getSheet().getGamePicks().get(game.getId());
-                  var optional = gameScoreService.findScore(game.getId());
-                  String cssName = "font-weight";
-                  String cssValue = "normal";
+                 Div layout = new Div();
+               //   layout.setPadding(false);
+               //   layout.setMargin(false);
+                  var span = createGameSpan(game, e);
+                  layout.add(span);
 
-                  if (optional.isPresent()) {
-                    var nflGame = nflGameService.findGameById(game.getId());
-                    var gameScore = optional.get();
-                    nflGame.setHomeScore(gameScore.getHomeScore());
-                    nflGame.setAwayScore(gameScore.getAwayScore());
+                  if (game.getOverUnder() != null) {
+                    var choice = e.getSheet().getOverUnderPicks().get(game.getId());
 
-                    var winner = nflGame.findWinner();
-
-                    // todo add this to nfl game view and share code
-
-                    if (winner.equals(value)) {
-                      cssValue = "bolder";
-                    } else if (winner.equals(NflTeam.TBD)) {
-                      cssValue = "normal";
-                    } else if (winner.equals(NflTeam.TIE)) {
-                      cssValue = "lighter";
-                    } else {
-                      cssName = "text-decoration";
-                      cssValue = "line-through";
+                    if( choice != null) {
+                      layout.add(new Span(" - " ));
+                      layout.add(new Span(createOverUndeSpan(game, e)));
                     }
                   }
 
-                  String result = "";
-                  if (value != null) {
-                    result = value.name();
-                  }
-
-                  var span = new Span(result);
-                  span.getStyle().set(cssName, cssValue);
-
-                  return span;
+                  return layout;
                 }))
         .setHeader(createHeader(game))
         .setAutoWidth(true)
         .setTooltipGenerator(g -> getString(game))
         .setTextAlign(ColumnTextAlign.CENTER);
+  }
+
+  @NotNull
+  private Span createOverUndeSpan(NflGame game, Ticket e) {
+    String cssName = "font-weight";
+    String cssValue = "normal";
+
+
+    OverUnder playerOverUnder = e.getSheet().getOverUnderPicks().get(game.getId());
+
+    if( playerOverUnder == null) {
+      return new Span("");
+    }
+
+    String value = playerOverUnder.name();
+
+    var optional = game.getScore();
+
+    if( optional.isPresent()) {
+        var gameScore = optional.get();
+
+        var overUnderResult = TicketScorer.computeOverUnderValue(gameScore, game.getOverUnder());
+
+        if( overUnderResult == null) {
+          cssName = "font-style";
+          cssValue = "oblique";
+        } else if( playerOverUnder == overUnderResult) {
+          cssValue = "bolder";
+        } else {
+          cssName = "text-decoration";
+          cssValue = "line-through";
+        }
+    }
+
+    var span = new Span(value );
+    span.getStyle().set(cssName, cssValue);
+    return span;
+  }
+
+  @NotNull
+  private Span createGameSpan(NflGame game, Ticket e) { // tod make class shared with over under
+    var value = e.getSheet().getGamePicks().get(game.getId());
+    var optional = gameScoreService.findScore(game.getId());
+    String cssName = "font-weight";
+    String cssValue = "normal";
+
+    if (optional.isPresent()) {
+      var nflGame = nflGameService.findGameById(game.getId());
+      var gameScore = optional.get();
+      nflGame.setHomeScore(gameScore.getHomeScore());
+      nflGame.setAwayScore(gameScore.getAwayScore());
+
+      var winner = nflGame.findWinner();
+
+      if (winner.equals(value)) {
+        cssValue = "bolder";
+      } else if (winner.equals(NflTeam.TBD)) {
+        cssValue = "normal";
+      } else if (winner.equals(NflTeam.TIE)) {
+        cssName = "font-style";
+        cssValue = "oblique";
+      } else {
+        cssName = "text-decoration";
+        cssValue = "line-through";
+      }
+    }
+
+    var span = new Span(value != null ? value.name() : "");
+    span.getStyle().set(cssName, cssValue);
+    return span;
   }
 
   private String getString(NflGame game) {
@@ -388,48 +427,47 @@ public class ResultsView extends VerticalLayout
     span.add(createNflTeamAvatar(game.getAwayTeam(), AvatarVariant.LUMO_XSMALL));
     span.add("v");
     span.add(createNflTeamAvatar(game.getHomeTeam(), AvatarVariant.LUMO_XSMALL));
+
+    if( game.getOverUnder() != null) {
+      span.add(new Span(" - " + game.getOverUnder()));
+    }
+
     return span;
   }
 
   private void decorateGrid() {
     var games = nflGameService.getWeeklyGamesForPool(pool, week);
-
     decoratePoolGrid();
-
     games.forEach(this::addItem);
   }
 
   @Override
   public String createTieBreakerString(Ticket ticket) {
     var optional = weeklyGames.getLast().getScore();
-
-    if (optional.isPresent()) {
-      var diff = optional.get() - ticket.getTieBreaker();
-      return ticket.getSheet().getTieBreaker() + "-" + Math.abs(diff);
-    } else return "" + ticket.getSheet().getTieBreaker();
+    return optional
+        .map(
+            score ->
+                ticket.getSheet().getTieBreaker() + "-" + Math.abs(score - ticket.getTieBreaker()))
+        .orElseGet(() -> "" + ticket.getSheet().getTieBreaker());
   }
 
   @Override
   public void setParameter(BeforeEvent event, @OptionalParameter String _ignored) {
     Location location = event.getLocation();
-
     var optionalWeekParameter = location.getQueryParameters().getSingleParameter("week");
 
-    if (optionalWeekParameter.isPresent()) week = NflWeek.valueOf(optionalWeekParameter.get());
-    else {
-      if (CollectionUtils.isEmpty(player.getPoolIdNames())) {
-        add(createErrorNotificationAndGoHome("Cannot find pool with supplied poolId."));
-      } else {
-        var pools = findPoolsForUser(player.getPoolIdNames(), poolService);
-        week = pools.getFirst().getWeek();
-      }
-    }
+    week =
+        optionalWeekParameter
+            .map(NflWeek::valueOf)
+            .orElseGet(
+                () -> findPoolsForUser(player.getPoolIdNames(), poolService).getFirst().getWeek());
 
     createUI();
   }
 
+  @Getter
   class GameGrid implements TicketShowGrid {
-    @Getter Grid<NflGame> ticketGrid = createGrid(NflGame.class);
+    Grid<NflGame> ticketGrid = createGrid(NflGame.class);
 
     public GameGrid(TicketService ticketService) {}
   }

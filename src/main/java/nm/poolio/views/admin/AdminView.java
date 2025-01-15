@@ -10,6 +10,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -30,6 +31,7 @@ import nm.poolio.model.JsonbNote;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
+import nm.poolio.model.enums.OverUnder;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketUiService;
@@ -81,16 +83,37 @@ public class AdminView extends VerticalLayout
     add(layout);
   }
 
-  private Component createTicketDialogLayout() {
+  private Component createTicketDialogLayout(NflWeek week) {
     var layout = new VerticalLayout();
     layout.setPadding(false);
     layout.setSpacing(false);
 
-    var games = nflGameService.getWeeklyGamesForPool(pool);
-    games.forEach(g -> layout.add(createGameRadioButton(g)));
+    var games = nflGameService.getWeeklyGamesForPool(pool, week);
+    games.forEach(g -> layout.add(createGamePick(g)));
     layout.add(createTieBreakerField(ticket));
 
     return layout;
+  }
+
+  private VerticalLayout createGamePick(NflGame g) {
+    VerticalLayout layout = new VerticalLayout();
+    layout.setPadding(false);
+    layout.setSpacing(false);
+
+    layout.add(createGameRadioButton(g));
+
+    if (g.getOverUnder() != null) {
+      var overUnder = createOverUnderField(g, ticket);
+      overUnder.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
+      layout.add(overUnder);
+      layout.add(new Hr());
+    }
+
+    return layout;
+  }
+
+  private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
+    ticket.getSheet().getOverUnderPicks().put(id, value);
   }
 
   private Component createGameRadioButton(NflGame g) {
@@ -178,7 +201,7 @@ public class AdminView extends VerticalLayout
       else ticket = buildNewTicket(week.getValue());
     }
 
-    createDialog(ticketDialog, e -> onSaveTicket(), createTicketDialogLayout());
+    createDialog(ticketDialog, e -> onSaveTicket(), createTicketDialogLayout(week.getValue()));
     ticketDialog.open();
   }
 
@@ -190,10 +213,11 @@ public class AdminView extends VerticalLayout
 
     String note =
         "Admin: %s created ticket for user: %s pool: %s-%s"
-            .formatted(userName, player.getName(), pool.getName(), pool.getWeek());
+            .formatted(userName, player.getName(), pool.getName(), week);
     var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
 
-    return ticketUiService.createTicket(createTicket(pool, player, week), pool, player, jsonbNote);
+    return ticketUiService.createTicket(
+        createTicket(pool, player, week), pool, player, jsonbNote, week);
   }
 
   private void onChangePool(Pool p) {

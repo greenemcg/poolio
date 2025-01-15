@@ -43,10 +43,7 @@ public class TicketService {
     }
 
     public Optional<Ticket> findTicketForUserWithWeek(User player, Pool pool, NflWeek week) {
-        var result =
-                repository.findByPlayerAndPoolAndSeasonAndWeek(player, pool, pool.getSeason(), week);
-
-        return result;
+        return repository.findByPlayerAndPoolAndSeasonAndWeek(player, pool, pool.getSeason(), week);
     }
 
     public List<Ticket> findWinners(Pool pool, NflWeek week) {

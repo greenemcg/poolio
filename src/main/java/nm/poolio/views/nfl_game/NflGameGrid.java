@@ -35,6 +35,8 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
         .setAutoWidth(true)
         .setTextAlign(ColumnTextAlign.CENTER);
 
+    createColumn(NflGame::getOverUnder, createIconSpan(OVER_UNDER_ICON, "O / U "));
+
     createColumn(NflGame::getHomeScore, createIconSpan(HOME_ICON, "Score"));
 
     getGrid()

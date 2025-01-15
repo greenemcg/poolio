@@ -3,16 +3,14 @@ package nm.poolio.views.ticket;
 import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 import static org.vaadin.lineawesome.LineAwesomeIcon.SAVE_SOLID;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.IntegerField;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -22,8 +20,10 @@ import nm.poolio.enitities.pool.PoolIdName;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
+import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
+import nm.poolio.model.enums.OverUnder;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioBadge;
 import nm.poolio.vaadin.PoolioDialog;
@@ -37,6 +37,28 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
   TicketService getTicketService();
 
   HasComponents getDialogHasComponents();
+
+  default RadioButtonGroup<OverUnder> createOverUnderField(NflGame g, Ticket ticket) {
+    // HorizontalLayout layout = new HorizontalLayout();
+    RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
+    radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
+    radioGroup.setRequired(true);
+    radioGroup.setLabel("Total Score " + g.getOverUnder());
+
+    var value = ticket.getSheet().getOverUnderPicks().get(g.getId());
+
+    if( value != null) {
+      radioGroup.setValue(value);
+    }
+
+   // radioGroup.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
+
+    return radioGroup;
+    //   layout.add(radioGroup);
+
+//    return layout;
+  }
+
 
   default Long convertTicketIdParameter(String ticketIdParameter) {
     return convertIdParameter(ticketIdParameter, "Invalid ticketId: ");
@@ -61,6 +83,7 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
       ticket.getSheet().getGamePicks().put(id, value);
     }
   }
+
 
   default IntegerField createTieBreakerField(Ticket ticket) {
     IntegerField tbField = new IntegerField();

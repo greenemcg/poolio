@@ -91,6 +91,7 @@ public interface TicketGrid extends PoolioGrid<Ticket> {
 
     createColumn(Ticket::getTieBreaker, createIconSpan(TIE_BREAKER_ICON, "Tie Break"))
         .setComparator(Ticket::getTieBreaker);
+
     createColumn(Ticket::getPicksString, createIconSpan(TICKET_ICON, "Picks"))
         .setAutoWidth(true)
         // .setTooltipGenerator(Ticket::getPicksString)

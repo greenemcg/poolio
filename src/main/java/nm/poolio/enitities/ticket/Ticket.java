@@ -1,33 +1,26 @@
 package nm.poolio.enitities.ticket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.transaction.PoolioTransaction;
+
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
+import nm.poolio.model.enums.OverUnder;
 import nm.poolio.model.enums.Season;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.Map;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Getter
 @Setter
@@ -53,7 +46,6 @@ public class Ticket extends AbstractEntity {
   @JoinColumn(name = "transaction_id")
   PoolioTransaction transaction;
 
-  @Nullable
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "winning_transaction_id")
   PoolioTransaction winningTransaction;
@@ -90,13 +82,24 @@ public class Ticket extends AbstractEntity {
   @JsonIgnore
   @Transient
   public String getPicksString() {
-    return sheet != null ? createPicksString(sheet.getGamePicks()) : null;
+    String picks = sheet != null ? createPicksString(sheet.getGamePicks()) : null;
+
+    String overUnder =
+        sheet != null && !CollectionUtils.isEmpty(sheet.getOverUnderPicks())
+            ? createOverUnderString(sheet.getOverUnderPicks())
+            : null;
+
+    return picks + (StringUtils.hasLength(overUnder) ? " - (" + overUnder + ")" : "");
+  }
+
+  private String createOverUnderString(Map<String, OverUnder> overUnderPicks) {
+    return overUnderPicks.values().stream().map(OverUnder::name).collect(Collectors.joining(","));
   }
 
   private String createPicksString(Map<String, NflTeam> gamePicks) {
-    var names = gamePicks.values().stream().map(t -> t == null ? "" : t.name()).toList();
-
-    return String.join(",", names);
+    return gamePicks.values().stream()
+        .map(t -> t == null ? "" : t.name())
+        .collect(Collectors.joining(","));
   }
 
   @Transient

@@ -33,6 +33,8 @@ public class VaddinUtils {
   public static final LineAwesomeIcon STANDINGS_ICON = LineAwesomeIcon.LIST_OL_SOLID;
   public static final LineAwesomeIcon GAME_TIME_ICON = LineAwesomeIcon.CLOCK_SOLID;
 
+  public static final LineAwesomeIcon OVER_UNDER_ICON = LineAwesomeIcon.ARROWS_ALT_V_SOLID;
+
   public static final LineAwesomeIcon HOME_ICON = LineAwesomeIcon.HOME_SOLID;
   public static final LineAwesomeIcon AWAY_ICON = LineAwesomeIcon.PLANE_ARRIVAL_SOLID;
   public static final LineAwesomeIcon ID_ICON = LineAwesomeIcon.DATABASE_SOLID;
@@ -51,7 +53,7 @@ public class VaddinUtils {
   public static final LineAwesomeIcon TICKET_ICON = LineAwesomeIcon.TICKET_ALT_SOLID;
 
   public static final LineAwesomeIcon PLAYERS_ICON = LineAwesomeIcon.USER_FRIENDS_SOLID;
-  public static final LineAwesomeIcon PLAYER_ICON = LineAwesomeIcon.USER_EDIT_SOLID;
+  public static final LineAwesomeIcon PLAYER_ICON = LineAwesomeIcon.USER_TIE_SOLID;
 
   public static final LineAwesomeIcon USER_ICON = LineAwesomeIcon.USER_SOLID;
   public static final LineAwesomeIcon USER_NAME_ICON = LineAwesomeIcon.USER_TAG_SOLID;
@@ -73,6 +75,7 @@ public class VaddinUtils {
     Span span = new Span();
     span.add(icon.create());
     span.add(" " + text);
+
     return span;
   }
 
