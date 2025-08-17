@@ -18,6 +18,8 @@ import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.pool.PoolIdName;
 import nm.poolio.enitities.pool.PoolService;
+import nm.poolio.enitities.silly.SillyAnswer;
+import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
 import nm.poolio.model.NflGame;
@@ -38,27 +40,19 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
 
   HasComponents getDialogHasComponents();
 
-  default RadioButtonGroup<OverUnder> createOverUnderField(NflGame g, Ticket ticket) {
-    // HorizontalLayout layout = new HorizontalLayout();
+  default RadioButtonGroup<OverUnder> createOverUnderField(NflGame nflGame, Ticket ticket) {
     RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
     radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
     radioGroup.setRequired(true);
-    radioGroup.setLabel("Total Score " + g.getOverUnder());
+    radioGroup.setLabel("Total Score " + nflGame.getOverUnder());
 
-    var value = ticket.getSheet().getOverUnderPicks().get(g.getId());
+    var value = ticket.getSheet().getOverUnderPicks().get(nflGame.getId());
 
-    if( value != null) {
+    if (value != null) {
       radioGroup.setValue(value);
     }
-
-   // radioGroup.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
-
     return radioGroup;
-    //   layout.add(radioGroup);
-
-//    return layout;
   }
-
 
   default Long convertTicketIdParameter(String ticketIdParameter) {
     return convertIdParameter(ticketIdParameter, "Invalid ticketId: ");
@@ -83,7 +77,6 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
       ticket.getSheet().getGamePicks().put(id, value);
     }
   }
-
 
   default IntegerField createTieBreakerField(Ticket ticket) {
     IntegerField tbField = new IntegerField();
@@ -205,5 +198,35 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
     layout.add(createBadge(new Span("Score: " + ticket.getScoreString())));
 
     return layout;
+  }
+
+  default Component createSillyRadio(SillyQuestion silly, Ticket ticket, NflGame nflGame) {
+    RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+    radioGroup.setLabel(silly.getQuestion());
+    radioGroup.setItems(silly.getAnswers());
+
+    var sillyAnswer = ticket.getSheet().getSillyPicks().get(silly.getId());
+    if (sillyAnswer != null) radioGroup.setValue(sillyAnswer.getAnswer());
+
+    radioGroup.addValueChangeListener(
+        c -> {
+          setSillyValue(c.getValue(), ticket, silly.getId(), nflGame.getId());
+        });
+
+    return radioGroup;
+  }
+
+  private void setSillyValue(String answer, Ticket ticket, String sillyId, String gameId) {
+    ticket
+        .getSheet()
+        .getSillyPicks()
+        .put(sillyId, SillyAnswer.builder().answer(answer).gameId(gameId).build());
+  }
+
+  default Div createScoringBlurb() {
+    Div div = new Div("Game: 10pts, O/U: 2pts, Silly Question: 1pt");
+    div.getElement().getStyle().set("font-weight", "bold");
+    div.getElement().getStyle().set("font-style", "italic");
+    return div;
   }
 }

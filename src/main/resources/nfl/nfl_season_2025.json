@@ -1,0 +1,2178 @@
+[
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatPHI_W1_THU_2025",
+    "week": 1,
+    "gameTime": "2025-09-04T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatLAC_W1_FRI_2025",
+    "week": 1,
+    "gameTime": "2025-09-05T08:00:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatATL_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatCLE_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatIND_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatNE_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatNO_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatNYJ_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatWAS_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatJAC_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatDEN_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatSEA_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatGB_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatLAR_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatBUF_W1_SUN_2025",
+    "week": 1,
+    "gameTime": "2025-09-07T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatCHI_W1_MON_2025",
+    "week": 1,
+    "gameTime": "2025-09-08T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatGB_W2_THU_2025",
+    "week": 2,
+    "gameTime": "2025-09-11T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatCIN_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatDAL_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatDET_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatTEN_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatMIA_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatNO_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatNYJ_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatPIT_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatBAL_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatIND_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatARI_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatKC_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatMIN_W2_SUN_2025",
+    "week": 2,
+    "gameTime": "2025-09-14T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatHOU_W2_MON_2025",
+    "week": 2,
+    "gameTime": "2025-09-15T07:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatLV_W2_MON_2025",
+    "week": 2,
+    "gameTime": "2025-09-15T10:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatBUF_W3_THU_2025",
+    "week": 3,
+    "gameTime": "2025-09-18T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatCLE_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatTEN_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatMIN_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatNE_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatPHI_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatTB_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatWAS_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatCAR_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatJAC_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatLAC_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatSEA_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatCHI_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatSF_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatNYG_W3_SUN_2025",
+    "week": 3,
+    "gameTime": "2025-09-21T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatBAL_W3_MON_2025",
+    "week": 3,
+    "gameTime": "2025-09-22T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatARI_W4_THU_2025",
+    "week": 4,
+    "gameTime": "2025-09-25T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatPIT_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatATL_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatBUF_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatDET_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatNE_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatNYG_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatTB_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatHOU_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatLAR_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatSF_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatKC_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatLV_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatDAL_W4_SUN_2025",
+    "week": 4,
+    "gameTime": "2025-09-28T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatMIA_W4_MON_2025",
+    "week": 4,
+    "gameTime": "2025-09-29T07:15:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatDEN_W4_MON_2025",
+    "week": 4,
+    "gameTime": "2025-09-29T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatLAR_W5_THU_2025",
+    "week": 5,
+    "gameTime": "2025-10-02T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatCLE_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatIND_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatNO_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatNYJ_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatPHI_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatCAR_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatBAL_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatARI_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatSEA_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatCIN_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatLAC_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatBUF_W5_SUN_2025",
+    "week": 5,
+    "gameTime": "2025-10-05T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatJAC_W5_MON_2025",
+    "week": 5,
+    "gameTime": "2025-10-06T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatNYG_W6_THU_2025",
+    "week": 6,
+    "gameTime": "2025-10-09T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatNYJ_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatIND_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatMIA_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatPIT_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatTB_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatCAR_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatJAC_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatBAL_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatLV_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatGB_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatNO_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatKC_W6_SUN_2025",
+    "week": 6,
+    "gameTime": "2025-10-12T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatATL_W6_MON_2025",
+    "week": 6,
+    "gameTime": "2025-10-13T07:15:00.000-0400"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatWAS_W6_MON_2025",
+    "week": 6,
+    "gameTime": "2025-10-13T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatCIN_W7_THU_2025",
+    "week": 7,
+    "gameTime": "2025-10-16T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatJAC_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T09:30:00.000-0400"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatCHI_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatCLE_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatTEN_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatKC_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatMIN_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatNYJ_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatDEN_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatLAC_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatDAL_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatARI_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatSF_W7_SUN_2025",
+    "week": 7,
+    "gameTime": "2025-10-19T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatDET_W7_MON_2025",
+    "week": 7,
+    "gameTime": "2025-10-20T07:00:00.000-0400"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatSEA_W7_MON_2025",
+    "week": 7,
+    "gameTime": "2025-10-20T10:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatLAC_W8_THU_2025",
+    "week": 8,
+    "gameTime": "2025-10-23T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatATL_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatCIN_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatNE_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatPHI_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatCAR_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatBAL_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatHOU_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatNO_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T04:05:00.000-0400"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatDEN_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatIND_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T04:25:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatPIT_W8_SUN_2025",
+    "week": 8,
+    "gameTime": "2025-10-26T08:20:00.000-0400"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatKC_W8_MON_2025",
+    "week": 8,
+    "gameTime": "2025-10-27T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatMIA_W9_THU_2025",
+    "week": 9,
+    "gameTime": "2025-10-30T08:15:00.000-0400"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatCIN_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatDET_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatGB_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatTEN_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatNE_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatNYG_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatPIT_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatHOU_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T01:00:00.000-0400"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatLV_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatLAR_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatBUF_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatWAS_W9_SUN_2025",
+    "week": 9,
+    "gameTime": "2025-11-02T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatDAL_W9_MON_2025",
+    "week": 9,
+    "gameTime": "2025-11-03T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatDEN_W10_THU_2025",
+    "week": 10,
+    "gameTime": "2025-11-06T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatIND_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T09:30:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatCHI_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatMIA_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatMIN_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatNYJ_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatTB_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatCAR_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatHOU_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatSEA_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatSF_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatWAS_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatLAC_W10_SUN_2025",
+    "week": 10,
+    "gameTime": "2025-11-09T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatGB_W10_MON_2025",
+    "week": 10,
+    "gameTime": "2025-11-10T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatNE_W11_THU_2025",
+    "week": 11,
+    "gameTime": "2025-11-13T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatMIA_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T09:30:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatATL_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatBUF_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatTEN_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatMIN_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatNYG_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatPIT_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatJAC_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatLAR_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatARI_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatCLE_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatDEN_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatPHI_W11_SUN_2025",
+    "week": 11,
+    "gameTime": "2025-11-16T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatLV_W11_MON_2025",
+    "week": 11,
+    "gameTime": "2025-11-17T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatHOU_W12_THU_2025",
+    "week": 12,
+    "gameTime": "2025-11-20T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatCHI_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatCIN_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatDET_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatGB_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatTEN_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatKC_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatBAL_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatLV_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatARI_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatDAL_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatNO_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatLAR_W12_SUN_2025",
+    "week": 12,
+    "gameTime": "2025-11-23T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatSF_W12_MON_2025",
+    "week": 12,
+    "gameTime": "2025-11-24T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatDET_W13_THU_2025",
+    "week": 13,
+    "gameTime": "2025-11-27T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatDAL_W13_THU_2025",
+    "week": 13,
+    "gameTime": "2025-11-27T04:30:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatBAL_W13_THU_2025",
+    "week": 13,
+    "gameTime": "2025-11-27T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatPHI_W13_FRI_2025",
+    "week": 13,
+    "gameTime": "2025-11-28T03:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatCLE_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatTEN_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatIND_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatMIA_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatNYJ_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatTB_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatCAR_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatSEA_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatPIT_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatLAC_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatWAS_W13_SUN_2025",
+    "week": 13,
+    "gameTime": "2025-11-30T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatNE_W13_MON_2025",
+    "week": 13,
+    "gameTime": "2025-12-01T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatDET_W14_THU_2025",
+    "week": 14,
+    "gameTime": "2025-12-04T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatATL_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatCLE_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatGB_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatMIN_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatNYG_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatTB_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatJAC_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatBAL_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatLV_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatBUF_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatARI_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatKC_W14_SUN_2025",
+    "week": 14,
+    "gameTime": "2025-12-07T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatLAC_W14_MON_2025",
+    "week": 14,
+    "gameTime": "2025-12-08T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatTB_W15_THU_2025",
+    "week": 15,
+    "gameTime": "2025-12-11T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatCHI_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatCIN_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatKC_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatNE_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatNYG_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatPHI_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatJAC_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatHOU_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatDEN_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "LAR",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatLAR_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatNO_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatSF_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatSEA_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatDAL_W15_SUN_2025",
+    "week": 15,
+    "gameTime": "2025-12-14T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatPIT_W15_MON_2025",
+    "week": 15,
+    "gameTime": "2025-12-15T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "SEA",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatSEA_W16_THU_2025",
+    "week": 16,
+    "gameTime": "2025-12-18T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatCHI_W16_SAT_2025",
+    "week": 16,
+    "gameTime": "2025-12-20T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatWAS_W16_SAT_2025",
+    "week": 16,
+    "gameTime": "2025-12-20T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "BUF",
+    "season": "S_2025",
+    "id": "BUFatCLE_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DAL",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatDAL_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatTEN_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NO",
+    "awayTeam": "NYJ",
+    "season": "S_2025",
+    "id": "NYJatNO_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "MIN",
+    "season": "S_2025",
+    "id": "MINatNYG_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatCAR_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BAL",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatBAL_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatDEN_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "ARI",
+    "awayTeam": "ATL",
+    "season": "S_2025",
+    "id": "ATLatARI_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T04:05:00.000-0500"
+  },
+  {
+    "homeTeam": "DET",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatDET_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "LV",
+    "season": "S_2025",
+    "id": "LVatHOU_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "CIN",
+    "season": "S_2025",
+    "id": "CINatMIA_W16_SUN_2025",
+    "week": 16,
+    "gameTime": "2025-12-21T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "SF",
+    "season": "S_2025",
+    "id": "SFatIND_W16_MON_2025",
+    "week": 16,
+    "gameTime": "2025-12-22T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "WAS",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatWAS_W17_THU_2025",
+    "week": 17,
+    "gameTime": "2025-12-25T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatMIN_W17_THU_2025",
+    "week": 17,
+    "gameTime": "2025-12-25T04:30:00.000-0500"
+  },
+  {
+    "homeTeam": "KC",
+    "awayTeam": "DEN",
+    "season": "S_2025",
+    "id": "DENatKC_W17_THU_2025",
+    "week": 17,
+    "gameTime": "2025-12-25T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CLE",
+    "awayTeam": "PIT",
+    "season": "S_2025",
+    "id": "PITatCLE_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TEN",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatTEN_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "IND",
+    "awayTeam": "JAC",
+    "season": "S_2025",
+    "id": "JACatIND_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIA",
+    "awayTeam": "TB",
+    "season": "S_2025",
+    "id": "TBatMIA_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYJ",
+    "awayTeam": "NE",
+    "season": "S_2025",
+    "id": "NEatNYJ_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T01:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "PHI",
+    "season": "S_2025",
+    "id": "PHIatBUF_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T04:25:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "CHI",
+    "season": "S_2025",
+    "id": "CHIatSF_W17_SUN_2025",
+    "week": 17,
+    "gameTime": "2025-12-28T08:20:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "LAR",
+    "season": "S_2025",
+    "id": "LARatATL_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T08:15:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatCIN_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "GB",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatGB_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatLV_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "HOU",
+    "season": "S_2025",
+    "id": "HOUatLAC_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CAR",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatCAR_W17_MON_2025",
+    "week": 17,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "ATL",
+    "awayTeam": "NO",
+    "season": "S_2025",
+    "id": "NOatATL_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "BUF",
+    "awayTeam": "NYG",
+    "season": "S_2025",
+    "id": "NYGatBUF_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CHI",
+    "awayTeam": "DET",
+    "season": "S_2025",
+    "id": "DETatCHI_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "CIN",
+    "awayTeam": "CLE",
+    "season": "S_2025",
+    "id": "CLEatCIN_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "DEN",
+    "awayTeam": "LAC",
+    "season": "S_2025",
+    "id": "LACatDEN_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LV",
+    "awayTeam": "KC",
+    "season": "S_2025",
+    "id": "KCatLV_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "LAC",
+    "awayTeam": "ARI",
+    "season": "S_2025",
+    "id": "ARIatLAC_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "MIN",
+    "awayTeam": "GB",
+    "season": "S_2025",
+    "id": "GBatMIN_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NE",
+    "awayTeam": "MIA",
+    "season": "S_2025",
+    "id": "MIAatNE_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "NYG",
+    "awayTeam": "DAL",
+    "season": "S_2025",
+    "id": "DALatNYG_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PHI",
+    "awayTeam": "WAS",
+    "season": "S_2025",
+    "id": "WASatPHI_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "PIT",
+    "awayTeam": "BAL",
+    "season": "S_2025",
+    "id": "BALatPIT_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "SF",
+    "awayTeam": "SEA",
+    "season": "S_2025",
+    "id": "SEAatSF_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "TB",
+    "awayTeam": "CAR",
+    "season": "S_2025",
+    "id": "CARatTB_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "JAC",
+    "awayTeam": "TEN",
+    "season": "S_2025",
+    "id": "TENatJAC_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  },
+  {
+    "homeTeam": "HOU",
+    "awayTeam": "IND",
+    "season": "S_2025",
+    "id": "INDatHOU_W18_MON_2025",
+    "week": 18,
+    "gameTime": "2025-12-29T13:00:00.000-0500"
+  }
+]

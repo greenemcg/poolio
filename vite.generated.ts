@@ -20,16 +20,15 @@ import {
   mergeConfig,
   OutputOptions,
   PluginOption,
-  ResolvedConfig,
   UserConfigFn
 } from 'vite';
-import { getManifest, type ManifestTransform } from 'workbox-build';
 
 import * as rollup from 'rollup';
 import brotli from 'rollup-plugin-brotli';
-import replace from '@rollup/plugin-replace';
 import checker from 'vite-plugin-checker';
 import postcssLit from './target/plugins/rollup-plugin-postcss-lit-custom/rollup-plugin-postcss-lit.js';
+import vaadinI18n from './target/plugins/rollup-plugin-vaadin-i18n/rollup-plugin-vaadin-i18n.js';
+import serviceWorkerPlugin from './target/plugins/vite-plugin-service-worker';
 
 import { createRequire } from 'module';
 
@@ -40,8 +39,6 @@ import reactPlugin from '@vitejs/plugin-react';
 
 // Make `require` compatible with ES modules
 const require = createRequire(import.meta.url);
-
-const appShellUrl = '.';
 
 const frontendFolder = path.resolve(__dirname, settings.frontendFolder);
 const themeFolder = path.resolve(frontendFolder, settings.themeFolder);
@@ -56,6 +53,7 @@ const buildOutputFolder = devBundle ? devBundleFolder : frontendBundleFolder;
 const statsFolder = path.resolve(__dirname, devBundle ? settings.devBundleStatsOutput : settings.statsOutput);
 const statsFile = path.resolve(statsFolder, 'stats.json');
 const bundleSizeFile = path.resolve(statsFolder, 'bundle-size.html');
+const i18nFolder = path.resolve(__dirname, settings.i18nOutput);
 const nodeModulesFolder = path.resolve(__dirname, 'node_modules');
 const webComponentTags = '';
 
@@ -85,122 +83,11 @@ const themeOptions = {
 
 const hasExportedWebComponents = existsSync(path.resolve(frontendFolder, 'web-component.html'));
 
+const target = ['safari15', 'es2022'];
+
 // Block debug and trace logs.
 console.trace = () => {};
 console.debug = () => {};
-
-function injectManifestToSWPlugin(): rollup.Plugin {
-  const rewriteManifestIndexHtmlUrl: ManifestTransform = (manifest) => {
-    const indexEntry = manifest.find((entry) => entry.url === 'index.html');
-    if (indexEntry) {
-      indexEntry.url = appShellUrl;
-    }
-
-    return { manifest, warnings: [] };
-  };
-
-  return {
-    name: 'vaadin:inject-manifest-to-sw',
-    async transform(code, id) {
-      if (/sw\.(ts|js)$/.test(id)) {
-        const { manifestEntries } = await getManifest({
-          globDirectory: buildOutputFolder,
-          globPatterns: ['**/*'],
-          globIgnores: ['**/*.br', 'pwa-icons/**'],
-          manifestTransforms: [rewriteManifestIndexHtmlUrl],
-          maximumFileSizeToCacheInBytes: 100 * 1024 * 1024 // 100mb,
-        });
-
-        return code.replace('self.__WB_MANIFEST', JSON.stringify(manifestEntries));
-      }
-    }
-  };
-}
-
-function buildSWPlugin(opts: { devMode: boolean }): PluginOption {
-  let config: ResolvedConfig;
-  const devMode = opts.devMode;
-
-  const swObj: { code?: string, map?: rollup.SourceMap | null } = {};
-
-  async function build(action: 'generate' | 'write', additionalPlugins: rollup.Plugin[] = []) {
-    const includedPluginNames = [
-      'vite:esbuild',
-      'rollup-plugin-dynamic-import-variables',
-      'vite:esbuild-transpile',
-      'vite:terser'
-    ];
-    const plugins: rollup.Plugin[] = config.plugins.filter((p) => {
-      return includedPluginNames.includes(p.name);
-    });
-    const resolver = config.createResolver();
-    const resolvePlugin: rollup.Plugin = {
-      name: 'resolver',
-      resolveId(source, importer, _options) {
-        return resolver(source, importer);
-      }
-    };
-    plugins.unshift(resolvePlugin); // Put resolve first
-    plugins.push(
-      replace({
-        values: {
-          'process.env.NODE_ENV': JSON.stringify(config.mode),
-          ...config.define
-        },
-        preventAssignment: true
-      })
-    );
-    if (additionalPlugins) {
-      plugins.push(...additionalPlugins);
-    }
-    const bundle = await rollup.rollup({
-      input: path.resolve(settings.clientServiceWorkerSource),
-      plugins
-    });
-
-    try {
-      return await bundle[action]({
-        file: path.resolve(buildOutputFolder, 'sw.js'),
-        format: 'es',
-        exports: 'none',
-        sourcemap: config.command === 'serve' || config.build.sourcemap,
-        inlineDynamicImports: true
-      });
-    } finally {
-      await bundle.close();
-    }
-  }
-
-  return {
-    name: 'vaadin:build-sw',
-    enforce: 'post',
-    async configResolved(resolvedConfig) {
-      config = resolvedConfig;
-    },
-    async buildStart() {
-      if (devMode) {
-        const { output } = await build('generate');
-        swObj.code = output[0].code;
-        swObj.map = output[0].map;
-      }
-    },
-    async load(id) {
-      if (id.endsWith('sw.js')) {
-        return '';
-      }
-    },
-    async transform(_code, id) {
-      if (id.endsWith('sw.js')) {
-        return swObj;
-      }
-    },
-    async closeBundle() {
-      if (!devMode) {
-        await build('write', [injectManifestToSWPlugin(), brotli()]);
-      }
-    }
-  };
-}
 
 function statsExtracterPlugin(): PluginOption {
   function collectThemeJsonsInFrontend(themeJsonContents: Record<string, string>, themeName: string) {
@@ -299,7 +186,7 @@ function statsExtracterPlugin(): PluginOption {
       const frontendFiles: Record<string, string> = {};
       frontendFiles['index.html'] = createHash('sha256').update(customIndexData.replace(/\r\n/g, '\n'), 'utf8').digest('hex');
 
-      const projectFileExtensions = ['.js', '.js.map', '.ts', '.ts.map', '.tsx', '.tsx.map', '.css', '.css.map', '.'];
+      const projectFileExtensions = ['.js', '.js.map', '.ts', '.ts.map', '.tsx', '.tsx.map', '.css', '.css.map'];
 
       const isThemeComponentsResource = (id: string) =>
           id.startsWith(themeOptions.frontendGeneratedFolder.replace(/\\/g, '/'))
@@ -723,11 +610,23 @@ export const vaadinConfig: UserConfigFn = (env) => {
       outDir: buildOutputFolder,
       emptyOutDir: devBundle,
       assetsDir: 'VAADIN/build',
+      target,
       rollupOptions: {
         input: {
           indexhtml: projectIndexHtml,
 
           ...(hasExportedWebComponents ? { webcomponenthtml: path.resolve(frontendFolder, 'web-component.html') } : {})
+        },
+        output: {
+          // Workaround to enable dynamic imports with top-level await for
+          // commonjs modules, such as "atmosphere.js" in Hilla. Extracting
+          // Rollup's commonjs helpers into separate manual chunk avoids
+          // circular dependencies in this case. Caused
+          //   - https://github.com/vitejs/vite/issues/10995
+          //   - https://github.com/rollup/rollup/issues/5884
+          //   - https://github.com/vitejs/vite/issues/19695
+          //   - https://github.com/vitejs/vite/issues/12209
+          manualChunks: (id: string) => id.startsWith('\0commonjsHelpers.js') ? 'commonjsHelpers' : null
         },
         onwarn: (warning: rollup.RollupLog, defaultHandler: rollup.LoggingFunction) => {
           const ignoreEvalWarning = [
@@ -743,6 +642,9 @@ export const vaadinConfig: UserConfigFn = (env) => {
       }
     },
     optimizeDeps: {
+      esbuildOptions: {
+        target,
+      },
       entries: [
         // Pre-scan entrypoints in Vite to avoid reloading on first open
         'generated/vaadin.ts'
@@ -761,7 +663,9 @@ export const vaadinConfig: UserConfigFn = (env) => {
       productionMode && brotli(),
       devMode && vaadinBundlesPlugin(),
       devMode && showRecompileReason(),
-      settings.offlineEnabled && buildSWPlugin({ devMode }),
+      settings.offlineEnabled && serviceWorkerPlugin({
+        srcPath: settings.clientServiceWorkerSource,
+      }),
       !devMode && statsExtracterPlugin(),
       !productionMode && preserveUsageStats(),
       themePlugin({ devMode }),
@@ -781,7 +685,16 @@ export const vaadinConfig: UserConfigFn = (env) => {
         babel: {
           // We need to use babel to provide the source information for it to be correct
           // (otherwise Babel will slightly rewrite the source file and esbuild generate source info for the modified file)
-          presets: [['@babel/preset-react', { runtime: 'automatic', development: !productionMode }]],
+          presets: [
+            [
+              '@babel/preset-react',
+              {
+                runtime: 'automatic',
+                importSource: productionMode ? 'react' : 'Frontend/generated/jsx-dev-transform',
+                development: !productionMode
+              }
+            ]
+          ],
           // React writes the source location for where components are used, this writes for where they are defined
           plugins: [
             !productionMode && addFunctionComponentSourceLocationBabel(),
@@ -793,6 +706,14 @@ export const vaadinConfig: UserConfigFn = (env) => {
             ]
           ].filter(Boolean)
         }
+      }),
+      productionMode && vaadinI18n({
+        cwd: __dirname,
+        meta: {
+          output: {
+            dir: i18nFolder,
+          },
+        },
       }),
       {
         name: 'vaadin:force-remove-html-middleware',
@@ -851,11 +772,11 @@ export const vaadinConfig: UserConfigFn = (env) => {
           }
         }
       },
+      
       checker({
         typescript: true
       }),
       productionMode && visualizer({ brotliSize: true, filename: bundleSizeFile })
-      
     ]
   };
 };

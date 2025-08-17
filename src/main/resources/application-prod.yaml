@@ -1,5 +1,5 @@
 app:
-  allowBets: false
+  allowBets: true
 
 server:
   port:  9090
@@ -12,7 +12,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 logging:
   level:
     root: INFO

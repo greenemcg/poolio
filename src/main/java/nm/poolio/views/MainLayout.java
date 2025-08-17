@@ -85,10 +85,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
   }
 
   private String createTitle(Boolean allowBets) {
-    String title = "Poolio";
-
-    if (allowBets) return title + " \uD83E\uDDEADEMO\uD83E\uDDEA";
-    else return title;
+      return "Poolio";
   }
 
   private SideNav createNavigation() {

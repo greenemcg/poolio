@@ -14,12 +14,6 @@ import nm.poolio.vaadin.PoolioGrid;
 
 public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
 
-  private String findByWeekNum(int weekNum) {
-    var result = NflWeek.findByWeekNum(weekNum);
-
-    return result == null ? "" : result.name();
-  }
-
   default void decoratePoolGrid() {
     getGrid()
         .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getAwayTeam(), game)))
@@ -35,9 +29,10 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
         .setAutoWidth(true)
         .setTextAlign(ColumnTextAlign.CENTER);
 
-    createColumn(NflGame::getOverUnder, createIconSpan(OVER_UNDER_ICON, "O / U "));
-
     createColumn(NflGame::getHomeScore, createIconSpan(HOME_ICON, "Score"));
+
+    createColumn(NflGame::getOverUnder, createIconSpan(OVER_UNDER_ICON, "O / U "));
+    createColumn(NflGame::getSpread, createIconSpan(SPREAD_ICON, "Spread"));
 
     getGrid()
         .addColumn(new ComponentRenderer<>(game -> new Span(findByWeekNum(game.getWeek()))))
@@ -54,5 +49,11 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
         .setAutoWidth(true);
 
     // createColumn(NflGame::getFullId, createIconSpan(ID_ICON, "Id"));
+  }
+
+  private String findByWeekNum(int weekNum) {
+    var result = NflWeek.findByWeekNum(weekNum);
+
+    return result == null ? "" : result.name();
   }
 }

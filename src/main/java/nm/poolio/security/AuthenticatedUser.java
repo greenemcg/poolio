@@ -2,6 +2,7 @@ package nm.poolio.security;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.services.UserService;
@@ -10,8 +11,6 @@ import org.slf4j.MDC;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Component
 @Slf4j
@@ -32,12 +31,15 @@ public class AuthenticatedUser {
             .map(userDetails -> userService.findByUserName(userDetails.getUsername()));
 
     var vaadinSession = VaadinSession.getCurrent();
-    Boolean showedLogin = (Boolean) vaadinSession.getAttribute("showedLogin");
+    Boolean showedLogin =
+        vaadinSession != null
+            && vaadinSession.getAttribute("showedLogin") != null
+            && (Boolean) vaadinSession.getAttribute("showedLogin");
 
     if (result.isPresent() && BooleanUtils.isNotTrue(showedLogin)) {
       MDC.put("userName", result.get().getUserName());
       MDC.put("sessionId", VaadinSession.getCurrent().getSession().getId());
-      vaadinSession.setAttribute("showedLogin", Boolean.TRUE);
+      if (vaadinSession != null) vaadinSession.setAttribute("showedLogin", Boolean.TRUE);
       log.info("Successfully Logged in");
     }
 

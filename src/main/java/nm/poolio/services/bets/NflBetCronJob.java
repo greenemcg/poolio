@@ -12,9 +12,10 @@ public class NflBetCronJob {
   private final NflOpenBetProcessor nflOpenBetProcessor;
   private final NflPendingBetProcessor nflPendingBetProcessor;
 
-  @Scheduled(cron = "0 */5 * * * *")
+  @Scheduled(cron = "0 */1 * * * *")
   void cleanBets() {
     nflOpenBetProcessor.process();
     nflPendingBetProcessor.process();
   }
 }
+

@@ -8,8 +8,13 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.Data;
+import nm.poolio.enitities.silly.SillyPicks;
+import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.model.enums.League;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.Season;
@@ -24,7 +29,11 @@ public class NflGame {
   String id;
   Integer week;
 
-  @Nullable Float overUnder;
+  @Nullable Double overUnder;
+  @Nullable Double spread;
+
+  @Nullable List<SillyQuestion> sillies;
+  @Nullable @JsonIgnore Map<String, String> sillyAnswers = new HashMap<>();
 
   @JsonIgnore Integer awayScore;
   @JsonIgnore Integer homeScore;

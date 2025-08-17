@@ -29,8 +29,8 @@ public enum NflWeek {
   WEEK_18(18),
   WILD_CARD(19),
   DIVISIONAL(20),
-  CHAMPIONSHIP(22),
-  SUPER_BOWL(23);
+  CHAMPIONSHIP(21),
+  SUPER_BOWL(22);
 
   final int weekNum;
 

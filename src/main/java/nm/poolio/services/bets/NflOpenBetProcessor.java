@@ -24,13 +24,27 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
   @Getter private final AuthenticatedUser authenticatedUser;
 
   @Transactional
- public void process() {
+  public void process() {
     var openBets = gameBetService.findOpenBets();
     log.debug("Found {} open bets", openBets.size());
 
     openBets.forEach(
         b -> {
+
+          // make 300
+          if (b.getModifiedDate().isAfter(Instant.now().minusSeconds(30))) {
+            log.info("Ignored bet {} because it was modified less than 5 minutes ago", b.getId());
+            return;
+          }
+
           boolean isProposalOpen = isProposalOpen(b);
+
+          if (b.getBetCanBeSplit() && !b.getAcceptorTransactions().isEmpty()) {
+            log.info(
+                "Ignored bet {} because it can be split and has acceptor transactions", b.getId());
+            isProposalOpen = false;
+          }
+
           boolean isExpired = b.getExpiryDate().isBefore(Instant.now());
 
           if (isProposalOpen && !isExpired) return;
@@ -42,8 +56,14 @@ class NflOpenBetProcessor implements GameBetCommon, NoteCreator {
                 CollectionUtils.isEmpty(b.getAcceptorTransactions())
                     ? BetStatus.CLOSED
                     : BetStatus.PENDING);
+            log.info(
+                "Bet {} is expired and set to {} - {}",
+                b.getStatus(),
+                b.getId(),
+                b.getInfoString());
           } else {
             b.setStatus(BetStatus.PENDING);
+            log.info("Bet {} is expired and set to Pending - {}", b.getId(), b.getInfoString());
           }
 
           gameBetService.save(b);

@@ -1,18 +1,25 @@
 package nm.poolio.views.nfl_game;
 
+import static nm.poolio.utils.VaddinUtils.SILLY_QUESTION;
+
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +31,7 @@ import nm.poolio.push.Broadcaster;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameScorerService;
 import nm.poolio.services.NflGameService;
+import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.views.MainLayout;
 import org.springframework.util.CollectionUtils;
 
@@ -31,14 +39,13 @@ import org.springframework.util.CollectionUtils;
 @Route(value = "nflGame", layout = MainLayout.class)
 @RolesAllowed({"ADMIN", "USER"})
 @Slf4j
-public class NflGameView extends VerticalLayout implements NflGameGrid {
+public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDialog {
   private final NflGameService service;
   private final GameScoreService gameScoreService;
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
-
   private final NflGameScorerService nflGameScorerService;
-
+  Dialog sillyDialog = new Dialog();
   @Getter Grid<NflGame> grid = createGrid(NflGame.class);
 
   public NflGameView(
@@ -64,6 +71,7 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
   private void decorateGrid() {
     decoratePoolGrid();
     var games = nflGameScorerService.getAllGames();
+
     grid.setItems(games);
 
     var optionalUser = authenticatedUser.get();
@@ -86,7 +94,7 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
 
           AtomicInteger atomicInteger = new AtomicInteger(0);
 
-            for (NflGame g : games) {
+          for (NflGame g : games) {
             if (g.getWeek() == week) break;
             else atomicInteger.set(atomicInteger.get() + 1);
           }
@@ -116,6 +124,16 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
     Grid.Column<NflGame> editColumn =
         grid.addComponentColumn(
                 nflGame -> {
+                  HorizontalLayout layout = new HorizontalLayout();
+                  layout.setPadding(false);
+                  layout.setSpacing(true);
+
+                  if (!CollectionUtils.isEmpty(nflGame.getSillies())) {
+                    Button sillyButton = new Button("Sillies", SILLY_QUESTION.create());
+                    sillyButton.addClickListener(e -> openDialog(nflGame));
+                    layout.add(sillyButton);
+                  }
+
                   Button editButton = new Button("Edit");
                   editButton.addClickListener(
                       e -> {
@@ -123,18 +141,30 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
                         grid.getEditor().editItem(nflGame);
                         binder.setBean(nflGame);
                       });
-                  return editButton;
+                  layout.add(editButton);
+
+                  return layout;
                 })
             .setWidth("150px")
             .setFlexGrow(0);
 
-    NumberField homeScoreField = getNumberField();
+    NumberField homeScoreField = createNumberIntField();
     binder.forField(homeScoreField).bind(NflGame::getHomeScoreDouble, NflGame::setHomeScoreDouble);
     grid.getColumns().get(3).setEditorComponent(homeScoreField);
 
-    NumberField awayScoreField = getNumberField();
+    NumberField awayScoreField = createNumberIntField();
     binder.forField(awayScoreField).bind(NflGame::getAwayScoreDouble, NflGame::setAwayScoreDouble);
     grid.getColumns().get(1).setEditorComponent(awayScoreField);
+
+    NumberField overUnderField = createNumberDoubleField();
+    binder.forField(overUnderField).bind(NflGame::getOverUnder, NflGame::setOverUnder);
+    grid.getColumns().get(4).setEditorComponent(overUnderField);
+
+    NumberField spreadField = createNumberDoubleField();
+    spreadField.setMax(100.0);
+    spreadField.setMin(-100.0);
+    binder.forField(spreadField).bind(NflGame::getSpread, NflGame::setSpread);
+    grid.getColumns().get(5).setEditorComponent(spreadField);
 
     Button saveButton =
         new Button(
@@ -150,13 +180,33 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
     editColumn.setEditorComponent(actions);
   }
 
-  private NumberField getNumberField() {
-    NumberField homeScoreField = new NumberField();
-    homeScoreField.setStepButtonsVisible(false);
-    homeScoreField.setMin(0);
-    homeScoreField.setMax(100);
-    homeScoreField.setWidthFull();
-    return homeScoreField;
+  private void openDialog(NflGame nflGame) {
+    sillyDialog.removeAll();
+    createDialog(sillyDialog, null, createSilliesUi(nflGame));
+
+    sillyDialog.open();
+  }
+
+  private NumberField createNumberIntField() {
+    NumberField numberField = new NumberField();
+    numberField.setStepButtonsVisible(false);
+    numberField.setMin(0);
+    numberField.setMax(100);
+    numberField.setStep(1);
+    numberField.setStepButtonsVisible(true);
+    numberField.setWidthFull();
+    return numberField;
+  }
+
+  private NumberField createNumberDoubleField() {
+    NumberField numberField = new NumberField();
+    numberField.setStepButtonsVisible(false);
+    numberField.setMin(0.0);
+    numberField.setMax(125.0);
+    numberField.setStep(0.5);
+    numberField.setStepButtonsVisible(true);
+    numberField.setWidthFull();
+    return numberField;
   }
 
   private void setGameScore(NflGame bean) {
@@ -165,11 +215,57 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
     score.setAwayScore(bean.getAwayScore());
     score.setHomeScore(bean.getHomeScore());
 
+    if (bean.getOverUnder() != null) score.setOverUnder(BigDecimal.valueOf(bean.getOverUnder()));
+    else score.setOverUnder(null);
+
+    if (bean.getSpread() != null) score.setSpread(BigDecimal.valueOf(bean.getSpread()));
+    else score.setSpread(null);
+
     gameScoreService.save(score);
 
     Broadcaster.broadcast("gameScore updated");
 
     grid.setItems(service.getGameList());
+  }
+
+  private Component createSilliesUi(NflGame nflGame) {
+    VerticalLayout verticalLayout = new VerticalLayout();
+
+    if (!CollectionUtils.isEmpty(nflGame.getSillies())) {
+      nflGame
+          .getSillies()
+          .forEach(
+              silly -> {
+                RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+                radioGroup.setLabel(silly.getQuestion());
+                radioGroup.setItems(silly.getAnswers());
+
+                radioGroup.addValueChangeListener(
+                    e -> {
+                      if (nflGame.getSillyAnswers() == null) {
+                        nflGame.setSillyAnswers(new HashMap<>());
+                      }
+
+                      nflGame.getSillyAnswers().put(silly.getId(), e.getValue());
+                    });
+
+                String value =
+                    nflGame.getSillyAnswers() != null
+                        ? nflGame.getSillyAnswers().get(silly.getId())
+                        : null;
+                if (value != null) {
+                  radioGroup.setValue(value);
+                }
+
+                verticalLayout.add(radioGroup);
+              });
+    }
+
+    Button button = new Button("Save", SILLY_QUESTION.create());
+    button.addClickListener(e -> saveSillies(nflGame));
+    verticalLayout.add(button);
+
+    return verticalLayout;
   }
 
   private GameScore findOrCreateGameScore(NflGame bean) {
@@ -183,5 +279,13 @@ public class NflGameView extends VerticalLayout implements NflGameGrid {
       score.setGameId(bean.getId());
       return score;
     }
+  }
+
+  private void saveSillies(NflGame nflGame) {
+    var gameScore = findOrCreateGameScore(nflGame);
+    gameScore.setSillyAnswers(nflGame.getSillyAnswers());
+    gameScoreService.save(gameScore);
+
+    sillyDialog.close();
   }
 }

@@ -34,6 +34,7 @@ public class VaddinUtils {
   public static final LineAwesomeIcon GAME_TIME_ICON = LineAwesomeIcon.CLOCK_SOLID;
 
   public static final LineAwesomeIcon OVER_UNDER_ICON = LineAwesomeIcon.ARROWS_ALT_V_SOLID;
+  public static final LineAwesomeIcon SPREAD_ICON = LineAwesomeIcon.ARROWS_ALT_H_SOLID;
 
   public static final LineAwesomeIcon HOME_ICON = LineAwesomeIcon.HOME_SOLID;
   public static final LineAwesomeIcon AWAY_ICON = LineAwesomeIcon.PLANE_ARRIVAL_SOLID;
@@ -63,7 +64,6 @@ public class VaddinUtils {
 
   public static final LineAwesomeIcon POOLIO_ICON = LineAwesomeIcon.FOOTBALL_BALL_SOLID;
 
-  public static final LineAwesomeIcon SPREAD_ICON = LineAwesomeIcon.ARROWS_ALT_V_SOLID;
   public static final LineAwesomeIcon BET_ICON = LineAwesomeIcon.COMMENTS_DOLLAR_SOLID;
   public static final LineAwesomeIcon POOL_ICON = LineAwesomeIcon.SWIMMING_POOL_SOLID;
   public static final LineAwesomeIcon LEAGUE_ICON = LineAwesomeIcon.LIST_ALT_SOLID;
@@ -71,13 +71,7 @@ public class VaddinUtils {
   public static final LineAwesomeIcon PAY_AS_YOU_GO = LineAwesomeIcon.PIGGY_BANK_SOLID;
   public static final LineAwesomeIcon INCLUDE_THURSDAY = LineAwesomeIcon.QUESTION_SOLID;
 
-  public static Span createIconSpan(LineAwesomeIcon icon, String text) {
-    Span span = new Span();
-    span.add(icon.create());
-    span.add(" " + text);
-
-    return span;
-  }
+  public static final LineAwesomeIcon SILLY_QUESTION = LineAwesomeIcon.TASKS_SOLID;
 
   public static Span createIconSpan(LineAwesomeIcon icon, String text, LineAwesomeIcon end) {
     Span span = new Span();
@@ -87,20 +81,28 @@ public class VaddinUtils {
     return span;
   }
 
-  public static Span createAdminLabel() {
-    return createIconSpan(ADMIN_ICON, "Admin User");
+  public static void decorateIncludeThursdayCheckbox(Checkbox payAsYouGo) {
+    payAsYouGo.setLabelComponent(createIncludeThursdayLabel());
   }
 
   public static Span createIncludeThursdayLabel() {
     return createIconSpan(INCLUDE_THURSDAY, "Thursday Games");
   }
 
-  public static void decorateIncludeThursdayCheckbox(Checkbox payAsYouGo) {
-    payAsYouGo.setLabelComponent(createIncludeThursdayLabel());
+  public static Span createIconSpan(LineAwesomeIcon icon, String text) {
+    Span span = new Span();
+    span.add(icon.create());
+    span.add(" " + text);
+
+    return span;
   }
 
   public static void decorateAdminCheckbox(Checkbox admin) {
     admin.setLabelComponent(createAdminLabel());
+  }
+
+  public static Span createAdminLabel() {
+    return createIconSpan(ADMIN_ICON, "Admin User");
   }
 
   public static void decoratePasswordField(PasswordField password) {

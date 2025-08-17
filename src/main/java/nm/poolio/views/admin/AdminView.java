@@ -42,6 +42,7 @@ import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.vaadin.UserComboBox;
 import nm.poolio.views.MainLayout;
 import nm.poolio.views.ticket.TicketEditUi;
+import org.springframework.util.CollectionUtils;
 
 @PageTitle("Admin \uD83D\uDC68\u200D\uD83D\uDCBB")
 @Route(value = "admin", layout = MainLayout.class)
@@ -61,6 +62,8 @@ public class AdminView extends VerticalLayout
   Button editTicketButton;
 
   Dialog ticketDialog = new Dialog();
+
+  boolean showScoreBlurb = false;
 
   Pool pool;
   User player;
@@ -92,6 +95,10 @@ public class AdminView extends VerticalLayout
     games.forEach(g -> layout.add(createGamePick(g)));
     layout.add(createTieBreakerField(ticket));
 
+    if (showScoreBlurb) {
+      layout.add(createScoringBlurb());
+    }
+
     return layout;
   }
 
@@ -106,9 +113,20 @@ public class AdminView extends VerticalLayout
       var overUnder = createOverUnderField(g, ticket);
       overUnder.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
       layout.add(overUnder);
-      layout.add(new Hr());
+      showScoreBlurb = true;
     }
 
+    if (!CollectionUtils.isEmpty(g.getSillies())) {
+      g.getSillies()
+          .forEach(
+              s -> {
+                var sillyField = createSillyRadio(s, ticket, g);
+                layout.add(sillyField);
+                showScoreBlurb = true;
+              });
+    }
+
+    layout.add(new Hr());
     return layout;
   }
 

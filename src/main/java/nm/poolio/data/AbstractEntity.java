@@ -49,8 +49,8 @@ public abstract class AbstractEntity {
 
   @Override
   public int hashCode() {
-    if (getId() != null) {
-      return getId().hashCode();
+    if (id != null) {
+      return id.hashCode();
     }
     return super.hashCode();
   }
@@ -60,8 +60,8 @@ public abstract class AbstractEntity {
     if (!(obj instanceof AbstractEntity that)) {
       return false; // null or not an AbstractEntity class
     }
-    if (getId() != null) {
-      return getId().equals(that.getId());
+    if (id != null) {
+      return id.equals(that.getId());
     }
     return super.equals(that);
   }

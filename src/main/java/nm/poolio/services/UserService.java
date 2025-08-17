@@ -85,7 +85,7 @@ public class UserService {
         .filter(u -> u.getInactiveDate() == null)
         .map(this::addPoolIdNames)
         .map(this::addFunds)
-        .sorted(Comparator.comparing(User::getModifiedSortTime).reversed())
+        .sorted(Comparator.comparing(User::getName))
         .toList();
   }
 

@@ -31,6 +31,7 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.enitities.transaction.PoolioTransactionType;
 import nm.poolio.model.JsonbNote;
+import nm.poolio.model.enums.Season;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioDialog;
@@ -86,7 +87,7 @@ public class PoolioTransactionView extends VerticalLayout
 
     Button newItemButton =
         new Button(
-            "NewTransaction",
+            "New Transaction",
             TRANSACTION_ICON.create(),
             e -> openPoolioTransactionDialog(new PoolioTransaction()));
     comboBoxesHorizontalLayout.add(newItemButton);
@@ -117,12 +118,78 @@ public class PoolioTransactionView extends VerticalLayout
     add(grid);
   }
 
+  private void onSaveTransaction(PoolioTransaction t) {
+    t.setSeason(Season.getCurrent());
+    transactionDialog.close();
+    handleType(t);
+    processNote(t);
+    service.save(t);
+    grid.setItems(service.findAllPoolioTransactions());
+  }
+
+  private Component[] createTransactionDialog() {
+    amount.setPlaceholder("Transfer Amount");
+    amount.setLabel("Amount");
+    amount.setPrefixComponent(AMOUNT_ICON.create());
+    amount.setMin(1);
+    amount.setMax(1000);
+    amount.setRequired(true);
+    UserComboBox userComboBox = new UserComboBox();
+    userComboBox.decorate(targetUser, userService.findAll(), "User");
+    targetUser.setRequired(true);
+
+    type.setPrefixComponent(MONEY_TYPE_ICON.create());
+    type.setRequired(true);
+
+    transactionNotes.setLabel("Notes");
+    transactionNotes.setPlaceholder("Transaction Notes");
+    transactionNotes.setTooltipText("Add Notes to help track or explain this transaction");
+    transactionNotes.setClearButtonVisible(true);
+    transactionNotes.setPrefixComponent(NOTES_ICON.create());
+
+    return new Component[] {amount, targetUser, type, transactionNotes};
+  }
+
+  private void openPoolioTransactionDialog(PoolioTransaction poolioTransaction) {
+    binder.setBean(poolioTransaction);
+    transactionDialog.open();
+  }
+
+  private void decorateGrid() {
+    decorateTransactionGrid();
+
+    grid.setItems(service.findAllPoolioTransactions());
+  }
+
   private void inspectUser(User user) {
     if (user == null) {
       temporalAmountColumn.setVisible(false);
       sequenceColumn.setVisible(false);
       grid.setItems(allPoolioTransactions);
     } else createUserInGrid(user);
+  }
+
+  private void handleType(PoolioTransaction t) {
+    User cashUser = userService.getCashUser();
+
+    switch (t.getType()) {
+      case CASH_WITHDRAWAL -> {
+        t.setDebitUser(cashUser);
+        t.setCreditUser(targetUser.getValue());
+      }
+      case CASH_DEPOSIT -> {
+        t.setDebitUser(targetUser.getValue());
+        t.setCreditUser(cashUser);
+      }
+      default -> throw new IllegalArgumentException("Not handling" + t.getType());
+    }
+  }
+
+  private void processNote(PoolioTransaction t) {
+    if (StringUtils.isNotEmpty(transactionNotes.getValue())) {
+      JsonbNote note = buildNote(transactionNotes.getValue());
+      t.setNotes(List.of(note));
+    }
   }
 
   private void createUserInGrid(User user) {
@@ -152,80 +219,14 @@ public class PoolioTransactionView extends VerticalLayout
           if (t.getPayAsYouGoUser() != null) havePayAsYouGo.set(true);
         });
 
-    if( payAsYouGoColumn != null ) {
+    if (payAsYouGoColumn != null) {
       payAsYouGoColumn.setVisible(havePayAsYouGo.get());
     }
-
 
     grid.setItems(transactions);
   }
 
   private boolean hasUser(PoolioTransaction t, User user) {
     return t.getCreditUser().equals(user) || t.getDebitUser().equals(user);
-  }
-
-  private Component[] createTransactionDialog() {
-    amount.setPlaceholder("Transfer Amount");
-    amount.setLabel("Amount");
-    amount.setPrefixComponent(AMOUNT_ICON.create());
-    amount.setMin(1);
-    amount.setMax(1000);
-    amount.setRequired(true);
-    UserComboBox userComboBox = new UserComboBox();
-    userComboBox.decorate(targetUser, userService.findAll(), "User");
-    targetUser.setRequired(true);
-
-    type.setPrefixComponent(MONEY_TYPE_ICON.create());
-    type.setRequired(true);
-
-    transactionNotes.setLabel("Notes");
-    transactionNotes.setPlaceholder("Transaction Notes");
-    transactionNotes.setTooltipText("Add Notes to help track or explain this transaction");
-    transactionNotes.setClearButtonVisible(true);
-    transactionNotes.setPrefixComponent(NOTES_ICON.create());
-
-    return new Component[] {amount, targetUser, type, transactionNotes};
-  }
-
-  private void decorateGrid() {
-    decorateTransactionGrid();
-
-    grid.setItems(service.findAllPoolioTransactions());
-  }
-
-  private void openPoolioTransactionDialog(PoolioTransaction poolioTransaction) {
-    binder.setBean(poolioTransaction);
-    transactionDialog.open();
-  }
-
-  private void handleType(PoolioTransaction t) {
-    User cashUser = userService.getCashUser();
-
-    switch (t.getType()) {
-      case CASH_WITHDRAWAL -> {
-        t.setDebitUser(cashUser);
-        t.setCreditUser(targetUser.getValue());
-      }
-      case CASH_DEPOSIT -> {
-        t.setDebitUser(targetUser.getValue());
-        t.setCreditUser(cashUser);
-      }
-      default -> throw new IllegalArgumentException("Not handling" + t.getType());
-    }
-  }
-
-  private void onSaveTransaction(PoolioTransaction t) {
-    transactionDialog.close();
-    handleType(t);
-    processNote(t);
-    service.save(t);
-    grid.setItems(service.findAllPoolioTransactions());
-  }
-
-  private void processNote(PoolioTransaction t) {
-    if (StringUtils.isNotEmpty(transactionNotes.getValue())) {
-      JsonbNote note = buildNote(transactionNotes.getValue());
-      t.setNotes(List.of(note));
-    }
   }
 }

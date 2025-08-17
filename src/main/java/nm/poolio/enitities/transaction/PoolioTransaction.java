@@ -10,6 +10,7 @@ import lombok.Setter;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
 import nm.poolio.model.JsonbNote;
+import nm.poolio.model.enums.Season;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -46,6 +47,10 @@ public class PoolioTransaction extends AbstractEntity {
     @Min(1)
     @Max(1000)
     Integer amount;
+
+   // @NotNull
+    @Enumerated(EnumType.STRING)
+    private Season season;
 
     @NotNull
     @Enumerated(EnumType.STRING)

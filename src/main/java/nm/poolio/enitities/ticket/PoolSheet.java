@@ -1,6 +1,7 @@
 package nm.poolio.enitities.ticket;
 
 import lombok.Data;
+import nm.poolio.enitities.silly.SillyAnswer;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.OverUnder;
 
@@ -14,6 +15,8 @@ public class PoolSheet {
     Map<String, OverUnder> overUnderPicks = new HashMap<>();
 
     Integer tieBreaker;
+
+    Map<String, SillyAnswer> sillyPicks = new HashMap<>();
 }
 
 

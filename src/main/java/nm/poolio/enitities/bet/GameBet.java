@@ -133,7 +133,7 @@ public class GameBet extends AbstractEntity {
   public String createGameDetailsString() {
     String str = gameId.split("_")[0].replace("at", " at ");
     str += " (" + spread + ")";
-    return "Game: %s %s".formatted(str, week);
+    return "Game: %s %s.".formatted(str, week);
   }
 
   public String createBetDetailsString() {
@@ -142,6 +142,10 @@ public class GameBet extends AbstractEntity {
       splits += "- Splits: Yes";
     }
 
-    return "Team picked: %s Amount: $%d %s".formatted(teamPicked, amount, splits);
+    return "Team picked: %s Amount: $%d %s.".formatted(teamPicked, amount, splits);
+  }
+
+  public String getInfoString() {
+    return  createBetDetailsString() + " - " + createGameDetailsString();
   }
 }

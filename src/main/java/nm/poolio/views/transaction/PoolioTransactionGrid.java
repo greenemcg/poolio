@@ -79,7 +79,7 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
       var c =
           getGrid()
               .addColumn(new ComponentRenderer<>(t -> createUserComponent(t.getPayAsYouGoUser())))
-              .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "Player (PayAsYouGo)"))
+              .setHeader(createIconSpan(LineAwesomeIcon.USER_TIE_SOLID, "PayAsYouGo"))
               .setAutoWidth(true);
       setPayAsYouGoColumn(c);
     }
@@ -108,7 +108,7 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
         .setComparator(AbstractEntity::getCreatedDate);
 
     createColumn(PoolioTransaction::getNote, createIconSpan(NOTES_ICON, "Note"))
-        .setAutoWidth(true)
+        .setWidth("20em")
         .setTooltipGenerator(PoolioTransaction::getNote)
         .setTextAlign(ColumnTextAlign.START)
         .getElement()

@@ -1,5 +1,7 @@
 package nm.poolio.views.result;
 
+import static nm.poolio.utils.VaddinUtils.*;
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.DetachEvent;
@@ -33,6 +35,7 @@ import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.enitities.pool.UserPoolFinder;
 import nm.poolio.enitities.score.GameScoreService;
+import nm.poolio.enitities.silly.SillyAnswer;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.enitities.ticket.TicketService;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
@@ -322,19 +325,16 @@ public class ResultsView extends VerticalLayout
     resultsGrid
         .addColumn(
             new ComponentRenderer<>(
-                e -> {
-                 Div layout = new Div();
-               //   layout.setPadding(false);
-               //   layout.setMargin(false);
-                  var span = createGameSpan(game, e);
+                ticket -> {
+                  Div layout = new Div();
+                  var span = createGameSpan(game, ticket);
                   layout.add(span);
-
                   if (game.getOverUnder() != null) {
-                    var choice = e.getSheet().getOverUnderPicks().get(game.getId());
+                    var choice = ticket.getSheet().getOverUnderPicks().get(game.getId());
 
-                    if( choice != null) {
-                      layout.add(new Span(" - " ));
-                      layout.add(new Span(createOverUndeSpan(game, e)));
+                    if (choice != null) {
+                      layout.add(new Span(" - "));
+                      layout.add(new Span(createOverUndeSpan(game, ticket)));
                     }
                   }
 
@@ -344,6 +344,41 @@ public class ResultsView extends VerticalLayout
         .setAutoWidth(true)
         .setTooltipGenerator(g -> getString(game))
         .setTextAlign(ColumnTextAlign.CENTER);
+
+    if (!CollectionUtils.isEmpty(game.getSillies()))
+      game.getSillies()
+          .forEach(
+              sillyQuestion -> {
+                resultsGrid
+                    .addColumn(
+                        new ComponentRenderer<>(
+                            ticket -> {
+                              SillyAnswer sillyAnswer =
+                                  ticket.getSheet().getSillyPicks().get(sillyQuestion.getId());
+
+                              Div div = new Div();
+
+                              if (sillyAnswer != null) {
+                                div.add(new Span(sillyAnswer.getAnswer()));
+
+                                if (!CollectionUtils.isEmpty(game.getSillyAnswers())
+                                    && game.getSillyAnswers().containsKey(sillyQuestion.getId())) {
+                                  String correctAnswer =
+                                      game.getSillyAnswers().get(sillyQuestion.getId());
+
+                                    if (correctAnswer.equals(sillyAnswer.getAnswer())) {
+                                      div.getStyle().set("font-weight", "bolder");
+                                    } else {
+                                      div.getStyle().set("text-decoration", "line-through");
+                                    }
+                                }
+                              }
+                              return div;
+                            }))
+                    .setHeader(createIconSpan(SILLY_QUESTION, sillyQuestion.getQuestion()))
+                    .setWidth("125px")
+                    .setTextAlign(ColumnTextAlign.CENTER);
+              });
   }
 
   @NotNull
@@ -351,10 +386,9 @@ public class ResultsView extends VerticalLayout
     String cssName = "font-weight";
     String cssValue = "normal";
 
-
     OverUnder playerOverUnder = e.getSheet().getOverUnderPicks().get(game.getId());
 
-    if( playerOverUnder == null) {
+    if (playerOverUnder == null) {
       return new Span("");
     }
 
@@ -362,23 +396,23 @@ public class ResultsView extends VerticalLayout
 
     var optional = game.getScore();
 
-    if( optional.isPresent()) {
-        var gameScore = optional.get();
+    if (optional.isPresent()) {
+      var gameScore = optional.get();
 
-        var overUnderResult = TicketScorer.computeOverUnderValue(gameScore, game.getOverUnder());
+      var overUnderResult = TicketScorer.computeOverUnderValue(gameScore, game.getOverUnder());
 
-        if( overUnderResult == null) {
-          cssName = "font-style";
-          cssValue = "oblique";
-        } else if( playerOverUnder == overUnderResult) {
-          cssValue = "bolder";
-        } else {
-          cssName = "text-decoration";
-          cssValue = "line-through";
-        }
+      if (overUnderResult == null) {
+        cssName = "font-style";
+        cssValue = "oblique";
+      } else if (playerOverUnder == overUnderResult) {
+        cssValue = "bolder";
+      } else {
+        cssName = "text-decoration";
+        cssValue = "line-through";
+      }
     }
 
-    var span = new Span(value );
+    var span = new Span(value);
     span.getStyle().set(cssName, cssValue);
     return span;
   }
@@ -428,7 +462,7 @@ public class ResultsView extends VerticalLayout
     span.add("v");
     span.add(createNflTeamAvatar(game.getHomeTeam(), AvatarVariant.LUMO_XSMALL));
 
-    if( game.getOverUnder() != null) {
+    if (game.getOverUnder() != null) {
       span.add(new Span(" - " + game.getOverUnder()));
     }
 

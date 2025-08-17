@@ -33,7 +33,7 @@ public class NflGameService implements Serializable {
   @SneakyThrows
   @PostConstruct
   public void init() {
-    InputStream inputStream = getClass().getResourceAsStream("/nfl/nfl_season_2024.json");
+    InputStream inputStream = getClass().getResourceAsStream("/nfl/nfl_season_2025.json");
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
     mapper.registerModule(new Jdk8Module());
@@ -79,16 +79,34 @@ public class NflGameService implements Serializable {
     return game;
   }
 
-  public List<NflGame> getGamesForPool(Pool pool, NflWeek week) {
-    return getWeeklyGamesThursdayFiltered(week, pool.isIncludeThursday());
+  void addScores(NflGame g) {
+    var optional = gameScoreService.findScore(g.getId());
+
+    if (optional.isPresent()) {
+      var score = optional.get();
+      g.setAwayScore(score.getAwayScore());
+      g.setHomeScore(score.getHomeScore());
+
+      if (score.getOverUnder() != null) g.setOverUnder(score.getOverUnder().doubleValue());
+
+      if (score.getSpread() != null) g.setSpread(score.getSpread().doubleValue());
+
+      if (score.getSillyAnswers() != null) {
+        g.setSillyAnswers(score.getSillyAnswers());
+      }
+
+    } else {
+      g.setAwayScore(null);
+      g.setHomeScore(null);
+    }
   }
 
   public List<NflGame> getWeeklyGamesForPool(Pool pool) {
     return getGamesForPool(pool, pool.getWeek());
   }
 
-  public List<NflGame> getWeeklyGamesForPool(Pool pool, NflWeek week) {
-    return getGamesForPool(pool, week);
+  public List<NflGame> getGamesForPool(Pool pool, NflWeek week) {
+    return getWeeklyGamesThursdayFiltered(week, pool.isIncludeThursday());
   }
 
   public List<NflGame> getWeeklyGamesThursdayFiltered(NflWeek week, boolean includeThurs) {
@@ -97,7 +115,8 @@ public class NflGameService implements Serializable {
     var filtered = filterByThurs(includeThurs, weekGames);
 
     if (week.getWeekNum() == 13
-        || week.getWeekNum() == 17) { // TODO HACK for adding thursday for t-day and xmas games remove this
+        || week.getWeekNum()
+            == 17) { // TODO HACK for adding thursday for t-day and xmas games remove this
       filtered = weekGames;
     }
 
@@ -106,17 +125,10 @@ public class NflGameService implements Serializable {
     return filtered;
   }
 
-  void addScores(NflGame g) {
-    var optional = gameScoreService.findScore(g.getId());
-
-    if (optional.isPresent()) {
-      var score = optional.get();
-      g.setAwayScore(score.getAwayScore());
-      g.setHomeScore(score.getHomeScore());
-    } else {
-      g.setAwayScore(null);
-      g.setHomeScore(null);
-    }
+  public List<NflGame> getWeeklyGames(NflWeek week) {
+    var n = gameList.stream().filter(g -> g.getWeek().equals(week.getWeekNum())).toList();
+    n.parallelStream().forEach(this::addScores);
+    return n;
   }
 
   private List<NflGame> filterByThurs(boolean includeThurs, List<NflGame> weekGames) {
@@ -141,15 +153,13 @@ public class NflGameService implements Serializable {
     return zdt.getDayOfWeek() == dayOfWeek;
   }
 
+  public List<NflGame> getWeeklyGamesForPool(Pool pool, NflWeek week) {
+    return getGamesForPool(pool, week);
+  }
+
   public List<NflGame> getGameList() {
     gameList.parallelStream().forEach(this::addScores);
     return gameList;
-  }
-
-  public List<NflGame> getWeeklyGames(NflWeek week) {
-    var n = gameList.stream().filter(g -> g.getWeek().equals(week.getWeekNum())).toList();
-    n.parallelStream().forEach(this::addScores);
-    return n;
   }
 
   public List<NflGame> getWeeklyGamesNotStarted(NflWeek week) {

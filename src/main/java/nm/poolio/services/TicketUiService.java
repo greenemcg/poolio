@@ -65,6 +65,7 @@ public class TicketUiService {
 
     poolioTransaction.setAmount(pool.getAmount());
     poolioTransaction.setType(PoolioTransactionType.POOL_PURCHASE);
+    poolioTransaction.setSeason(pool.getSeason());
 
     if (note != null) poolioTransaction.setNotes(List.of(note));
 

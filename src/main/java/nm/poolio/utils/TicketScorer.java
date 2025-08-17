@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.OverUnder;
+import org.springframework.util.CollectionUtils;
 
 @RequiredArgsConstructor
 public class TicketScorer {
@@ -72,6 +73,30 @@ public class TicketScorer {
               }
             });
 
+    ticket
+        .getSheet()
+        .getSillyPicks()
+        .forEach(
+            (sillyKey, sillyAnswer) -> {
+              var nflGame =
+                  games.stream()
+                      .filter(g -> g.getId().equals(sillyAnswer.getGameId()))
+                      .findAny()
+                      .orElse(null);
+
+              if (nflGame != null && !CollectionUtils.isEmpty(nflGame.getSillyAnswers())) {
+                var sillyCorrectAnswer = nflGame.getSillyAnswers().get(sillyKey);
+
+                if (sillyCorrectAnswer != null && sillyAnswer.getAnswer() != null) {
+
+                  if (sillyCorrectAnswer.equals(sillyAnswer.getAnswer())) {
+                    score += 1;
+                    fullScore += 10000;
+                  }
+                }
+              }
+            });
+
     ticket.setScore(score);
     ticket.setCorrect(correct);
 
@@ -89,7 +114,7 @@ public class TicketScorer {
   }
 
   public static @Nullable OverUnder computeOverUnderValue(
-      @NotNull Integer gameScore, @NotNull Float bookOverUnderValue) {
+      @NotNull Integer gameScore, @NotNull Double bookOverUnderValue) {
     return bookOverUnderValue < gameScore
         ? OverUnder.OVER
         : bookOverUnderValue > gameScore ? OverUnder.UNDER : null;

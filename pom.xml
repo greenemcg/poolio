@@ -7,12 +7,12 @@
     <groupId>nm.poolio</groupId>
     <artifactId>poolio</artifactId>
     <name>poolio</name>
-    <version>1.12-BETA</version>
+    <version>1.17-BETA</version>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>21</java.version>
-        <vaadin.version>24.6.2</vaadin.version>
+        <vaadin.version>24.8.4</vaadin.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd-HH:mm</maven.build.timestamp.format>
     </properties>
@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.5.4</version>
     </parent>
 
     <repositories>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.parttio</groupId>
             <artifactId>line-awesome</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.0</version>
         </dependency>
 
         <dependency>
@@ -104,7 +104,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.googlecode.libphonenumber</groupId>

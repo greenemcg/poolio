@@ -9,6 +9,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.dom.Style;
@@ -16,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import javax.annotation.Nullable;
 import nm.poolio.enitities.score.GameScore;
+import nm.poolio.enitities.silly.SillyAnswer;
+import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
@@ -39,8 +42,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
 
   private Component createWinnerComponent(Boolean pickCorrect) {
     if (pickCorrect == null) return new Span("");
-    else if (pickCorrect) return createIcon(VaadinIcon.PLUS);
-    else return createIcon(VaadinIcon.MINUS);
+    return createIcon(pickCorrect ? VaadinIcon.PLUS : VaadinIcon.MINUS);
   }
 
   private void createWinnerText(Boolean pickCorrect, Style style) {
@@ -55,39 +57,29 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
       Map<String, GameScore> scores) {
 
     var pickedTeam = gamePicks.get(nflGame.getId());
-
-    if (teamToCheck == null) {
-      return new Span("");
-    }
+    if (teamToCheck == null) return new Span("");
 
     if (pickedTeam != null) {
       var gameScore = scores.get(nflGame.getId());
       Boolean pickedCorrectly = null;
 
-      if (gameScore != null) {
+      if (gameScore != null
+          && gameScore.getHomeScore() != null
+          && gameScore.getAwayScore() != null) {
         nflGame.setHomeScore(gameScore.getHomeScore());
         nflGame.setAwayScore(gameScore.getAwayScore());
-
-        var winner = nflGame.findWinner();
-        pickedCorrectly = winner == teamToCheck;
+        pickedCorrectly = nflGame.findWinner() == teamToCheck;
       }
 
+      Span confirmed2 =
+          new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
       if (pickedTeam == teamToCheck) {
-        Span confirmed2 =
-            new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
-
         if (Boolean.FALSE.equals(pickedCorrectly))
           confirmed2.getElement().getStyle().set("color", "red");
         else confirmed2.getElement().getStyle().set("font-weight", "bold");
-
-        createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
-        return confirmed2;
-      } else {
-        Span confirmed2 = new Span(new Span(teamToCheck.name()));
-        createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
-
-        return confirmed2;
       }
+      createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
+      return confirmed2;
     }
 
     return new Span(teamToCheck.name());
@@ -96,6 +88,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
   default void decorateTicketGrid(Ticket ticket, Map<String, GameScore> scores) {
     Map<String, NflTeam> gamePicks = ticket.getSheet().getGamePicks();
     Map<String, OverUnder> overUnderPicks = ticket.getSheet().getOverUnderPicks();
+    Map<String, SillyAnswer> sillies = ticket.getSheet().getSillyPicks();
 
     getGrid()
         .addColumn(
@@ -132,28 +125,64 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
                   game -> {
                     var overUnder = overUnderPicks.get(game.getId());
                     if (overUnder == null) return new Span("");
-                    else {
-                      var span = new Span(overUnder.name() + " (" + game.getOverUnder() + ")");
-
-                      if (game.getScore().isPresent()) {
-                        var gameScore = game.getScore().get();
-                        var overUnderResult = computeOverUnderValue(gameScore, game.getOverUnder());
-                        if (overUnderResult == overUnder) {
-                          span.getStyle().set("font-weight", "bold");
-                        } else {
-                          span.getStyle().set("text-decoration", "line-through");
-                        }
-                      }
-
-                      return span;
-                    }
+                    var span = new Span(overUnder.name() + " (" + game.getOverUnder() + ")");
+                    game.getScore()
+                        .ifPresent(
+                            gameScore -> {
+                              var overUnderResult =
+                                  computeOverUnderValue(gameScore, game.getOverUnder());
+                              if (overUnderResult == overUnder)
+                                span.getStyle().set("font-weight", "bold");
+                              else span.getStyle().set("text-decoration", "line-through");
+                            });
+                    return span;
                   }))
           .setHeader(createIconSpan(OVER_UNDER_ICON, "Over/Under"))
           .setWidth("150px")
           .setFlexGrow(0)
           .setTextAlign(ColumnTextAlign.CENTER);
 
-    // This date formatter will show the day of week
+    if (!CollectionUtils.isEmpty(sillies))
+      getGrid()
+          .addColumn(
+              new ComponentRenderer<>(
+                  game -> {
+                    VerticalLayout verticalLayout = new VerticalLayout();
+                    verticalLayout.setPadding(false);
+                    verticalLayout.setSpacing(false);
+                    sillies
+                        .keySet()
+                        .forEach(
+                            s -> {
+                              SillyAnswer sillyAnswer = sillies.get(s);
+
+                              if (sillyAnswer.getGameId().equals(game.getId())) {
+                                assert game.getSillies() != null;
+                                var optional =
+                                    game.getSillies().stream()
+                                        .filter(silly -> silly.getId().equals(s))
+                                        .findFirst();
+
+                                String question =
+                                    optional.map(SillyQuestion::getQuestion).orElse(s);
+
+                                Span parentSpan = new Span();
+                                Span questionSpan = new Span(question + ": ");
+                                questionSpan.getElement().getStyle().set("font-weight", "bold");
+                                parentSpan.add(questionSpan);
+
+                                Span answerSpan = new Span(sillyAnswer.getAnswer() + " ");
+                                answerSpan.getElement().getStyle().set("font-style", "italic");
+                                parentSpan.add(answerSpan);
+                                verticalLayout.add(parentSpan);
+                              }
+                            });
+                    return verticalLayout;
+                  }))
+          .setHeader(createIconSpan(SILLY_QUESTION, "Sillies"))
+          .setAutoWidth(true)
+          .setTextAlign(ColumnTextAlign.CENTER);
+
     getGrid()
         .addColumn(
             new LocalDateTimeRenderer<>(

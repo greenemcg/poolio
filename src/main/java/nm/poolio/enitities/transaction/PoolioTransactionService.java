@@ -2,6 +2,7 @@ package nm.poolio.enitities.transaction;
 
 import lombok.RequiredArgsConstructor;
 import nm.poolio.data.User;
+import nm.poolio.model.enums.Season;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -13,14 +14,14 @@ public class PoolioTransactionService {
     private final PoolioTransactionRepository repository;
 
     public List<PoolioTransaction> findAllPoolioTransactions() {
-        var result = repository.findAll();
+        var result = repository.findBySeason(Season.getCurrent());
         result.sort(Comparator.comparing(PoolioTransaction::getCreatedDate).reversed());
         return result;
     }
 
     public List<PoolioTransaction> findAllPoolioTransactionsForUser(User user) {
-        return repository.findByDebitUserOrCreditUserOrPayAsYouGoUser(
-                user, user, user);
+        return repository.findByDebitUserOrCreditUserOrPayAsYouGoUserAndSeason(
+                user, user, user, Season.getCurrent());
     }
 
     public PoolioTransaction save(PoolioTransaction t) {
@@ -28,8 +29,8 @@ public class PoolioTransactionService {
     }
 
     public int getFunds(User user) {
-        Integer debitsAmount = repository.calculateDebitAmount(user);
-        Integer creditAmount = repository.calculateCreditAmount(user);
+        Integer debitsAmount = repository.calculateDebitAmount(user, Season.getCurrent());
+        Integer creditAmount = repository.calculateCreditAmount(user, Season.getCurrent());
 
         return (debitsAmount == null ? 0 : debitsAmount) - (creditAmount == null ? 0 : creditAmount);
     }

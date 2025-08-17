@@ -8,6 +8,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -25,6 +26,7 @@ import jakarta.annotation.security.RolesAllowed;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -43,6 +45,7 @@ import nm.poolio.services.TicketUiService;
 import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.views.MainLayout;
+import org.springframework.util.CollectionUtils;
 
 @PageTitle("Edit Ticket \uFE0F")
 @Route(value = "ticketEdit", layout = MainLayout.class)
@@ -63,7 +66,6 @@ public class TicketEditView extends VerticalLayout
   private final TicketUiService ticketUiService;
 
   IntegerField tieBreakerFiled;
-
   Pool pool;
   Ticket ticket;
   @Getter boolean errorFound = false;
@@ -82,17 +84,12 @@ public class TicketEditView extends VerticalLayout
     this.ticketUiService = ticketUiService;
   }
 
+  @Override
+  public void setErrorFound(boolean errorFound) {}
+
   public HasComponents getDialogHasComponents() {
     return this;
   }
-
-  private void createNullPoolIdDialogAndGoHome() {
-    errorFound = true;
-    add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
-  }
-
-  @Override
-  public void setErrorFound(boolean errorFound) {}
 
   @Override
   public void setParameter(BeforeEvent event, @OptionalParameter String s) {
@@ -115,8 +112,39 @@ public class TicketEditView extends VerticalLayout
     createTicketUI();
   }
 
+  private void processPoolIdParameter(String poolIdParameter) {
+    pool = findPoolWithQueryParam(poolIdParameter, player);
+  }
+
+  private void createNullPoolIdDialogAndGoHome() {
+    errorFound = true;
+    add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
+  }
+
+  private void processTicketIdParameter(String ticketIdParameter) {
+    ticket = processTicketIdParameter(ticketIdParameter, player);
+  }
+
+  private void buildNewTicket() {
+    String userName = authenticatedUser.get().map(User::getName).orElse("unknown");
+    String note =
+        "User: %s Created ticket for pool: %s-%s"
+            .formatted(userName, pool.getName(), pool.getWeek());
+    var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
+
+    ticket =
+        ticketUiService.createTicket(
+            createTicket(pool, player), pool, player, jsonbNote, pool.getWeek());
+  }
+
   private void createTicketUI() {
     add(createHeaderBadgesTop(pool, ticket));
+
+    add(
+        new Paragraph(
+            "If game has a a point spread ora team listed as a favored, the winner will be detemined by this point spread, "
+                + "and the final point spread will be the point spread at game time. We will use the score as our reference "
+                + " https://www.thescore.com/nfl/events/"));
 
     var games = nflGameService.getWeeklyGamesForPool(pool);
 
@@ -140,7 +168,24 @@ public class TicketEditView extends VerticalLayout
     buttonLayout.add(tieBreakerFiled);
     buttonLayout.add(createSubmitButton(e -> saveTicket()));
 
+    AtomicBoolean showScoring = new AtomicBoolean(false);
+
+    games.forEach(
+        g -> {
+          if (!CollectionUtils.isEmpty(g.getSillies()) || g.getOverUnder() != null) {
+            showScoring.set(true);
+          }
+        });
+
+    if (showScoring.get()) {
+      add(new Hr());
+      add(createScoringBlurb());
+      add(new Hr());
+    }
+
     add(buttonLayout);
+    add(new Hr());
+    add(new Hr());
 
     HorizontalLayout spacerLayout = new HorizontalLayout();
     spacerLayout.setPadding(true);
@@ -148,16 +193,31 @@ public class TicketEditView extends VerticalLayout
     spacerLayout.add(new Hr());
     spacerLayout.setMinHeight(50, Unit.PIXELS);
     add(spacerLayout);
+  }
 
-    //    HorizontalLayout horizontalLayout =
-    //        new HorizontalLayout(tieBreakerFiled, createSubmitButton(e -> saveTicket()));
-    //    horizontalLayout.setAlignItems(Alignment.BASELINE);
-    //    add(horizontalLayout);
+  private Component createGamePick(NflGame nflGame) {
+    VerticalLayout verticalLayout = new VerticalLayout();
+    verticalLayout.getElement().getStyle().set("border", "1px solid black");
 
-    add(new Div());
-    add(new Hr());
-    //   add(tieBreakerFiled);
-    //   add(createSubmitButton(e -> saveTicket()));
+    HorizontalLayout horizontalLayout = new HorizontalLayout();
+    horizontalLayout.add(createGameRadioButton(nflGame));
+
+    verticalLayout.add(horizontalLayout);
+
+    if (nflGame.getOverUnder() != null) {
+      var overUnder = createOverUnderField(nflGame, ticket);
+      overUnder.addValueChangeListener(
+          c -> setOverUnderValue(ticket, c.getValue(), nflGame.getId()));
+      verticalLayout.add(overUnder);
+    }
+
+    if (!CollectionUtils.isEmpty(nflGame.getSillies())) {
+      var sillies =
+          nflGame.getSillies().stream().map(s -> createSillyRadio(s, ticket, nflGame)).toList();
+      verticalLayout.add(sillies);
+    }
+
+    return verticalLayout;
   }
 
   private void saveTicket() {
@@ -202,6 +262,42 @@ public class TicketEditView extends VerticalLayout
     }
   }
 
+  private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
+    RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
+
+    radioGroup.setHelperComponent(createHelperSpread(g));
+
+    var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTime());
+    radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
+    radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
+    radioGroup.setRequired(true);
+    radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
+
+    radioGroup.setReadOnly(true);
+
+    var value = ticket.getSheet().getGamePicks().get(g.getId());
+    if (value != null) radioGroup.setValue(value);
+
+    radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), g.getId()));
+
+    radioGroup.setRenderer(
+        new ComponentRenderer<>(
+            nflTeam -> {
+              var layout =
+                  new HorizontalLayout(
+                      createNflTeamAvatar(nflTeam, AvatarVariant.LUMO_SMALL),
+                      createGameSpan(nflTeam, g));
+              layout.setAlignItems(Alignment.CENTER);
+              return layout;
+            }));
+
+    return radioGroup;
+  }
+
+  private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
+    ticket.getSheet().getOverUnderPicks().put(id, value);
+  }
+
   private Component createMissingGamePick(String gameKey) {
     var game = nflGameService.findGameById(gameKey);
 
@@ -216,99 +312,31 @@ public class TicketEditView extends VerticalLayout
     return layout;
   }
 
-  private Component createGamePick(NflGame g) {
+  private Component createHelperSpread(NflGame g) {
+    if (g.getSpread() == null) return new Span(new Text("PICK EM"));
 
-    VerticalLayout verticalLayout = new VerticalLayout();
+    return g.getSpread() > 0.0
+        ? createSpreadSpan(g.getAwayTeam(), g.getSpread())
+        : createSpreadSpan(g.getHomeTeam(), -g.getSpread());
+  }
 
-    HorizontalLayout horizontalLayout = new HorizontalLayout();
-    horizontalLayout.add(createGameRadioButton(g));
+  private Component createGameSpan(NflTeam nflTeam, NflGame g) {
+    if (g.getSpread() == null) return new Span(new Text(nflTeam.getFullName()));
 
-    verticalLayout.add(horizontalLayout);
+    boolean isHomeTeam = g.getHomeTeam() == nflTeam;
 
-    if (g.getOverUnder() != null) {
-      var overUnder = createOverUnderField(g, ticket);
-      overUnder.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
-      verticalLayout.add(overUnder);
+    if (!isHomeTeam && g.getSpread() > 0.0) {
+      return new Span(new Text(nflTeam.getFullName() + "  " + (-1 * g.getSpread())));
     }
 
-    return verticalLayout;
-  }
-
-  //  private Component createOverUnderField(NflGame g) {
-  //   // HorizontalLayout layout = new HorizontalLayout();
-  //    RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
-  //    radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
-  //    radioGroup.setRequired(true);
-  //    radioGroup.setLabel("Total Score " + g.getOverUnder());
-  //
-  //    var value = ticket.getSheet().getOverUnderPicks().get(g.getId());
-  //
-  //    if( value != null) {
-  //      radioGroup.setValue(value);
-  //    }
-  //
-  //    radioGroup.addValueChangeListener(c -> setOverUnderValue(ticket, c.getValue(), g.getId()));
-  //
-  //    return radioGroup;
-  // //   layout.add(radioGroup);
-  //
-  ////    return layout;
-  //  }
-
-  private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
-
-    ticket.getSheet().getOverUnderPicks().put(id, value);
-  }
-
-  private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
-    RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
-    var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTime());
-    radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
-    radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
-    radioGroup.setRequired(true);
-    radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
-
-    var value = ticket.getSheet().getGamePicks().get(g.getId());
-
-    if (value != null) radioGroup.setValue(value);
-
-    radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), g.getId()));
-
-    radioGroup.setRenderer(
-        new ComponentRenderer<>(
-            nflTeam -> {
-              var layout =
-                  new HorizontalLayout(
-                      createNflTeamAvatar(nflTeam, AvatarVariant.LUMO_SMALL),
-                      new Span(new Text(nflTeam.getFullName())));
-              layout.setAlignItems(Alignment.CENTER);
-              return layout;
-            }));
-
-    return radioGroup;
-  }
-
-  private void processTicketIdParameter(String ticketIdParameter) {
-    ticket = processTicketIdParameter(ticketIdParameter, player);
-  }
-
-  private void processPoolIdParameter(String poolIdParameter) {
-    pool = findPoolWithQueryParam(poolIdParameter, player);
-  }
-
-  private void buildNewTicket() {
-    String userName = "unknown";
-    if (authenticatedUser.get().isPresent()) {
-      userName = authenticatedUser.get().get().getName();
+    if (isHomeTeam && g.getSpread() <= 0.0) {
+      return new Span(new Text(nflTeam.getFullName() + "  " + (g.getSpread())));
     }
 
-    String note =
-        "User: %s Created ticket for pool: %s-%s"
-            .formatted(userName, pool.getName(), pool.getWeek());
-    var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
+    return new Span(new Text(nflTeam.getFullName()));
+  }
 
-    ticket =
-        ticketUiService.createTicket(
-            createTicket(pool, player), pool, player, jsonbNote, pool.getWeek());
+  private Span createSpreadSpan(NflTeam team, double spread) {
+    return new Span(new Text(team.name() + " favored by " + spread + " points."));
   }
 }

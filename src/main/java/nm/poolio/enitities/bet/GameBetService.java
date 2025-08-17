@@ -47,9 +47,7 @@ public class GameBetService implements Serializable, GameBetCommon {
 
 
   public List<GameBet> findBetsForPlayer(User player) {
-   var r = repository.findByAcceptorTransactionId(player.getId());
-
-   return r;
+      return repository.findByAcceptorTransactionId(player.getId());
   }
 
 
