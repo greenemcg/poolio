@@ -1,4 +1,12 @@
 
+Add timezone for games to users browser tz
+
+add change passwd and theme in user profile view
+
+
+
+
+======= clean up this shite
 HEmal thurs
 mano a mano 
 and bets 
@@ -7,7 +15,7 @@ SIlly Builder
 
 test user name and username duplicates
 
-if games not started yet dont show scores and rank in results grid 
+if games not started yet don't show scores and rank in results grid 
 
 sort users  by name in admin grid
 
@@ -24,6 +32,8 @@ Edit Credit amount on APP
 
 Do notes
 
+pg_dump poolio > poolio.sql
+psql poolio < poolio.sql
 
 
 # Poolio

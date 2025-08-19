@@ -166,6 +166,7 @@ public class NflGameService implements Serializable {
     return gameList.stream()
         .filter(g -> g.getWeek() != null && g.getWeek().equals(week.getWeekNum()))
         .filter(g -> g.getGameTime().isAfter(Instant.now()))
+        .sorted(Comparator.comparing(NflGame::getGameTime))
         .toList();
   }
 }

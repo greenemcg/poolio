@@ -357,7 +357,7 @@ public class BetView extends VerticalLayout
                     .formatted(funds, gameBet.getAmount())));
       } else {
         NflGame nflGame = game.getValue();
-        gameBet.setSeason(Season.S_2024);
+        gameBet.setSeason(Season.getCurrent());
         gameBet.setWeek(pool.getWeek());
         gameBet.setGameId(nflGame.getId());
         gameBet.setProposerCanEditTeam(false);

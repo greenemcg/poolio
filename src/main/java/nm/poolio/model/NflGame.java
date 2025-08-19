@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Data;
-import nm.poolio.enitities.silly.SillyPicks;
 import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.model.enums.League;
 import nm.poolio.model.enums.NflTeam;
@@ -90,6 +89,11 @@ public class NflGame {
   @JsonIgnore
   public @NotNull NflTeam findWinner() {
     if (awayScore == null || homeScore == null) return NflTeam.TBD;
+
+    if (spread != null) {
+      return findWinnerSpread(new BigDecimal(spread));
+    }
+
     if (awayScore > homeScore) return awayTeam;
     if (homeScore > awayScore) return homeTeam;
     return NflTeam.TIE;
