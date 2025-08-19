@@ -23,6 +23,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -39,6 +40,7 @@ import nm.poolio.model.JsonbNote;
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.OverUnder;
+import nm.poolio.model.enums.PoolStatus;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketUiService;
@@ -142,7 +144,27 @@ public class TicketEditView extends VerticalLayout
 
     add(
         new Paragraph(
-            "If game has a a point spread ora team listed as a favored, the winner will be detemined by this point spread, "
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            "If game has a a point spread and a team listed as a favored, the winner will be determined by this point spread, "
                 + "and the final point spread will be the point spread at game time. We will use the score as our reference "
                 + " https://www.thescore.com/nfl/events/"));
 
@@ -273,7 +295,9 @@ public class TicketEditView extends VerticalLayout
     radioGroup.setRequired(true);
     radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
 
-    radioGroup.setReadOnly(true);
+    if (!canChangeGame(g)) {
+      radioGroup.setReadOnly(true);
+    }
 
     var value = ticket.getSheet().getGamePicks().get(g.getId());
     if (value != null) radioGroup.setValue(value);
@@ -316,8 +340,31 @@ public class TicketEditView extends VerticalLayout
     if (g.getSpread() == null) return new Span(new Text("PICK EM"));
 
     return g.getSpread() > 0.0
-        ? createSpreadSpan(g.getAwayTeam(), g.getSpread())
-        : createSpreadSpan(g.getHomeTeam(), -g.getSpread());
+        ? createSpreadSpan(g.getHomeTeam(), g.getSpread())
+        : createSpreadSpan(g.getAwayTeam(), -g.getSpread());
+  }
+
+  private boolean canChangeGame(NflGame g) {
+    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
+      return false;
+    }
+
+    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
+    if (gamesNotStarted.isEmpty()) {
+      return false;
+    }
+
+    var firstGameNotStarted = gamesNotStarted.getFirst();
+    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
+
+    if (dayOfWeek == DayOfWeek.MONDAY) {
+      return false;
+    }
+
+    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
+      return false;
+
+    return true;
   }
 
   private Component createGameSpan(NflTeam nflTeam, NflGame g) {

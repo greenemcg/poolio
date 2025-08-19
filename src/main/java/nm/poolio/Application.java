@@ -6,6 +6,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import nm.poolio.data.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@Theme(value = "poolio")
+@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 // @Theme(themeClass = Material.class, variant = Material.DARK)
 @ServletComponentScan
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")

@@ -4,12 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
 import nm.poolio.model.enums.BetStatus;
+import nm.poolio.model.enums.Season;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,34 +21,30 @@ public class GameBetService implements Serializable, GameBetCommon {
   public List<GameBet> findAvailableBets() {
     log.debug("Now: {}", Instant.now());
 
-    var list =
-        repository
-            .findByStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
-                BetStatus.OPEN, Instant.now())
-            .stream()
-            .filter(this::isProposalOpen)
-            .toList();
-
-    return list;
+    return repository
+        .findBySeasonAndStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
+            Season.getCurrent(), BetStatus.OPEN, Instant.now())
+        .stream()
+        .filter(this::isProposalOpen)
+        .toList();
   }
 
   public List<GameBet> findOpenBets() {
-    return repository.findByStatus(BetStatus.OPEN);
+    return repository.findByStatusAndSeason(BetStatus.OPEN, Season.getCurrent());
   }
 
   public List<GameBet> findPendingBets() {
-    return repository.findByStatus(BetStatus.PENDING);
+    return repository.findByStatusAndSeason(BetStatus.PENDING, Season.getCurrent());
   }
 
   public List<GameBet> findBetProposals(User player) {
-    return repository.findByProposerTransactionCreditUserOrderByCreatedDateDesc(player);
+    return repository.findBySeasonAndProposerTransactionCreditUserOrderByCreatedDateDesc(
+        Season.getCurrent(), player);
   }
-
 
   public List<GameBet> findBetsForPlayer(User player) {
-      return repository.findByAcceptorTransactionId(player.getId());
+    return repository.findBySeasonAndAcceptorTransactionId(Season.getCurrent(), player.getId());
   }
-
 
   public GameBet save(GameBet gameBet) {
     return repository.save(gameBet);

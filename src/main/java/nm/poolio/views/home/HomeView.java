@@ -1,15 +1,18 @@
 package nm.poolio.views.home;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -53,6 +56,7 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
       PoolioTransactionService poolioTransactionService,
       PoolService poolService,
       PoolioTransactionService poolioTransactionService1) {
+
     this.poolioTransactionService = poolioTransactionService1;
     setSpacing(false);
     setHeight("100%");
@@ -60,6 +64,11 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
     Optional<User> maybeUser = authenticatedUser.get();
     if (maybeUser.isPresent()) {
       user = maybeUser.get();
+
+      ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+      if (user.getTheme() != null) {
+        MainLayout.setTheme(user.getTheme(), themeList);
+      }
 
       Boolean aBoolean = (Boolean) VaadinSession.getCurrent().getAttribute("loggedInitDetails");
 

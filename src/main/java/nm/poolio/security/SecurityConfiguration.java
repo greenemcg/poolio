@@ -38,7 +38,16 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                 .requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg"))
                 .permitAll());
 
+    http.rememberMe(
+        rememberMe ->
+            rememberMe
+                .key("B74A39DCA2A3D")
+                .alwaysRemember(true) // A unique key for your application
+                .tokenValiditySeconds(60 * 60 * 24 * 30 * 8) // 8 months
+                .rememberMeCookieName("poolio-remember-me-cookie"));
+
     super.configure(http);
+
     setLoginView(http, LoginView.class);
   }
 }

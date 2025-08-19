@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import nm.poolio.Theme;
 import nm.poolio.enitities.pool.PoolIdName;
 import nm.poolio.utils.PhoneNumberUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +46,9 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   @NotNull
   @Size(min = 2, max = 255)
   private String name;
+
+  @Enumerated(EnumType.STRING)
+  private Theme theme;
 
   @Email private String email;
 

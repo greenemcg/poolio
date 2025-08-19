@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import nm.poolio.enitities.transaction.PoolioTransaction;
+import nm.poolio.model.enums.Season;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,8 +27,9 @@ class GameBetServiceTest {
   void findOpenBets_returnsAvailableBets() {
     GameBet bet1 = mock(GameBet.class);
     GameBet bet2 = mock(GameBet.class);
-    when(repository.findByStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
-            any(), any(Instant.class)))
+    when(repository
+            .findBySeasonAndStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
+                any(Season.class), any(), any(Instant.class)))
         .thenReturn(List.of(bet1, bet2));
     when(bet1.getBetCanBeSplit()).thenReturn(false);
     when(bet1.getAcceptorTransactions()).thenReturn(Set.of());
@@ -48,8 +50,9 @@ class GameBetServiceTest {
   void findAvailableBets_excludesClosedBets() {
     GameBet bet1 = mock(GameBet.class);
     GameBet bet2 = mock(GameBet.class);
-    when(repository.findByStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
-            any(), any(Instant.class)))
+    when(repository
+            .findBySeasonAndStatusAndExpiryDateAfterAndAcceptanceDateIsNullOrderByCreatedDate(
+                any(Season.class), any(), any(Instant.class)))
         .thenReturn(List.of(bet1, bet2));
     when(bet1.getBetCanBeSplit()).thenReturn(false);
     when(bet1.getAcceptorTransactions()).thenReturn(Set.of(mock(PoolioTransaction.class)));

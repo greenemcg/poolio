@@ -3,6 +3,7 @@ package nm.poolio.views;
 import static nm.poolio.utils.VaddinUtils.*;
 import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -12,12 +13,16 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.page.WebStorage;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.util.Optional;
+import nm.poolio.Theme;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.security.AuthenticatedUser;
@@ -51,6 +56,23 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     this.accessChecker = accessChecker;
     this.poolService = poolService;
 
+    UI ui = UI.getCurrent();
+    ui.addBeforeEnterListener(
+        event -> {
+          ThemeList themeList = ui.getElement().getThemeList();
+
+          WebStorage.getItem(WebStorage.Storage.LOCAL_STORAGE, "theme")
+              .thenAccept(
+                  value -> {
+                    ui.access(
+                        () -> {
+                            processTheme(authenticatedUser, value, themeList);
+                        });
+                  });
+
+          System.out.println("Global beforeEnter for " + event.getLocation().getPath());
+        });
+
     Optional<User> maybeUser = authenticatedUser.get();
     maybeUser.ifPresent(value -> user = value);
 
@@ -59,15 +81,24 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     addHeaderContent();
   }
 
-  private void addHeaderContent() {
-    DrawerToggle toggle = new DrawerToggle();
-    toggle.setAriaLabel("Menu toggle");
+    private void processTheme(AuthenticatedUser authenticatedUser, String value, ThemeList themeList) {
+        if (value != null) {
+          System.out.println("Retrieved from local storage: " + value);
 
-    viewTitle = new H1();
-    viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+          try {
+            Theme theme = Theme.valueOf(value);
+            setTheme(theme, themeList);
+          } catch (IllegalArgumentException e) {
+            WebStorage.removeItem(WebStorage.Storage.LOCAL_STORAGE, "theme");
+          }
 
-    addToNavbar(true, toggle, viewTitle);
-  }
+        } else {
+          System.out.println("Item not found in local storage.");
+          authenticatedUser
+              .get()
+              .ifPresent(user -> setThemeFromUser(user, themeList));
+        }
+    }
 
   private void addDrawerContent() {
     Span appNameSpan = new Span("");
@@ -84,8 +115,47 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     addToDrawer(header, scroller, createFooter());
   }
 
+  private void addHeaderContent() {
+    DrawerToggle toggle = new DrawerToggle();
+    toggle.setAriaLabel("Menu toggle");
+
+    viewTitle = new H1();
+    viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+
+    addToNavbar(true, toggle, viewTitle);
+  }
+
+    public static void setTheme(Theme theme, ThemeList themeList) {
+    switch (theme) {
+      case DARK:
+        {
+          if (!themeList.contains(Lumo.DARK)) {
+            themeList.remove(Lumo.LIGHT); // Ensure dark theme is removed if present
+            themeList.add(Lumo.DARK);
+            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
+          }
+          break;
+        }
+      case LIGHT:
+        {
+          if (!themeList.contains(Lumo.LIGHT)) {
+            themeList.remove(Lumo.DARK); // Ensure dark theme is removed if present
+            themeList.add(Lumo.LIGHT);
+            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
+          }
+          break;
+        }
+    }
+  }
+
+  private void setThemeFromUser(User user, ThemeList themeList) {
+    if (user.getTheme() != null) {
+      setTheme(user.getTheme(), themeList);
+    }
+  }
+
   private String createTitle(Boolean allowBets) {
-      return "Poolio";
+    return "Poolio";
   }
 
   private SideNav createNavigation() {
