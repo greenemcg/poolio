@@ -367,6 +367,29 @@ public class TicketEditView extends VerticalLayout
     return true;
   }
 
+  private boolean canChangeGame(NflGame g) {
+    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
+      return false;
+    }
+
+    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
+    if (gamesNotStarted.isEmpty()) {
+      return false;
+    }
+
+    var firstGameNotStarted = gamesNotStarted.getFirst();
+    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
+
+    if (dayOfWeek == DayOfWeek.MONDAY) {
+      return false;
+    }
+
+    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
+      return false;
+
+    return true;
+  }
+
   private Component createGameSpan(NflTeam nflTeam, NflGame g) {
     if (g.getSpread() == null) return new Span(new Text(nflTeam.getFullName()));
 
