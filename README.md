@@ -3,6 +3,11 @@ Add timezone for games to users browser tz
 
 add change passwd and theme in user profile view
 
+RE-direct nginx to https
+
+
+
+
 
 
 

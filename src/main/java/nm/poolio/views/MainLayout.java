@@ -56,6 +56,9 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     this.accessChecker = accessChecker;
     this.poolService = poolService;
 
+    Optional<User> maybeUser = authenticatedUser.get();
+    maybeUser.ifPresent(value -> user = value);
+
     UI ui = UI.getCurrent();
     ui.addBeforeEnterListener(
         event -> {
@@ -66,39 +69,36 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
                   value -> {
                     ui.access(
                         () -> {
-                            processTheme(authenticatedUser, value, themeList);
+                          processTheme(authenticatedUser, value, themeList);
                         });
                   });
 
-          System.out.println("Global beforeEnter for " + event.getLocation().getPath());
+          System.out.println(
+              "View: "
+                  + event.getNavigationTarget().getSimpleName()
+                  + " - For User: "
+                  + (user == null ? null : user.getUserName()));
         });
-
-    Optional<User> maybeUser = authenticatedUser.get();
-    maybeUser.ifPresent(value -> user = value);
 
     setPrimarySection(Section.DRAWER);
     addDrawerContent();
     addHeaderContent();
   }
 
-    private void processTheme(AuthenticatedUser authenticatedUser, String value, ThemeList themeList) {
-        if (value != null) {
-          System.out.println("Retrieved from local storage: " + value);
+  private void processTheme(
+      AuthenticatedUser authenticatedUser, String value, ThemeList themeList) {
+    if (value != null) {
+      try {
+        Theme theme = Theme.valueOf(value);
+        setTheme(theme, themeList);
+      } catch (IllegalArgumentException e) {
+        WebStorage.removeItem(WebStorage.Storage.LOCAL_STORAGE, "theme");
+      }
 
-          try {
-            Theme theme = Theme.valueOf(value);
-            setTheme(theme, themeList);
-          } catch (IllegalArgumentException e) {
-            WebStorage.removeItem(WebStorage.Storage.LOCAL_STORAGE, "theme");
-          }
-
-        } else {
-          System.out.println("Item not found in local storage.");
-          authenticatedUser
-              .get()
-              .ifPresent(user -> setThemeFromUser(user, themeList));
-        }
+    } else {
+      authenticatedUser.get().ifPresent(user -> setThemeFromUser(user, themeList));
     }
+  }
 
   private void addDrawerContent() {
     Span appNameSpan = new Span("");
@@ -125,7 +125,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     addToNavbar(true, toggle, viewTitle);
   }
 
-    public static void setTheme(Theme theme, ThemeList themeList) {
+  public static void setTheme(Theme theme, ThemeList themeList) {
     switch (theme) {
       case DARK:
         {
