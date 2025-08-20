@@ -26,6 +26,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
             authorize
                 .requestMatchers(
                     new AntPathRequestMatcher("/images/*.png"),
+                    new AntPathRequestMatcher("/actuator/caches"),
                     new AntPathRequestMatcher("/icons/nfl/*.svg"),
                     new AntPathRequestMatcher("/images/*.jpeg"),
                     new AntPathRequestMatcher("/icons/*.ico"))
