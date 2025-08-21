@@ -15,6 +15,7 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.dom.Style;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.annotation.Nullable;
 import nm.poolio.enitities.score.GameScore;
 import nm.poolio.enitities.silly.SillyAnswer;
@@ -85,10 +86,12 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
     return new Span(teamToCheck.name());
   }
 
-  default void decorateTicketGrid(Ticket ticket, Map<String, GameScore> scores) {
+  default void decorateTicketGrid(Ticket ticket, Map<String, GameScore> scores, TimeZone timeZone) {
     Map<String, NflTeam> gamePicks = ticket.getSheet().getGamePicks();
     Map<String, OverUnder> overUnderPicks = ticket.getSheet().getOverUnderPicks();
     Map<String, SillyAnswer> sillies = ticket.getSheet().getSillyPicks();
+      String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
+
 
     getGrid()
         .addColumn(
@@ -186,8 +189,8 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
     getGrid()
         .addColumn(
             new LocalDateTimeRenderer<>(
-                NflGame::getLocalDateTime, () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
-        .setHeader(createIconSpan(GAME_TIME_ICON, "Game Time (EST)"))
+                NflGame::getLocalDateTimeWithZone, () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
+        .setHeader(createIconSpan(GAME_TIME_ICON, "Game Time (" + shortName + ")"))
         .setAutoWidth(true);
   }
 }

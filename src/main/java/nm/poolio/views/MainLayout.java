@@ -21,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+
+import java.time.Instant;
 import java.util.Optional;
 import java.util.TimeZone;
 import nm.poolio.Theme;
@@ -78,8 +80,8 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
             setTimeZone(ui);
           }
 
-          System.out.println(
-              "View: "
+          System. out.println( Instant.now().toString() +
+              " - View: "
                   + event.getNavigationTarget().getSimpleName()
                   + " - For User: "
                   + (user == null ? null : user.getUserName()));

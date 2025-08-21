@@ -18,6 +18,8 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -43,6 +45,7 @@ public class TicketView extends VerticalLayout
   private final User player;
   private final PoolService poolService;
   private final TicketUiService ticketUiService;
+  private final TimeZone timeZone;
 
   @Getter Grid<Ticket> grid = createGrid(Ticket.class);
   List<Ticket> allTickets = new ArrayList<>();
@@ -56,6 +59,7 @@ public class TicketView extends VerticalLayout
     player = authenticatedUser.get().orElseThrow();
     this.poolService = poolService;
     this.ticketUiService = ticketUiService;
+    timeZone = MainLayout.getTimeZone();
 
     var userPools = findPoolsForUser(player.getPoolIdNames(), poolService);
 
@@ -142,12 +146,13 @@ public class TicketView extends VerticalLayout
   }
 
   private void decorateGrid() {
-    decorateTicketGrid();
+    decorateTicketGrid(timeZone);
     getAllTickets();
   }
 
   private void getAllTickets() {
     allTickets = service.getAllTickets(player, Season.getCurrent());
+    allTickets.forEach( t-> t.setTimeZone(timeZone));
     grid.setItems(allTickets);
   }
 

@@ -12,6 +12,7 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.vaadin.PoolioGrid;
@@ -53,7 +54,9 @@ public interface TicketGrid extends PoolioGrid<Ticket> {
         .withProperty("season", pojo -> (pojo.getPool().getSeason().getDisplay()));
   }
 
-  default void decorateTicketGrid() {
+  default void decorateTicketGrid(TimeZone timeZone) {
+    String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
+
     getGrid()
         .addColumn(
             new ComponentRenderer<>(
@@ -82,9 +85,9 @@ public interface TicketGrid extends PoolioGrid<Ticket> {
 
     getGrid()
         .addColumn(getRenderer())
-        .setHeader(createIconSpan(CREATED_ICON, "Created (EST)"))
+        .setHeader(createIconSpan(CREATED_ICON, "Created (" + shortName + ")"))
         .setAutoWidth(true)
-        .setComparator(AbstractEntity::getCreatedDate);
+        .setComparator(AbstractEntity::getCreatedLocalDateTimeWithZone);
 
     createColumn(Ticket::getWeek, createIconSpan(WEEK_ICON, "Week"))
         .setComparator(t -> t.getWeek().getWeekNum());

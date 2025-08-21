@@ -143,7 +143,8 @@ public class TicketShowView extends VerticalLayout
 
     var scores = gameScoreService.getScores(weeklyGames);
 
-    decorateTicketGrid(ticket, scores);
+    decorateTicketGrid(ticket, scores, timeZone);
+    weeklyGames.forEach(g-> g.setTimeZone(timeZone));
     ticketGrid.setItems(weeklyGames);
 
     add(ticketGrid);

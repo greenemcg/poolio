@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.TimeZone;
 import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @Setter
 public abstract class AbstractEntity {
+  @JsonIgnore TimeZone timeZone;
+
   @Nullable
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
@@ -69,6 +72,17 @@ public abstract class AbstractEntity {
     try {
       ZoneId zone = ZoneId.of("America/New_York");
       return LocalDateTime.ofInstant(createdDate, zone);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @JsonIgnore
+  public LocalDateTime getCreatedLocalDateTimeWithZone() {
+    if (timeZone == null) return getCreatedLocalDateTime();
+
+    try {
+      return LocalDateTime.ofInstant(createdDate, timeZone.toZoneId());
     } catch (Exception e) {
       return null;
     }
