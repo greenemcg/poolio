@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 import java.time.Instant;
+import java.util.TimeZone;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -47,6 +48,8 @@ public class TicketShowView extends VerticalLayout
   private final NflGameScorerService nflGameScorerService;
   private final TicketScorerService ticketScorerService;
 
+  private final TimeZone timeZone;
+
   Ticket ticket;
   @Getter boolean errorFound = false;
 
@@ -69,6 +72,7 @@ public class TicketShowView extends VerticalLayout
     this.nflGameService = nflGameService;
     this.nflGameScorerService = nflGameScorerService;
     this.ticketScorerService = ticketScorerService;
+    timeZone = MainLayout.getTimeZone();
   }
 
   @Override
@@ -104,7 +108,7 @@ public class TicketShowView extends VerticalLayout
         nflGameService.getWeeklyGamesThursdayFiltered(
             ticket.getWeek(), ticket.getPool().isIncludeThursday());
 
-    add(createHeaderBadgesTop(ticket.getPool(), ticket));
+    add(createHeaderBadgesTop(ticket.getPool(), ticket, timeZone));
     add(createHeaderBadgesBottom(ticket));
 
     if (Instant.now().isAfter(weeklyGames.getFirst().getGameTime())) {

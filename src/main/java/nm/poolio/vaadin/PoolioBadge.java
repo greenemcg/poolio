@@ -10,6 +10,8 @@ import com.vaadin.flow.component.html.Span;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.ticket.Ticket;
 
+import java.util.TimeZone;
+
 public interface PoolioBadge extends PoolioAvatar {
 
   default Span createBadge(Span span) {
@@ -32,6 +34,12 @@ public interface PoolioBadge extends PoolioAvatar {
 
   default void createTicketBadge(Ticket ticket, HasComponents layout) {
     layout.add(createUserAvatar(ticket.getPlayer(), AvatarVariant.LUMO_SMALL));
-    // layout.add(createBadge(new Span(" " + ticket.getPlayer().getName())));
+     layout.add(createBadge(new Span(" " + ticket.getPlayer().getName())));
   }
+
+    default void createTimeZoneBadge(TimeZone timeZone, HasComponents layout) {
+        layout.add(createBadge(new Span(" ⏱ TimeZone:  " + timeZone.getDisplayName())));
+    }
+
+
 }

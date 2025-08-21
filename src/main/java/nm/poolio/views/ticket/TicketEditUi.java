@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.IntegerField;
 import java.util.Objects;
+import java.util.TimeZone;
 import javax.annotation.Nullable;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
@@ -182,11 +183,12 @@ public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAv
     }
   }
 
-  default HorizontalLayout createHeaderBadgesTop(Pool pool, Ticket ticket) {
+  default HorizontalLayout createHeaderBadgesTop(Pool pool, Ticket ticket, TimeZone timeZone) {
     var layout = new HorizontalLayout();
 
     createPoolBadge(pool, layout);
     createTicketBadge(ticket, layout);
+    createTimeZoneBadge(timeZone, layout);
 
     return layout;
   }

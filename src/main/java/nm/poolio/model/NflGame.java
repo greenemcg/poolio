@@ -8,10 +8,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import lombok.Data;
 import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.model.enums.League;
@@ -42,6 +40,9 @@ public class NflGame {
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
       timezone = "America/New_York")
   Instant gameTime;
+
+  @Nullable TimeZone timeZone;
+  ;
 
   public static League getLeague() {
     return League.NFL;
@@ -77,6 +78,17 @@ public class NflGame {
   public LocalDateTime getLocalDateTime() {
     try {
       return LocalDateTime.ofInstant(gameTime, ZoneId.of("America/New_York"));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @JsonIgnore
+  public LocalDateTime getLocalDateTimeWithZone() {
+    if (timeZone == null) return getLocalDateTime();
+
+    try {
+      return LocalDateTime.ofInstant(gameTime, timeZone.toZoneId());
     } catch (Exception e) {
       return null;
     }

@@ -22,6 +22,7 @@ import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.util.Optional;
+import java.util.TimeZone;
 import nm.poolio.Theme;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
@@ -73,6 +74,10 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
                         });
                   });
 
+          if (ui.getSession().getAttribute("tz") == null) {
+            setTimeZone(ui);
+          }
+
           System.out.println(
               "View: "
                   + event.getNavigationTarget().getSimpleName()
@@ -83,6 +88,29 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     setPrimarySection(Section.DRAWER);
     addDrawerContent();
     addHeaderContent();
+  }
+
+  public static void setTheme(Theme theme, ThemeList themeList) {
+    switch (theme) {
+      case DARK:
+        {
+          if (!themeList.contains(Lumo.DARK)) {
+            themeList.remove(Lumo.LIGHT); // Ensure dark theme is removed if present
+            themeList.add(Lumo.DARK);
+            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
+          }
+          break;
+        }
+      case LIGHT:
+        {
+          if (!themeList.contains(Lumo.LIGHT)) {
+            themeList.remove(Lumo.DARK); // Ensure dark theme is removed if present
+            themeList.add(Lumo.LIGHT);
+            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
+          }
+          break;
+        }
+    }
   }
 
   private void processTheme(
@@ -123,29 +151,6 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
     addToNavbar(true, toggle, viewTitle);
-  }
-
-  public static void setTheme(Theme theme, ThemeList themeList) {
-    switch (theme) {
-      case DARK:
-        {
-          if (!themeList.contains(Lumo.DARK)) {
-            themeList.remove(Lumo.LIGHT); // Ensure dark theme is removed if present
-            themeList.add(Lumo.DARK);
-            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
-          }
-          break;
-        }
-      case LIGHT:
-        {
-          if (!themeList.contains(Lumo.LIGHT)) {
-            themeList.remove(Lumo.DARK); // Ensure dark theme is removed if present
-            themeList.add(Lumo.LIGHT);
-            WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, "theme", theme.name());
-          }
-          break;
-        }
-    }
   }
 
   private void setThemeFromUser(User user, ThemeList themeList) {
@@ -238,5 +243,23 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
   private String getCurrentPageTitle() {
     PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
     return title == null ? "" : title.value();
+  }
+
+  public static TimeZone getTimeZone() {
+    UI ui = UI.getCurrent();
+
+    if (ui == null || ui.getSession().getAttribute("tz") == null) {
+      return TimeZone.getTimeZone("America/New_York");
+    }
+
+    return TimeZone.getTimeZone(ui.getSession().getAttribute("tz").toString());
+  }
+
+  private void setTimeZone(UI ui) {
+    ui.getPage()
+        .retrieveExtendedClientDetails(
+            details -> {
+              ui.getSession().setAttribute("tz", details.getTimeZoneId());
+            });
   }
 }

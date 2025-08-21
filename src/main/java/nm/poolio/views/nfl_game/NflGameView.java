@@ -20,6 +20,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,7 @@ public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDi
   private final AuthenticatedUser authenticatedUser;
   private final PoolService poolService;
   private final NflGameScorerService nflGameScorerService;
+  private final TimeZone timeZone;
   Dialog sillyDialog = new Dialog();
   @Getter Grid<NflGame> grid = createGrid(NflGame.class);
 
@@ -61,6 +63,8 @@ public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDi
     this.nflGameScorerService = nflGameScorerService;
     setHeight("100%");
 
+    timeZone = MainLayout.getTimeZone();
+
     decorateGrid();
 
     setPadding(true);
@@ -69,8 +73,10 @@ public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDi
   }
 
   private void decorateGrid() {
-    decoratePoolGrid();
+    decorateGameGrid(timeZone);
     var games = nflGameScorerService.getAllGames();
+
+    games.forEach(g-> g.setTimeZone(timeZone));
 
     grid.setItems(games);
 
@@ -90,11 +96,11 @@ public class NflGameView extends VerticalLayout implements NflGameGrid, PoolioDi
         if (optionalPool.isPresent()) {
 
           var week = optionalPool.get().getWeek().getWeekNum();
-          var optionalGame = games.stream().filter(g -> g.getWeek() == week).findFirst();
+         // var optionalGame = games.stream().filter(g -> g.getWeek() == week).findFirst();
 
           AtomicInteger atomicInteger = new AtomicInteger(0);
 
-            for (NflGame g : games) {
+          for (NflGame g : games) {
             if (g.getWeek() == week) break;
             else atomicInteger.set(atomicInteger.get() + 1);
           }

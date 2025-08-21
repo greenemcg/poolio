@@ -7,6 +7,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
+
 import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflWeek;
 import nm.poolio.vaadin.PoolioAvatar;
@@ -14,8 +16,11 @@ import nm.poolio.vaadin.PoolioGrid;
 
 public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
 
-  default void decoratePoolGrid() {
-    getGrid()
+  default void decorateGameGrid(TimeZone timeZone ) {
+
+      String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
+
+      getGrid()
         .addColumn(new ComponentRenderer<>(game -> createTeamComponent(game.getAwayTeam(), game)))
         .setHeader(createIconSpan(AWAY_ICON, "Away"))
         .setAutoWidth(true)
@@ -44,9 +49,10 @@ public interface NflGameGrid extends PoolioGrid<NflGame>, PoolioAvatar {
     getGrid()
         .addColumn(
             new LocalDateTimeRenderer<>(
-                NflGame::getLocalDateTime, () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
-        .setHeader(createIconSpan(GAME_TIME_ICON, "Game Time (EST)"))
+                NflGame::getLocalDateTimeWithZone, () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
+        .setHeader(createIconSpan(GAME_TIME_ICON, "Game Time (" + shortName + ")"))
         .setAutoWidth(true);
+
 
     // createColumn(NflGame::getFullId, createIconSpan(ID_ICON, "Id"));
   }

@@ -27,6 +27,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +67,7 @@ public class TicketEditView extends VerticalLayout
   private final NflGameService nflGameService;
   @Getter private final TicketService ticketService;
   private final TicketUiService ticketUiService;
-
+  private final TimeZone timeZone;
   IntegerField tieBreakerFiled;
   Pool pool;
   Ticket ticket;
@@ -84,6 +85,8 @@ public class TicketEditView extends VerticalLayout
     this.ticketService = ticketService;
     this.authenticatedUser = authenticatedUser;
     this.ticketUiService = ticketUiService;
+
+    timeZone = MainLayout.getTimeZone();
   }
 
   @Override
@@ -140,32 +143,12 @@ public class TicketEditView extends VerticalLayout
   }
 
   private void createTicketUI() {
-    add(createHeaderBadgesTop(pool, ticket));
+    add(createHeaderBadgesTop(pool, ticket, timeZone));
 
     add(
         new Paragraph(
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            "If game has a a point spread and a team listed as a favored, the winner will be determined by this point spread, "
-                + "and the final point spread will be the point spread at game time. We will use the score as our reference "
+            "If a game has a point spread and a team listed as a favorite, the winner will be determined by this point spread. "
+                + "The final point spread will be the point spread at game time. We will use the score as our reference. "
                 + " https://www.thescore.com/nfl/events/"));
 
     var games = nflGameService.getWeeklyGamesForPool(pool);
@@ -288,8 +271,10 @@ public class TicketEditView extends VerticalLayout
     RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
 
     radioGroup.setHelperComponent(createHelperSpread(g));
+    g.setTimeZone(timeZone);
 
-    var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTime());
+
+    var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTimeWithZone());
     radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
     radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
     radioGroup.setRequired(true);
@@ -367,28 +352,28 @@ public class TicketEditView extends VerticalLayout
     return true;
   }
 
-//  private boolean canChangeGame(NflGame g) {
-//    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
-//      return false;
-//    }
-//
-//    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
-//    if (gamesNotStarted.isEmpty()) {
-//      return false;
-//    }
-//
-//    var firstGameNotStarted = gamesNotStarted.getFirst();
-//    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
-//
-//    if (dayOfWeek == DayOfWeek.MONDAY) {
-//      return false;
-//    }
-//
-//    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
-//      return false;
-//
-//    return true;
-//  }
+  //  private boolean canChangeGame(NflGame g) {
+  //    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
+  //      return false;
+  //    }
+  //
+  //    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
+  //    if (gamesNotStarted.isEmpty()) {
+  //      return false;
+  //    }
+  //
+  //    var firstGameNotStarted = gamesNotStarted.getFirst();
+  //    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
+  //
+  //    if (dayOfWeek == DayOfWeek.MONDAY) {
+  //      return false;
+  //    }
+  //
+  //    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
+  //      return false;
+  //
+  //    return true;
+  //  }
 
   private Component createGameSpan(NflTeam nflTeam, NflGame g) {
     if (g.getSpread() == null) return new Span(new Text(nflTeam.getFullName()));
