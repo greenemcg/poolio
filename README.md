@@ -1,5 +1,5 @@
 
-Add timezone for games to users browser tz
+
 
 add change passwd and theme in user profile view
 
@@ -11,9 +11,10 @@ RE-direct nginx to https
 
 
 
+
 ======= clean up this shite
 HEmal thurs
-mano a mano 
+mano a mano when player submits ticket create spring event
 and bets 
 
 SIlly Builder

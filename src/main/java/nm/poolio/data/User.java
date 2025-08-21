@@ -47,6 +47,7 @@ public class User extends AbstractEntity implements AvatarImageBytes {
   @Size(min = 2, max = 255)
   private String name;
 
+  @Nullable
   @Enumerated(EnumType.STRING)
   private Theme theme;
 

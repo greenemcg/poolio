@@ -22,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TimeZone;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,7 @@ import org.apache.commons.lang3.BooleanUtils;
 public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTransactionGrid {
   private final PoolService poolService;
   private final PoolioTransactionService poolioTransactionService;
+  private final TimeZone timeZone;
   @Getter Grid<PoolioTransaction> grid = createGrid(PoolioTransaction.class);
   @Getter User user;
 
@@ -58,6 +61,8 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
       PoolioTransactionService poolioTransactionService1) {
 
     this.poolioTransactionService = poolioTransactionService1;
+    timeZone = MainLayout.getTimeZone();
+
     setSpacing(false);
     setHeight("100%");
 
@@ -129,8 +134,9 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
                 new Span(createBoldSpan("Roles: "), new Span("" + roles))));
       else add(new Paragraph(poolSpan));
 
-      ZoneId zone = ZoneId.of("America/New_York");
-      var localDateTime = LocalDateTime.ofInstant(poolService.getBuildProperties().getTime(), zone);
+      // ZoneId zone = ZoneId.of("America/New_York");
+      var localDateTime =
+          LocalDateTime.ofInstant(poolService.getBuildProperties().getTime(), timeZone.toZoneId());
 
       add(
           new Div(
@@ -176,10 +182,11 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
   }
 
   private void decorateGrid() {
-    decorateTransactionGrid();
+    decorateTransactionGrid(timeZone);
 
     var trans = poolioTransactionService.findAllPoolioTransactionsForUser(user);
     trans.sort(Comparator.comparing(PoolioTransaction::getCreatedDate).reversed());
+    trans.forEach(t -> t.setTimeZone(timeZone));
     grid.setItems(trans);
 
     temporalAmountColumn.setVisible(false);

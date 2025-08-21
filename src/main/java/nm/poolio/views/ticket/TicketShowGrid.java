@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import javax.annotation.Nullable;
 import nm.poolio.enitities.score.GameScore;
 import nm.poolio.enitities.silly.SillyAnswer;
+import nm.poolio.enitities.silly.SillyPicks;
 import nm.poolio.enitities.silly.SillyQuestion;
 import nm.poolio.enitities.ticket.Ticket;
 import nm.poolio.model.NflGame;
@@ -28,79 +29,21 @@ import nm.poolio.vaadin.PoolioGrid;
 import org.springframework.util.CollectionUtils;
 
 public interface TicketShowGrid extends PoolioGrid<NflGame> {
-  Grid<NflGame> getTicketGrid();
-
-  @Override
-  default Grid<NflGame> getGrid() {
-    return getTicketGrid();
-  }
-
-  private Icon createIcon(VaadinIcon vaadinIcon) {
-    Icon icon = vaadinIcon.create();
-    icon.getStyle().set("padding", "var(--lumo-space-xs)");
-    return icon;
-  }
-
-  private Component createWinnerComponent(Boolean pickCorrect) {
-    if (pickCorrect == null) return new Span("");
-    return createIcon(pickCorrect ? VaadinIcon.PLUS : VaadinIcon.MINUS);
-  }
-
-  private void createWinnerText(Boolean pickCorrect, Style style) {
-    if (pickCorrect == null) style.set("font-style", "oblique");
-    else if (!pickCorrect) style.set("text-decoration", "line-through");
-  }
-
-  private Component createStylesTeamComponent(
-      NflGame nflGame,
-      @Nullable NflTeam teamToCheck,
-      Map<String, NflTeam> gamePicks,
-      Map<String, GameScore> scores) {
-
-    var pickedTeam = gamePicks.get(nflGame.getId());
-    if (teamToCheck == null) return new Span("");
-
-    if (pickedTeam != null) {
-      var gameScore = scores.get(nflGame.getId());
-      Boolean pickedCorrectly = null;
-
-      if (gameScore != null
-          && gameScore.getHomeScore() != null
-          && gameScore.getAwayScore() != null) {
-        nflGame.setHomeScore(gameScore.getHomeScore());
-        nflGame.setAwayScore(gameScore.getAwayScore());
-        pickedCorrectly = nflGame.findWinner() == teamToCheck;
-      }
-
-      Span confirmed2 =
-          new Span(new Span(teamToCheck.name()), createWinnerComponent(pickedCorrectly));
-      if (pickedTeam == teamToCheck) {
-        if (Boolean.FALSE.equals(pickedCorrectly))
-          confirmed2.getElement().getStyle().set("color", "red");
-        else confirmed2.getElement().getStyle().set("font-weight", "bold");
-      }
-      createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
-      return confirmed2;
-    }
-
-    return new Span(teamToCheck.name());
-  }
-
   default void decorateTicketGrid(Ticket ticket, Map<String, GameScore> scores, TimeZone timeZone) {
     Map<String, NflTeam> gamePicks = ticket.getSheet().getGamePicks();
     Map<String, OverUnder> overUnderPicks = ticket.getSheet().getOverUnderPicks();
     Map<String, SillyAnswer> sillies = ticket.getSheet().getSillyPicks();
-      String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
-
+    String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
 
     getGrid()
         .addColumn(
             new ComponentRenderer<>(
-                game -> createStylesTeamComponent(game, game.getAwayTeam(), gamePicks, scores)))
+                game ->
+                    createStylesTeamComponent(game, game.getAwayTeam(), gamePicks, scores, false)))
         .setHeader(createIconSpan(AWAY_ICON, "Away"))
-        .setWidth("86px")
-        .setFlexGrow(0)
-        .setTextAlign(ColumnTextAlign.CENTER);
+        .setWidth("100px")
+        .setTextAlign(ColumnTextAlign.START)
+        .setFlexGrow(0);
 
     if (!CollectionUtils.isEmpty(scores))
       createColumn(NflGame::getAwayScore, createIconSpan(AWAY_ICON, "Score"))
@@ -110,11 +53,12 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
     getGrid()
         .addColumn(
             new ComponentRenderer<>(
-                game -> createStylesTeamComponent(game, game.getHomeTeam(), gamePicks, scores)))
+                game ->
+                    createStylesTeamComponent(game, game.getHomeTeam(), gamePicks, scores, true)))
         .setHeader(createIconSpan(HOME_ICON, "Home"))
-        .setWidth("86px")
-        .setFlexGrow(0)
-        .setTextAlign(ColumnTextAlign.CENTER);
+        .setWidth("100px")
+        .setTextAlign(ColumnTextAlign.START)
+        .setFlexGrow(0);
 
     if (!CollectionUtils.isEmpty(scores))
       createColumn(NflGame::getHomeScore, createIconSpan(HOME_ICON, "Score"))
@@ -189,8 +133,90 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
     getGrid()
         .addColumn(
             new LocalDateTimeRenderer<>(
-                NflGame::getLocalDateTimeWithZone, () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
+                NflGame::getLocalDateTimeWithZone,
+                () -> DateTimeFormatter.ofPattern("E, MMM d, h:mm a")))
         .setHeader(createIconSpan(GAME_TIME_ICON, "Game Time (" + shortName + ")"))
         .setAutoWidth(true);
+  }
+
+  @Override
+  default Grid<NflGame> getGrid() {
+    return getTicketGrid();
+  }
+
+  private Component createStylesTeamComponent(
+      NflGame nflGame,
+      @Nullable NflTeam teamToCheck,
+      Map<String, NflTeam> gamePicks,
+      Map<String, GameScore> scores,
+      boolean isHomeTeam) {
+
+    var pickedTeam = gamePicks.get(nflGame.getId());
+    if (teamToCheck == null) return new Span("");
+
+    if (pickedTeam != null) {
+      var gameScore = scores.get(nflGame.getId());
+      Boolean pickedCorrectly = null;
+
+      if (gameScore != null
+          && gameScore.getHomeScore() != null
+          && gameScore.getAwayScore() != null) {
+        nflGame.setHomeScore(gameScore.getHomeScore());
+        nflGame.setAwayScore(gameScore.getAwayScore());
+        pickedCorrectly = nflGame.findWinner() == teamToCheck;
+      }
+
+      String spread = "";
+      if (nflGame.getSpread() != null) {
+
+        if (nflGame.getSpread() < 0 && isHomeTeam) {
+          spread = " " + nflGame.getSpread() + " ";
+        }
+
+        if (nflGame.getSpread() > 0 && !isHomeTeam) {
+          spread = " " + (-1 * nflGame.getSpread()) + " ";
+        }
+      }
+
+
+        String mark = "✘ ";
+        if (pickedTeam == teamToCheck) {
+            mark = "✔ ";
+        }
+
+
+
+      Span confirmed2 =
+          new Span(new Span( mark + teamToCheck.name() + spread), createWinnerComponent(pickedCorrectly));
+      if (pickedTeam == teamToCheck) {
+        if (Boolean.FALSE.equals(pickedCorrectly))
+          confirmed2.getElement().getStyle().set("color", "red");
+        else {
+            confirmed2.getElement().getStyle().set("font-weight", "bold");
+        }
+      }
+      createWinnerText(pickedCorrectly, confirmed2.getElement().getStyle());
+      return confirmed2;
+    }
+
+    return new Span(teamToCheck.name());
+  }
+
+  Grid<NflGame> getTicketGrid();
+
+  private Component createWinnerComponent(Boolean pickCorrect) {
+    if (pickCorrect == null) return new Span("");
+    return createIcon(pickCorrect ? VaadinIcon.PLUS : VaadinIcon.MINUS);
+  }
+
+  private void createWinnerText(Boolean pickCorrect, Style style) {
+    if (pickCorrect == null) style.set("font-style", "oblique");
+    else if (!pickCorrect) style.set("text-decoration", "line-through");
+  }
+
+  private Icon createIcon(VaadinIcon vaadinIcon) {
+    Icon icon = vaadinIcon.create();
+    icon.getStyle().set("padding", "var(--lumo-space-xs)");
+    return icon;
   }
 }

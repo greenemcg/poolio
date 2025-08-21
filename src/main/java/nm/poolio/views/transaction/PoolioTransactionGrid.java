@@ -9,6 +9,7 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import javax.annotation.Nullable;
 import nm.poolio.data.AbstractEntity;
 import nm.poolio.data.User;
@@ -17,16 +18,6 @@ import nm.poolio.vaadin.PoolioGrid;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
-  default @Nullable User getUser() {
-    return null;
-  }
-
-  void setTemporalAmountColumn(Column<PoolioTransaction> column);
-
-  void setSequenceColumn(Column<PoolioTransaction> column);
-
-  void setPayAsYouGoColumn(Column<PoolioTransaction> column);
-
   private Renderer<PoolioTransaction> createCreditUserRenderer() {
     return LitRenderer.<PoolioTransaction>of(getUserTemplateExpression())
         .withProperty("pictureUrl", pojo -> createUserPictureUrl(pojo.getCreditUser()))
@@ -52,7 +43,8 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
                     : t.getPayAsYouGoUser().getName()));
   }
 
-  default void decorateTransactionGrid() {
+  default void decorateTransactionGrid(TimeZone timeZone) {
+    String shortName = timeZone.getDisplayName(false, TimeZone.SHORT);
 
     var sequenceColumn =
         createColumn(
@@ -101,9 +93,9 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
     getGrid()
         .addColumn(
             new LocalDateTimeRenderer<>(
-                PoolioTransaction::getCreatedLocalDateTime,
+                PoolioTransaction::getCreatedLocalDateTimeWithZone,
                 () -> DateTimeFormatter.ofPattern("MMM d, h:mm a")))
-        .setHeader(createIconSpan(CREATED_ICON, "Created (EST)"))
+        .setHeader(createIconSpan(CREATED_ICON, "Created (" + shortName + ")"))
         .setAutoWidth(true)
         .setComparator(AbstractEntity::getCreatedDate);
 
@@ -115,4 +107,14 @@ public interface PoolioTransactionGrid extends PoolioGrid<PoolioTransaction> {
         .getStyle()
         .set("font-size", "small");
   }
+
+  void setSequenceColumn(Column<PoolioTransaction> column);
+
+  default @Nullable User getUser() {
+    return null;
+  }
+
+  void setPayAsYouGoColumn(Column<PoolioTransaction> column);
+
+  void setTemporalAmountColumn(Column<PoolioTransaction> column);
 }

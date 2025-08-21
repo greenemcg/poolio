@@ -1,12 +1,12 @@
 @import url('./main-layout.css');
 
 
-vaadin-grid::part(header-cell) {
-    background-color: floralwhite;
-    font-size: medium;
-    font-weight: bold;
-    color: black;
-}
+/*vaadin-grid::part(header-cell) {*/
+/*    background-color: floralwhite;*/
+/*    font-size: medium;*/
+/*    font-weight: bold;*/
+/*    color: black;*/
+/*}*/
 
 vaadin-input-field-label-font-weight {
     font-weight: bold;

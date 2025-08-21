@@ -16,10 +16,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
@@ -48,6 +46,7 @@ public class PoolioTransactionView extends VerticalLayout
   @Getter private final AuthenticatedUser authenticatedUser;
   private final PoolioTransactionService service;
   private final UserService userService;
+    private final TimeZone timeZone;
 
   @Setter Column<PoolioTransaction> temporalAmountColumn;
   @Setter Column<PoolioTransaction> sequenceColumn;
@@ -76,6 +75,9 @@ public class PoolioTransactionView extends VerticalLayout
     this.authenticatedUser = authenticatedUser;
     this.service = service;
     this.userService = userService;
+
+    timeZone = MainLayout.getTimeZone();
+
     setHeight("100%");
     binder.bindInstanceFields(this);
 
@@ -156,7 +158,7 @@ public class PoolioTransactionView extends VerticalLayout
   }
 
   private void decorateGrid() {
-    decorateTransactionGrid();
+    decorateTransactionGrid(timeZone);
 
     grid.setItems(service.findAllPoolioTransactions());
   }

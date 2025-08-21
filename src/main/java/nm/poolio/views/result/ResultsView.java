@@ -86,9 +86,8 @@ public class ResultsView extends VerticalLayout
   Span poolInfoSpan = new Span("Pool Value: $");
   Span poolDuplicateSpan = new Span("No Duplicates");
   Details details = new Details();
-  private NflWeek week;
-
   Registration broadcasterRegistration;
+  private NflWeek week;
 
   public ResultsView(
       AuthenticatedUser authenticatedUser,
@@ -366,11 +365,11 @@ public class ResultsView extends VerticalLayout
                                   String correctAnswer =
                                       game.getSillyAnswers().get(sillyQuestion.getId());
 
-                                    if (correctAnswer.equals(sillyAnswer.getAnswer())) {
-                                      div.getStyle().set("font-weight", "bolder");
-                                    } else {
-                                      div.getStyle().set("text-decoration", "line-through");
-                                    }
+                                  if (correctAnswer.equals(sillyAnswer.getAnswer())) {
+                                    div.getStyle().set("font-weight", "bolder");
+                                  } else {
+                                    div.getStyle().set("text-decoration", "line-through");
+                                  }
                                 }
                               }
                               return div;
@@ -457,10 +456,24 @@ public class ResultsView extends VerticalLayout
   }
 
   private Component createHeader(NflGame game) {
+
     Span span = new Span();
+
+    if (game.getSpread() != null && game.getSpread() > 0) {
+      Span boldTextSpan = new Span("" + (game.getSpread() * -1));
+      boldTextSpan.getElement().getStyle().set("font-weight", "bold");
+      span.add(boldTextSpan);
+    }
+
     span.add(createNflTeamAvatar(game.getAwayTeam(), AvatarVariant.LUMO_XSMALL));
     span.add("v");
     span.add(createNflTeamAvatar(game.getHomeTeam(), AvatarVariant.LUMO_XSMALL));
+
+    if (game.getSpread() != null && game.getSpread() < 0) {
+      Span boldTextSpan = new Span("" + game.getSpread());
+      boldTextSpan.getElement().getStyle().set("font-weight", "bold");
+      span.add(boldTextSpan);
+    }
 
     if (game.getOverUnder() != null) {
       span.add(new Span(" - " + game.getOverUnder()));
