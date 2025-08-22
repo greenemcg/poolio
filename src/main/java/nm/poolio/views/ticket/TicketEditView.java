@@ -324,12 +324,12 @@ public class TicketEditView extends VerticalLayout
   private Component createHelperSpread(NflGame g) {
     if (g.getSpread() == null) return new Span(new Text("PICK EM"));
 
-    return g.getSpread() > 0.0
+    return g.getSpread() < 0.0
         ? createSpreadSpan(g.getHomeTeam(), g.getSpread())
-        : createSpreadSpan(g.getAwayTeam(), -g.getSpread());
+        : createSpreadSpan(g.getAwayTeam(), g.getSpread());
   }
 
-  private boolean canChangeGame(NflGame g) {
+  private  boolean canChangeGame(NflGame g) {
     if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
       return false;
     }
@@ -392,6 +392,6 @@ public class TicketEditView extends VerticalLayout
   }
 
   private Span createSpreadSpan(NflTeam team, double spread) {
-    return new Span(new Text(team.name() + " favored by " + spread + " points."));
+    return new Span(new Text(team.name() + " favored by " + Math.abs(spread) + " points."));
   }
 }
