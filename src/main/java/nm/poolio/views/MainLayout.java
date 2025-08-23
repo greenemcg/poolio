@@ -23,6 +23,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.TimeZone;
 import nm.poolio.Theme;
@@ -80,7 +82,7 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
             setTimeZone(ui);
           }
 
-          System. out.println( Instant.now().toString() +
+          System. out.println( ZonedDateTime.now().format(DateTimeFormatter.ISO_TIME) +
               " - View: "
                   + event.getNavigationTarget().getSimpleName()
                   + " - For User: "

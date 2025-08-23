@@ -41,7 +41,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
                 game ->
                     createStylesTeamComponent(game, game.getAwayTeam(), gamePicks, scores, false)))
         .setHeader(createIconSpan(AWAY_ICON, "Away"))
-        .setWidth("100px")
+        .setWidth("110px")
         .setTextAlign(ColumnTextAlign.START)
         .setFlexGrow(0);
 
@@ -56,7 +56,7 @@ public interface TicketShowGrid extends PoolioGrid<NflGame> {
                 game ->
                     createStylesTeamComponent(game, game.getHomeTeam(), gamePicks, scores, true)))
         .setHeader(createIconSpan(HOME_ICON, "Home"))
-        .setWidth("100px")
+        .setWidth("110px")
         .setTextAlign(ColumnTextAlign.START)
         .setFlexGrow(0);
 
