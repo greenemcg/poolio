@@ -2,7 +2,7 @@ app:
   allowBets: true
 
 server:
-  port:  9090
+  port: 9090
 
 spring:
   datasource:

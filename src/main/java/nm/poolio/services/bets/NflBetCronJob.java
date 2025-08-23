@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class NflBetCronJob {
-  private final NflOpenBetProcessor nflOpenBetProcessor;
-  private final NflPendingBetProcessor nflPendingBetProcessor;
+    private final NflOpenBetProcessor nflOpenBetProcessor;
+    private final NflPendingBetProcessor nflPendingBetProcessor;
 
-  @Scheduled(cron = "0 */1 * * * *")
-  void cleanBets() {
-    nflOpenBetProcessor.process();
-    nflPendingBetProcessor.process();
-  }
+    @Scheduled(cron = "0 */1 * * * *")
+    void cleanBets() {
+        nflOpenBetProcessor.process();
+        nflPendingBetProcessor.process();
+    }
 }
 

@@ -10,4 +10,5 @@ import nm.poolio.views.MainLayout;
 @Route(value = "userTransactions", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 @Slf4j
-public class UserPoolioTransactionView {}
+public class UserPoolioTransactionView {
+}

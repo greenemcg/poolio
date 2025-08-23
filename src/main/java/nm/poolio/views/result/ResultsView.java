@@ -1,7 +1,5 @@
 package nm.poolio.views.result;
 
-import static nm.poolio.utils.VaddinUtils.*;
-
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.DetachEvent;
@@ -25,12 +23,6 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -46,7 +38,6 @@ import nm.poolio.model.NflGame;
 import nm.poolio.model.enums.NflTeam;
 import nm.poolio.model.enums.NflWeek;
 import nm.poolio.model.enums.OverUnder;
-import nm.poolio.model.enums.PoolStatus;
 import nm.poolio.push.Broadcaster;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.NflGameScorerService;
@@ -60,6 +51,14 @@ import nm.poolio.views.MainLayout;
 import nm.poolio.views.ticket.TicketShowGrid;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static nm.poolio.utils.VaddinUtils.SILLY_QUESTION;
+import static nm.poolio.utils.VaddinUtils.createIconSpan;
 
 @PageTitle("Results \uD83D\uDCC3")
 @Route(value = "result", layout = MainLayout.class)

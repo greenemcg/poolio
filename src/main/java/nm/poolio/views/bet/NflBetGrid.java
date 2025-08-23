@@ -1,7 +1,5 @@
 package nm.poolio.views.bet;
 
-import static nm.poolio.utils.VaddinUtils.*;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -12,121 +10,123 @@ import nm.poolio.model.enums.NflTeam;
 import nm.poolio.services.NflGameService;
 import nm.poolio.vaadin.PoolioGrid;
 
+import static nm.poolio.utils.VaddinUtils.*;
+
 public interface NflBetGrid extends PoolioGrid<GameBet>, BetUtils {
 
-  NflGameService getNflGameService();
+    NflGameService getNflGameService();
 
-  User getPlayer();
+    User getPlayer();
 
-  private Component createOtherTeamPickedSpan(GameBet gameBet) {
-    var t = getNflTeamNotPicked(gameBet, gameBet.getGame());
+    private Component createOtherTeamPickedSpan(GameBet gameBet) {
+        var t = getNflTeamNotPicked(gameBet, gameBet.getGame());
 
-    var winningTeam = gameBet.getGame().findWinnerSpread(gameBet.getSpread());
+        var winningTeam = gameBet.getGame().findWinnerSpread(gameBet.getSpread());
 
-    if (winningTeam == NflTeam.TBD) {
-      return new Span(t.toString());
+        if (winningTeam == NflTeam.TBD) {
+            return new Span(t.toString());
+        }
+
+        if (winningTeam == NflTeam.TIE) {
+            Span span = new Span();
+            span.getStyle().set("font-style", "italic");
+            span.add(t.toString() + "-TIE");
+            return span;
+        }
+
+        Span span = new Span();
+        if (winningTeam == t) {
+            span.getStyle().set("font-weight", "bold");
+            span.add(t.toString() + "-WIN");
+        } else {
+            span.getStyle().set("text-decoration", "line-through");
+            span.add(t.toString());
+        }
+        return span;
     }
 
-    if (winningTeam == NflTeam.TIE) {
-      Span span = new Span();
-      span.getStyle().set("font-style", "italic");
-      span.add(t.toString() + "-TIE");
-      return span;
+    private Component createGameSpan(GameBet gameBet) {
+        var game = gameBet.getGame();
+        Span span = new Span();
+
+        span.add(createGameWithSpreadString(gameBet, game));
+
+        return span;
     }
 
-    Span span = new Span();
-    if (winningTeam == t) {
-      span.getStyle().set("font-weight", "bold");
-      span.add(t.toString() + "-WIN");
-    } else {
-      span.getStyle().set("text-decoration", "line-through");
-      span.add(t.toString());
+    private Component createPlayersComponent(GameBet gameBet) {
+        Div div = new Div();
+        createPlayersDiv(div, gameBet);
+        return div;
     }
-    return span;
-  }
 
-  private Component createGameSpan(GameBet gameBet) {
-    var game = gameBet.getGame();
-    Span span = new Span();
+    private Component amountAvailSpan(GameBet gameBet) {
+        return new Span(gameBet.getBetCanBeSplit() ? createAmountAvailableString(gameBet) : "N/A");
+    }
 
-    span.add(createGameWithSpreadString(gameBet, game));
+    default void decorateTransactionGrid(boolean isProposal) {
 
-    return span;
-  }
+        getGrid().setDetailsVisibleOnClick(false);
 
-  private Component createPlayersComponent(GameBet gameBet) {
-    Div div = new Div();
-    createPlayersDiv(div, gameBet);
-    return div;
-  }
+        if (!isProposal)
+            getGrid()
+                    .addColumn(
+                            new ComponentRenderer<>(
+                                    transaction -> createUserComponent(transaction.getProposer())))
+                    .setHeader(createIconSpan(BET_ICON, "Creator"))
+                    .setAutoWidth(true)
+                    .setFrozen(true)
+                    .setFlexGrow(0);
 
-  private Component amountAvailSpan(GameBet gameBet) {
-    return new Span(gameBet.getBetCanBeSplit() ? createAmountAvailableString(gameBet) : "N/A");
-  }
+        if (isProposal)
+            getGrid()
+                    .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + gameBet.getAmount())))
+                    .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
+                    .setAutoWidth(true);
+        else
+            getGrid()
+                    .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + getPlayerAmount(gameBet))))
+                    .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
+                    .setAutoWidth(true);
 
-  default void decorateTransactionGrid(boolean isProposal) {
+        getGrid()
+                .addColumn(new ComponentRenderer<>(this::createGameSpan))
+                .setHeader(createIconSpan(GAMES_ICON, "Game"))
+                .setAutoWidth(true)
+                .setComparator(GameBet::getWeek);
 
-    getGrid().setDetailsVisibleOnClick(false);
+        if (isProposal) createColumn(GameBet::getTeamPicked, createIconSpan(POOLIO_ICON, "Pick"));
+        else
+            getGrid()
+                    .addColumn(new ComponentRenderer<>(this::createOtherTeamPickedSpan))
+                    .setHeader(createIconSpan(POOLIO_ICON, "Pick"))
+                    .setAutoWidth(true);
 
-    if (!isProposal)
-      getGrid()
-          .addColumn(
-              new ComponentRenderer<>(
-                  transaction -> createUserComponent(transaction.getProposer())))
-          .setHeader(createIconSpan(BET_ICON, "Creator"))
-          .setAutoWidth(true)
-          .setFrozen(true)
-          .setFlexGrow(0);
+        createColumn(GameBet::getStatus, createIconSpan(STATUS_ICON, "Status"));
 
-    if (isProposal)
-      getGrid()
-          .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + gameBet.getAmount())))
-          .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
-          .setAutoWidth(true);
-    else
-      getGrid()
-          .addColumn(new ComponentRenderer<>(gameBet -> new Span("$" + getPlayerAmount(gameBet))))
-          .setHeader(createIconSpan(AMOUNT_ICON, "$ AMT"))
-          .setAutoWidth(true);
+        getGrid()
+                .addColumn(new ComponentRenderer<>(this::createPlayersComponent))
+                .setHeader(createIconSpan(PLAYERS_ICON, "Player(s)"))
+                .setAutoWidth(true)
+                .setComparator(GameBet::getWeek);
 
-    getGrid()
-        .addColumn(new ComponentRenderer<>(this::createGameSpan))
-        .setHeader(createIconSpan(GAMES_ICON, "Game"))
-        .setAutoWidth(true)
-        .setComparator(GameBet::getWeek);
+        createColumn(GameBet::getBetCanBeSplit, createIconSpan(SPLIT_ICON, "Split"));
 
-    if (isProposal) createColumn(GameBet::getTeamPicked, createIconSpan(POOLIO_ICON, "Pick"));
-    else
-      getGrid()
-          .addColumn(new ComponentRenderer<>(this::createOtherTeamPickedSpan))
-          .setHeader(createIconSpan(POOLIO_ICON, "Pick"))
-          .setAutoWidth(true);
+        if (isProposal)
+            getGrid()
+                    .addColumn(new ComponentRenderer<>(this::amountAvailSpan))
+                    .setHeader(createIconSpan(GAMES_ICON, "$ Avail"))
+                    .setAutoWidth(true);
+    }
 
-    createColumn(GameBet::getStatus, createIconSpan(STATUS_ICON, "Status"));
+    private Integer getPlayerAmount(GameBet gameBet) {
 
-    getGrid()
-        .addColumn(new ComponentRenderer<>(this::createPlayersComponent))
-        .setHeader(createIconSpan(PLAYERS_ICON, "Player(s)"))
-        .setAutoWidth(true)
-        .setComparator(GameBet::getWeek);
+        var o =
+                gameBet.getAcceptorTransactions().stream()
+                        .filter(t -> t.getCreditUser().equals(getPlayer()))
+                        .findFirst()
+                        .map(t -> t.getAmount());
 
-    createColumn(GameBet::getBetCanBeSplit, createIconSpan(SPLIT_ICON, "Split"));
-
-    if (isProposal)
-      getGrid()
-          .addColumn(new ComponentRenderer<>(this::amountAvailSpan))
-          .setHeader(createIconSpan(GAMES_ICON, "$ Avail"))
-          .setAutoWidth(true);
-  }
-
-  private Integer getPlayerAmount(GameBet gameBet) {
-
-    var o =
-        gameBet.getAcceptorTransactions().stream()
-            .filter(t -> t.getCreditUser().equals(getPlayer()))
-            .findFirst()
-            .map(t -> t.getAmount());
-
-    return o.orElse(-1);
-  }
+        return o.orElse(-1);
+    }
 }

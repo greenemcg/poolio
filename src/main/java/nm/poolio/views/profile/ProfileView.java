@@ -207,7 +207,7 @@ public class ProfileView extends VerticalLayout implements PoolioAvatar {
                     avatarSpan.setText(" Uploaded Avatar Image Preview");
                 });
         upload = new Upload(inMemoryUploadHandler);
-       upload.setDropAllowed(false);
+        upload.setDropAllowed(false);
         upload.setMaxFiles(1);
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
 

@@ -5,14 +5,14 @@ import nm.poolio.model.JsonbNote;
 import nm.poolio.security.AuthenticatedUser;
 
 public interface NoteCreator {
-  AuthenticatedUser getAuthenticatedUser();
+    static JsonbNote buildJsonbNote(String note, String userName) {
+        return JsonbNoteCreator.buildJsonbNote(note, userName);
+    }
 
-  default JsonbNote buildNote(String note) {
-    return buildJsonbNote(
-        note, getAuthenticatedUser().get().map(User::getUserName).orElse("System"));
-  }
+    AuthenticatedUser getAuthenticatedUser();
 
-  static JsonbNote buildJsonbNote(String note, String userName) {
-    return JsonbNoteCreator.buildJsonbNote(note, userName);
-  }
+    default JsonbNote buildNote(String note) {
+        return buildJsonbNote(
+                note, getAuthenticatedUser().get().map(User::getUserName).orElse("System"));
+    }
 }

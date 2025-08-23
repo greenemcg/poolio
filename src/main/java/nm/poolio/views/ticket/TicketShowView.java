@@ -1,12 +1,9 @@
 package nm.poolio.views.ticket;
 
-import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
-
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
-import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,11 +13,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import jakarta.annotation.security.RolesAllowed;
-
-import java.io.ByteArrayInputStream;
-import java.time.Instant;
-import java.util.TimeZone;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -36,6 +28,12 @@ import nm.poolio.services.NflGameService;
 import nm.poolio.services.TicketScorerService;
 import nm.poolio.views.MainLayout;
 import org.vaadin.lineawesome.LineAwesomeIcon;
+
+import java.io.ByteArrayInputStream;
+import java.time.Instant;
+import java.util.TimeZone;
+
+import static nm.poolio.utils.VaddinUtils.RESULTS_ICON;
 
 @PageTitle("Ticket View \uD83D\uDC40")
 @Route(value = "ticketShow", layout = MainLayout.class)

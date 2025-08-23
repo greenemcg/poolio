@@ -47,15 +47,12 @@ public class PoolioTransaction extends AbstractEntity {
     @Min(1)
     @Max(1000)
     Integer amount;
-
-   // @NotNull
-    @Enumerated(EnumType.STRING)
-    private Season season;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     PoolioTransactionType type;
-
+    // @NotNull
+    @Enumerated(EnumType.STRING)
+    private Season season;
     @JsonIgnore
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "notes", columnDefinition = "jsonb")

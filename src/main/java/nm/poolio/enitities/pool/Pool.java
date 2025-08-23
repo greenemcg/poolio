@@ -22,7 +22,7 @@ import java.sql.Types;
 import java.util.Set;
 
 @Data()
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(

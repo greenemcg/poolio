@@ -1,6 +1,5 @@
 package nm.poolio.enitities.silly;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

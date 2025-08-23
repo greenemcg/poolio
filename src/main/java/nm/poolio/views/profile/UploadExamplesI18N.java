@@ -6,10 +6,10 @@ import java.util.Arrays;
 
 /**
  * Provides a default I18N configuration for the Upload examples
- *
+ * <p>
  * At the moment the Upload component requires a fully configured I18N instance,
  * even for use-cases where you only want to change individual texts.
- *
+ * <p>
  * This I18N configuration is an adaption of the web components I18N defaults
  * and can be used as a basis for customizing individual texts.
  */

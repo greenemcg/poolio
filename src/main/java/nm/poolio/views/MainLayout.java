@@ -37,7 +37,8 @@ import nm.poolio.views.transaction.PoolioTransactionView;
 import nm.poolio.views.user.UserView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -86,8 +87,8 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
                         setTimeZone(ui);
                     }
 
-                    System.out.println(Instant.now().toString() +
-                            " - View: "
+                    System.out.println(ZonedDateTime.now().format(DateTimeFormatter.ISO_TIME)
+                            + " - View: "
                             + event.getNavigationTarget().getSimpleName()
                             + " - For User: "
                             + (user == null ? null : user.getUserName()));
@@ -117,6 +118,24 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
                 break;
             }
         }
+    }
+
+    public static TimeZone getTimeZone() {
+        UI ui = UI.getCurrent();
+
+        if (ui == null || ui.getSession().getAttribute("tz") == null) {
+            return TimeZone.getTimeZone("America/New_York");
+        }
+
+        return TimeZone.getTimeZone(ui.getSession().getAttribute("tz").toString());
+    }
+
+    private void setTimeZone(UI ui) {
+        ui.getPage()
+                .retrieveExtendedClientDetails(
+                        details -> {
+                            ui.getSession().setAttribute("tz", details.getTimeZoneId());
+                        });
     }
 
     private void processTheme(
@@ -252,23 +271,5 @@ public class MainLayout extends AppLayout implements PoolioAvatar {
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
-    }
-
-    public static TimeZone getTimeZone() {
-        UI ui = UI.getCurrent();
-
-        if (ui == null || ui.getSession().getAttribute("tz") == null) {
-            return TimeZone.getTimeZone("America/New_York");
-        }
-
-        return TimeZone.getTimeZone(ui.getSession().getAttribute("tz").toString());
-    }
-
-    private void setTimeZone(UI ui) {
-        ui.getPage()
-                .retrieveExtendedClientDetails(
-                        details -> {
-                            ui.getSession().setAttribute("tz", details.getTimeZoneId());
-                        });
     }
 }

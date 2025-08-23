@@ -1,8 +1,5 @@
 package nm.poolio.views.ticket;
 
-import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
-import static org.vaadin.lineawesome.LineAwesomeIcon.SAVE_SOLID;
-
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -12,9 +9,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.IntegerField;
-import java.util.Objects;
-import java.util.TimeZone;
-import javax.annotation.Nullable;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.Pool;
 import nm.poolio.enitities.pool.PoolIdName;
@@ -32,203 +26,210 @@ import nm.poolio.vaadin.PoolioBadge;
 import nm.poolio.vaadin.PoolioDialog;
 import nm.poolio.vaadin.PoolioNotification;
 
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.TimeZone;
+
+import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
+import static org.vaadin.lineawesome.LineAwesomeIcon.SAVE_SOLID;
+
 public interface TicketEditUi extends PoolioNotification, PoolioDialog, PoolioAvatar, PoolioBadge {
-  void setErrorFound(boolean errorFound);
+    void setErrorFound(boolean errorFound);
 
-  PoolService getPoolService();
+    PoolService getPoolService();
 
-  TicketService getTicketService();
+    TicketService getTicketService();
 
-  HasComponents getDialogHasComponents();
+    HasComponents getDialogHasComponents();
 
-  default RadioButtonGroup<OverUnder> createOverUnderField(NflGame nflGame, Ticket ticket) {
-    RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
-    radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
-    radioGroup.setRequired(true);
-    radioGroup.setLabel("Total Score " + nflGame.getOverUnder());
+    default RadioButtonGroup<OverUnder> createOverUnderField(NflGame nflGame, Ticket ticket) {
+        RadioButtonGroup<OverUnder> radioGroup = new RadioButtonGroup<>();
+        radioGroup.setItems(OverUnder.OVER, OverUnder.UNDER);
+        radioGroup.setRequired(true);
+        radioGroup.setLabel("Total Score " + nflGame.getOverUnder());
 
-    var value = ticket.getSheet().getOverUnderPicks().get(nflGame.getId());
+        var value = ticket.getSheet().getOverUnderPicks().get(nflGame.getId());
 
-    if (value != null) {
-      radioGroup.setValue(value);
+        if (value != null) {
+            radioGroup.setValue(value);
+        }
+        return radioGroup;
     }
-    return radioGroup;
-  }
 
-  default Long convertTicketIdParameter(String ticketIdParameter) {
-    return convertIdParameter(ticketIdParameter, "Invalid ticketId: ");
-  }
-
-  default Long convertPoolIdParameter(String poolIdParameter) {
-    return convertIdParameter(poolIdParameter, "Invalid poolId: ");
-  }
-
-  private @Nullable Long convertIdParameter(String queryParameter, String message) {
-    try {
-      return Long.valueOf(queryParameter);
-    } catch (NumberFormatException ignored) {
-      setErrorFound(true);
-      creatErrorDialogAndGoHome(message + queryParameter);
-      return null;
+    default Long convertTicketIdParameter(String ticketIdParameter) {
+        return convertIdParameter(ticketIdParameter, "Invalid ticketId: ");
     }
-  }
 
-  default void setTicketGameValue(Ticket ticket, NflTeam value, String id) {
-    if (ticket.getSheet().getGamePicks().containsKey(id)) {
-      ticket.getSheet().getGamePicks().put(id, value);
+    default Long convertPoolIdParameter(String poolIdParameter) {
+        return convertIdParameter(poolIdParameter, "Invalid poolId: ");
     }
-  }
 
-  default IntegerField createTieBreakerField(Ticket ticket) {
-    IntegerField tbField = new IntegerField();
-    tbField.setRequired(true);
-    tbField.setValue(ticket.getSheet().getTieBreaker());
-    tbField.setStepButtonsVisible(false); // does not work on IOS
-    tbField.setMin(0);
-    tbField.setMax(150);
-    tbField.addValueChangeListener(e -> ticket.getSheet().setTieBreaker(e.getValue()));
-
-    tbField.setLabel("Tie Breaker (last game)");
-    tbField.setPrefixComponent(TIE_BREAKER_ICON.create());
-
-    return tbField;
-  }
-
-  default Button createSubmitButton(ComponentEventListener<ClickEvent<Button>> listener) {
-    Button submitButton = new Button("Save Ticket");
-    submitButton.setPrefixComponent(SAVE_SOLID.create());
-    submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    submitButton.addClickListener(listener);
-
-    return submitButton;
-  }
-
-  default Ticket createTicket(Pool pool, User player) {
-    return createTicket(pool, player, pool.getWeek());
-  }
-
-  default Ticket createTicket(Pool pool, User player, NflWeek week) {
-    Ticket ticket = new Ticket();
-    ticket.setPool(pool);
-    ticket.setPlayer(player);
-    ticket.setSeason(pool.getSeason());
-    ticket.setWeek(week);
-    return ticket;
-  }
-
-  private void creatErrorDialogAndGoHome(String message) {
-    setErrorFound(true);
-
-    Dialog dialog = new Dialog();
-    createDialog(dialog, null, new Div(message));
-    getDialogHasComponents().add(dialog);
-    dialog.open();
-
-    dialog.addDialogCloseActionListener(e -> UI.getCurrent().navigate("home"));
-  }
-
-  private void createNotFoundInDbDialogAndGoHome(HasComponents hasComponents) {
-    setErrorFound(true);
-    hasComponents.add(createErrorNotificationAndGoHome("Cannot find pool in the Poolio Database"));
-  }
-
-  default @Nullable Pool findPool(User player, Long poolId) {
-    var optionalId =
-        player.getPoolIdNames().stream()
-            .map(PoolIdName::getId)
-            .filter(id -> Objects.equals(id, poolId))
-            .findFirst();
-
-    // var optional = getPoolService().findPoolForUser(player, poolId);
-
-    if (optionalId.isPresent()) {
-      var optional = getPoolService().get(optionalId.get());
-      if (optional.isPresent()) return optional.get();
-      else {
-        showPoolNotFoundErrorDialog();
-        return null;
-      }
-    } else {
-      showPoolNotFoundErrorDialog();
-      return null;
+    private @Nullable Long convertIdParameter(String queryParameter, String message) {
+        try {
+            return Long.valueOf(queryParameter);
+        } catch (NumberFormatException ignored) {
+            setErrorFound(true);
+            creatErrorDialogAndGoHome(message + queryParameter);
+            return null;
+        }
     }
-  }
 
-  private void showPoolNotFoundErrorDialog() {
-    setErrorFound(true);
-    getDialogHasComponents()
-        .add(createErrorNotification(new Span("Cannot find pool in the Poolio Database")));
-  }
-
-  default @Nullable Pool findPoolWithQueryParam(String poolIdParameter, User player) {
-    var poolId = convertPoolIdParameter(poolIdParameter);
-    return findPool(player, poolId);
-  }
-
-  default @Nullable Ticket processTicketIdParameter(String ticketIdParameter, User player) {
-    var ticketId = convertTicketIdParameter(ticketIdParameter);
-    return findTicket(player, ticketId);
-  }
-
-  private @Nullable Ticket findTicket(User player, Long ticketId) {
-    var optional = getTicketService().findTicketForUser(player, ticketId);
-
-    if (optional.isPresent()) {
-      return optional.get();
-    } else {
-      setErrorFound(true);
-      getDialogHasComponents()
-          .add(createErrorNotification(new Span("Cannot find ticket in the Poolio Database")));
-      return null;
+    default void setTicketGameValue(Ticket ticket, NflTeam value, String id) {
+        if (ticket.getSheet().getGamePicks().containsKey(id)) {
+            ticket.getSheet().getGamePicks().put(id, value);
+        }
     }
-  }
 
-  default HorizontalLayout createHeaderBadgesTop(Pool pool, Ticket ticket, TimeZone timeZone) {
-    var layout = new HorizontalLayout();
+    default IntegerField createTieBreakerField(Ticket ticket) {
+        IntegerField tbField = new IntegerField();
+        tbField.setRequired(true);
+        tbField.setValue(ticket.getSheet().getTieBreaker());
+        tbField.setStepButtonsVisible(false); // does not work on IOS
+        tbField.setMin(0);
+        tbField.setMax(150);
+        tbField.addValueChangeListener(e -> ticket.getSheet().setTieBreaker(e.getValue()));
 
-    createPoolBadge(pool, layout);
-    createTicketBadge(ticket, layout);
-    createTimeZoneBadge(timeZone, layout);
+        tbField.setLabel("Tie Breaker (last game)");
+        tbField.setPrefixComponent(TIE_BREAKER_ICON.create());
 
-    return layout;
-  }
+        return tbField;
+    }
 
-  default HorizontalLayout createHeaderBadgesBottom(Ticket ticket) {
-    var layout = new HorizontalLayout();
-    layout.add(createBadge(new Span("TieBreaker: " + ticket.getTieBreaker())));
-    layout.add(createBadge(new Span("Rank: " + ticket.getRankString())));
-    layout.add(createBadge(new Span("Score: " + ticket.getScoreString())));
+    default Button createSubmitButton(ComponentEventListener<ClickEvent<Button>> listener) {
+        Button submitButton = new Button("Save Ticket");
+        submitButton.setPrefixComponent(SAVE_SOLID.create());
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        submitButton.addClickListener(listener);
 
-    return layout;
-  }
+        return submitButton;
+    }
 
-  default Component createSillyRadio(SillyQuestion silly, Ticket ticket, NflGame nflGame) {
-    RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
-    radioGroup.setLabel(silly.getQuestion());
-    radioGroup.setItems(silly.getAnswers());
+    default Ticket createTicket(Pool pool, User player) {
+        return createTicket(pool, player, pool.getWeek());
+    }
 
-    var sillyAnswer = ticket.getSheet().getSillyPicks().get(silly.getId());
-    if (sillyAnswer != null) radioGroup.setValue(sillyAnswer.getAnswer());
+    default Ticket createTicket(Pool pool, User player, NflWeek week) {
+        Ticket ticket = new Ticket();
+        ticket.setPool(pool);
+        ticket.setPlayer(player);
+        ticket.setSeason(pool.getSeason());
+        ticket.setWeek(week);
+        return ticket;
+    }
 
-    radioGroup.addValueChangeListener(
-        c -> {
-          setSillyValue(c.getValue(), ticket, silly.getId(), nflGame.getId());
-        });
+    private void creatErrorDialogAndGoHome(String message) {
+        setErrorFound(true);
 
-    return radioGroup;
-  }
+        Dialog dialog = new Dialog();
+        createDialog(dialog, null, new Div(message));
+        getDialogHasComponents().add(dialog);
+        dialog.open();
 
-  private void setSillyValue(String answer, Ticket ticket, String sillyId, String gameId) {
-    ticket
-        .getSheet()
-        .getSillyPicks()
-        .put(sillyId, SillyAnswer.builder().answer(answer).gameId(gameId).build());
-  }
+        dialog.addDialogCloseActionListener(e -> UI.getCurrent().navigate("home"));
+    }
 
-  default Div createScoringBlurb() {
-    Div div = new Div("Game: 10pts, O/U: 2pts, Silly Question: 1pt");
-    div.getElement().getStyle().set("font-weight", "bold");
-    div.getElement().getStyle().set("font-style", "italic");
-    return div;
-  }
+    private void createNotFoundInDbDialogAndGoHome(HasComponents hasComponents) {
+        setErrorFound(true);
+        hasComponents.add(createErrorNotificationAndGoHome("Cannot find pool in the Poolio Database"));
+    }
+
+    default @Nullable Pool findPool(User player, Long poolId) {
+        var optionalId =
+                player.getPoolIdNames().stream()
+                        .map(PoolIdName::getId)
+                        .filter(id -> Objects.equals(id, poolId))
+                        .findFirst();
+
+        // var optional = getPoolService().findPoolForUser(player, poolId);
+
+        if (optionalId.isPresent()) {
+            var optional = getPoolService().get(optionalId.get());
+            if (optional.isPresent()) return optional.get();
+            else {
+                showPoolNotFoundErrorDialog();
+                return null;
+            }
+        } else {
+            showPoolNotFoundErrorDialog();
+            return null;
+        }
+    }
+
+    private void showPoolNotFoundErrorDialog() {
+        setErrorFound(true);
+        getDialogHasComponents()
+                .add(createErrorNotification(new Span("Cannot find pool in the Poolio Database")));
+    }
+
+    default @Nullable Pool findPoolWithQueryParam(String poolIdParameter, User player) {
+        var poolId = convertPoolIdParameter(poolIdParameter);
+        return findPool(player, poolId);
+    }
+
+    default @Nullable Ticket processTicketIdParameter(String ticketIdParameter, User player) {
+        var ticketId = convertTicketIdParameter(ticketIdParameter);
+        return findTicket(player, ticketId);
+    }
+
+    private @Nullable Ticket findTicket(User player, Long ticketId) {
+        var optional = getTicketService().findTicketForUser(player, ticketId);
+
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            setErrorFound(true);
+            getDialogHasComponents()
+                    .add(createErrorNotification(new Span("Cannot find ticket in the Poolio Database")));
+            return null;
+        }
+    }
+
+    default HorizontalLayout createHeaderBadgesTop(Pool pool, Ticket ticket, TimeZone timeZone) {
+        var layout = new HorizontalLayout();
+
+        createPoolBadge(pool, layout);
+        createTicketBadge(ticket, layout);
+        createTimeZoneBadge(timeZone, layout);
+
+        return layout;
+    }
+
+    default HorizontalLayout createHeaderBadgesBottom(Ticket ticket) {
+        var layout = new HorizontalLayout();
+        layout.add(createBadge(new Span("TieBreaker: " + ticket.getTieBreaker())));
+        layout.add(createBadge(new Span("Rank: " + ticket.getRankString())));
+        layout.add(createBadge(new Span("Score: " + ticket.getScoreString())));
+
+        return layout;
+    }
+
+    default Component createSillyRadio(SillyQuestion silly, Ticket ticket, NflGame nflGame) {
+        RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+        radioGroup.setLabel(silly.getQuestion());
+        radioGroup.setItems(silly.getAnswers());
+
+        var sillyAnswer = ticket.getSheet().getSillyPicks().get(silly.getId());
+        if (sillyAnswer != null) radioGroup.setValue(sillyAnswer.getAnswer());
+
+        radioGroup.addValueChangeListener(
+                c -> {
+                    setSillyValue(c.getValue(), ticket, silly.getId(), nflGame.getId());
+                });
+
+        return radioGroup;
+    }
+
+    private void setSillyValue(String answer, Ticket ticket, String sillyId, String gameId) {
+        ticket
+                .getSheet()
+                .getSillyPicks()
+                .put(sillyId, SillyAnswer.builder().answer(answer).gameId(gameId).build());
+    }
+
+    default Div createScoringBlurb() {
+        Div div = new Div("Game: 10pts, O/U: 2pts, Silly Question: 1pt");
+        div.getElement().getStyle().set("font-weight", "bold");
+        div.getElement().getStyle().set("font-style", "italic");
+        return div;
+    }
 }
