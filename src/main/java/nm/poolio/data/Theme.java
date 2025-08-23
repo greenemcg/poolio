@@ -1,4 +1,4 @@
-package nm.poolio;
+package nm.poolio.data;
 
 public enum Theme {
   LIGHT,

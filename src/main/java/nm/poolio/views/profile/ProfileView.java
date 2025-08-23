@@ -28,7 +28,7 @@ import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.server.streams.UploadMetadata;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
-import nm.poolio.Theme;
+import nm.poolio.data.Theme;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioAvatar;

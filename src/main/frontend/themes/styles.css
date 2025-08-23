@@ -1,0 +1,17 @@
+html {
+    --vaadin-user-color-8: purple;
+    --vaadin-user-color-9: brown;
+    --vaadin-user-color-10: orange;
+    --vaadin-user-color-11: violet;
+    --vaadin-user-color-12: darkred;
+    --vaadin-user-color-13: darkgreen;
+    --vaadin-user-color-14: #006666;
+    --vaadin-user-color-15: #660033;
+    --vaadin-user-color-16: #333b3c;
+    --vaadin-user-color-17: green;
+    --vaadin-user-color-18: teal;
+    --vaadin-user-color-19: royalblue;
+    --vaadin-user-color-20: #ff6347; /* Tomato */
+    --vaadin-user-color-21: #4682b4; /* SteelBlue */
+}
+

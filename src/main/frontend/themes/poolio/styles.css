@@ -16,18 +16,5 @@ label {
     font-weight: bold;
 }
 
-html {
-    --vaadin-user-color-7: royalblue;
-    --vaadin-user-color-8: purple;
-    --vaadin-user-color-9: pink;
-    --vaadin-user-color-10: orange;
-    --vaadin-user-color-11: violet;
-    --vaadin-user-color-12: aqua;
-    --vaadin-user-color-13: lavender;
-    --vaadin-user-color-14: lawngreen;
-    --vaadin-user-color-15: lightgreen;
-    --vaadin-user-color-16: yellow;
-    --vaadin-user-color-17: turquoise;
-    --vaadin-user-color-18: teal;
-}
+
 

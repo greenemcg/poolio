@@ -1,15 +1,12 @@
 package nm.poolio.views;
 
-import static nm.poolio.utils.VaddinUtils.*;
-import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
-import static org.vaadin.lineawesome.LineAwesomeIcon.USER_EDIT_SOLID;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -22,12 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-
-import java.time.Instant;
-import java.util.Optional;
-import java.util.TimeZone;
-
-import nm.poolio.Theme;
+import nm.poolio.data.Theme;
 import nm.poolio.data.User;
 import nm.poolio.enitities.pool.PoolService;
 import nm.poolio.security.AuthenticatedUser;
@@ -45,9 +37,18 @@ import nm.poolio.views.transaction.PoolioTransactionView;
 import nm.poolio.views.user.UserView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
+import java.time.Instant;
+import java.util.Optional;
+import java.util.TimeZone;
+
+import static nm.poolio.utils.VaddinUtils.*;
+import static org.vaadin.lineawesome.LineAwesomeIcon.STORE_ALT_SOLID;
+import static org.vaadin.lineawesome.LineAwesomeIcon.USER_EDIT_SOLID;
+
 /**
  * The main view is a top-level placeholder for other views.
  */
+@CssImport(value = "./themes/styles.css")
 public class MainLayout extends AppLayout implements PoolioAvatar {
     private final AuthenticatedUser authenticatedUser;
     private final AccessAnnotationChecker accessChecker;

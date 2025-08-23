@@ -6,6 +6,7 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,9 +14,13 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.StreamResource;
 import jakarta.annotation.security.RolesAllowed;
+
+import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.TimeZone;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -37,130 +42,144 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 @RolesAllowed("USER")
 @Slf4j
 public class TicketShowView extends VerticalLayout
-    implements HasUrlParameter<String>, TicketEditUi, TicketShowGrid {
-  @Getter private final PoolService poolService;
-  @Getter private final TicketService ticketService;
-  private final User player;
-  private final NflGameService nflGameService;
-  private final AuthenticatedUser authenticatedUser;
+        implements HasUrlParameter<String>, TicketEditUi, TicketShowGrid {
+    @Getter
+    private final PoolService poolService;
+    @Getter
+    private final TicketService ticketService;
+    private final User player;
+    private final NflGameService nflGameService;
+    private final AuthenticatedUser authenticatedUser;
 
-  private final GameScoreService gameScoreService;
-  private final NflGameScorerService nflGameScorerService;
-  private final TicketScorerService ticketScorerService;
+    private final GameScoreService gameScoreService;
+    private final NflGameScorerService nflGameScorerService;
+    private final TicketScorerService ticketScorerService;
 
-  private final TimeZone timeZone;
+    private final TimeZone timeZone;
 
-  Ticket ticket;
-  @Getter boolean errorFound = false;
+    Ticket ticket;
+    @Getter
+    boolean errorFound = false;
 
-  @Getter Grid<NflGame> ticketGrid = createGrid(NflGame.class);
+    @Getter
+    Grid<NflGame> ticketGrid = createGrid(NflGame.class);
 
-  public TicketShowView(
-      PoolService poolService,
-      TicketService ticketService,
-      AuthenticatedUser authenticatedUser,
-      NflGameService nflGameService,
-      GameScoreService gameScoreService,
-      NflGameScorerService nflGameScorerService,
-      TicketScorerService ticketScorerService) {
-    this.poolService = poolService;
-    this.ticketService = ticketService;
-    this.authenticatedUser = authenticatedUser;
+    public TicketShowView(
+            PoolService poolService,
+            TicketService ticketService,
+            AuthenticatedUser authenticatedUser,
+            NflGameService nflGameService,
+            GameScoreService gameScoreService,
+            NflGameScorerService nflGameScorerService,
+            TicketScorerService ticketScorerService) {
+        this.poolService = poolService;
+        this.ticketService = ticketService;
+        this.authenticatedUser = authenticatedUser;
 
-    player = authenticatedUser.get().orElseThrow();
-    this.gameScoreService = gameScoreService;
-    this.nflGameService = nflGameService;
-    this.nflGameScorerService = nflGameScorerService;
-    this.ticketScorerService = ticketScorerService;
-    timeZone = MainLayout.getTimeZone();
-  }
-
-  @Override
-  public void setParameter(BeforeEvent event, @OptionalParameter String _ignored) {
-    Location location = event.getLocation();
-
-    var optionalTicketParameter = location.getQueryParameters().getSingleParameter("ticketId");
-
-    if (optionalTicketParameter.isPresent()) processTicketParameter(optionalTicketParameter.get());
-    else {
-      add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
-      return;
+        player = authenticatedUser.get().orElseThrow();
+        this.gameScoreService = gameScoreService;
+        this.nflGameService = nflGameService;
+        this.nflGameScorerService = nflGameScorerService;
+        this.ticketScorerService = ticketScorerService;
+        timeZone = MainLayout.getTimeZone();
     }
 
-    if (player.equals(ticket.getPlayer())) {
-      createUIComponents();
-    } else {
-      add(createErrorNotification(new Span("Wrong player found")));
-    }
-  }
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String _ignored) {
+        Location location = event.getLocation();
 
-  private void createUIComponents() {
-    setHeight("100%");
-    var scoredTickets = ticketScorerService.findAndScoreTickets(ticket.getPool(), ticket.getWeek());
+        var optionalTicketParameter = location.getQueryParameters().getSingleParameter("ticketId");
 
-    ticket =
-        scoredTickets.stream()
-            .filter(t -> t.getPlayer().equals(player))
-            .findFirst()
-            .orElseThrow(() -> new PoolioException("Cannot find ticket"));
+        if (optionalTicketParameter.isPresent()) processTicketParameter(optionalTicketParameter.get());
+        else {
+            add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
+            return;
+        }
 
-    var weeklyGames =
-        nflGameService.getWeeklyGamesThursdayFiltered(
-            ticket.getWeek(), ticket.getPool().isIncludeThursday());
-
-    add(createHeaderBadgesTop(ticket.getPool(), ticket, timeZone));
-    add(createHeaderBadgesBottom(ticket));
-
-    if (Instant.now().isAfter(weeklyGames.getFirst().getGameTime())) {
-      var button =
-          new Button(
-              "View Results Grid for " + ticket.getWeek(),
-              e -> UI.getCurrent().getPage().open("/result?week=" + ticket.getWeek(), "_self"));
-      button.setPrefixComponent(RESULTS_ICON.create());
-      button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-      add(button);
-    } else {
-      var button = new Button("Games have no started yet " + ticket.getWeek());
-      button.addThemeVariants(ButtonVariant.LUMO_ERROR);
-      button.setPrefixComponent(LineAwesomeIcon.CLOCK_SOLID.create());
-      button.setEnabled(false);
-      add(button);
+        if (player.equals(ticket.getPlayer())) {
+            createUIComponents();
+        } else {
+            add(createErrorNotification(new Span("Wrong player found")));
+        }
     }
 
-    HorizontalLayout horizontalLayout = new HorizontalLayout();
-    horizontalLayout.setWidthFull();
-    horizontalLayout.add(new Span(scoredTickets.size() + " Players: "));
-    AvatarGroup avatarGroup = new AvatarGroup();
-    avatarGroup.setMaxItemsVisible(25);
-    scoredTickets.forEach(
-        t -> {
-          AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
-          avatar.setColorIndex((int) (t.getPlayer().getId() % 8));
-          avatarGroup.add(avatar);
-        });
-    horizontalLayout.add(avatarGroup);
-    add(horizontalLayout);
+    private void createUIComponents() {
+        setHeight("100%");
+        var scoredTickets = ticketScorerService.findAndScoreTickets(ticket.getPool(), ticket.getWeek());
 
-    var scores = gameScoreService.getScores(weeklyGames);
+        ticket =
+                scoredTickets.stream()
+                        .filter(t -> t.getPlayer().equals(player))
+                        .findFirst()
+                        .orElseThrow(() -> new PoolioException("Cannot find ticket"));
 
-    decorateTicketGrid(ticket, scores, timeZone);
-    weeklyGames.forEach(g-> g.setTimeZone(timeZone));
-    ticketGrid.setItems(weeklyGames);
+        var weeklyGames =
+                nflGameService.getWeeklyGamesThursdayFiltered(
+                        ticket.getWeek(), ticket.getPool().isIncludeThursday());
 
-    add(ticketGrid);
-  }
+        add(createHeaderBadgesTop(ticket.getPool(), ticket, timeZone));
+        add(createHeaderBadgesBottom(ticket));
 
-  private void processTicketParameter(String ticketIdParameter) {
-    ticket = processTicketIdParameter(ticketIdParameter, player);
-  }
+        if (Instant.now().isAfter(weeklyGames.getFirst().getGameTime())) {
+            var button =
+                    new Button(
+                            "View Results Grid for " + ticket.getWeek(),
+                            e -> UI.getCurrent().getPage().open("/result?week=" + ticket.getWeek(), "_self"));
+            button.setPrefixComponent(RESULTS_ICON.create());
+            button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            add(button);
+        } else {
+            var button = new Button("Games have no started yet " + ticket.getWeek());
+            button.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            button.setPrefixComponent(LineAwesomeIcon.CLOCK_SOLID.create());
+            button.setEnabled(false);
+            add(button);
+        }
 
-  @Override
-  public void setErrorFound(boolean errorFound) {
-    this.errorFound = errorFound;
-  }
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setWidthFull();
+        horizontalLayout.add(new Span(scoredTickets.size() + " Players: "));
+        AvatarGroup avatarGroup = new AvatarGroup();
+        avatarGroup.setMaxItemsVisible(25);
+        scoredTickets.forEach(
+                t -> {
+                    AvatarGroupItem avatar = new AvatarGroupItem(t.getPlayer().getName());
 
-  @Override
-  public HasComponents getDialogHasComponents() {
-    return this;
-  }
+                    var bytes = t.getPlayer().getImageResource();
+
+                    if (bytes != null && bytes.length > 0) {
+                        avatar.setImageResource(
+                                new StreamResource(
+                                        "profile-pic", () -> new ByteArrayInputStream(bytes)));
+                    } else {
+                        avatar.setColorIndex((int) (t.getPlayer().getId() % 21));
+                    }
+
+                    avatarGroup.add(avatar);
+                });
+        horizontalLayout.add(avatarGroup);
+        add(horizontalLayout);
+
+        var scores = gameScoreService.getScores(weeklyGames);
+
+        decorateTicketGrid(ticket, scores, timeZone);
+        weeklyGames.forEach(g -> g.setTimeZone(timeZone));
+        ticketGrid.setItems(weeklyGames);
+
+        add(ticketGrid);
+    }
+
+    private void processTicketParameter(String ticketIdParameter) {
+        ticket = processTicketIdParameter(ticketIdParameter, player);
+    }
+
+    @Override
+    public void setErrorFound(boolean errorFound) {
+        this.errorFound = errorFound;
+    }
+
+    @Override
+    public HasComponents getDialogHasComponents() {
+        return this;
+    }
 }

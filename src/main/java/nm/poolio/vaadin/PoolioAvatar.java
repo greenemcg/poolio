@@ -26,7 +26,7 @@ public interface PoolioAvatar {
   default Avatar createUserAvatar(@NotNull User user, AvatarVariant variant) {
     var avatar = new Avatar(user.getName());
 
-    if (user.getId() != null) avatar.setColorIndex((int) (user.getId() % 8));
+    if (user.getId() != null) avatar.setColorIndex((int) (user.getId() % 21));
 
     return decorateAvatar(user, avatar, variant);
   }
