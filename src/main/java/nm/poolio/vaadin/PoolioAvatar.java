@@ -31,12 +31,12 @@ public interface PoolioAvatar {
     return decorateAvatar(user, avatar, variant);
   }
 
-  private Avatar decorateAvatar(AvatarImageBytes imageBytes, Avatar avatar, AvatarVariant variant) {
+  default Avatar decorateAvatar(AvatarImageBytes imageBytes, Avatar avatar, AvatarVariant variant) {
     avatar.setImageResource(
         new StreamResource(
             "profile-pic", () -> new ByteArrayInputStream(imageBytes.getImageResource())));
     avatar.addThemeVariants(variant);
-    avatar.getElement().setAttribute("tooltip", "My tooltip");
+  //  avatar.getElement().setAttribute("tooltip", "My tooltip");
     avatar.setTooltipEnabled(true);
 
     return avatar;

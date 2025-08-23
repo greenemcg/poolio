@@ -23,12 +23,14 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -55,343 +57,323 @@ import org.springframework.util.CollectionUtils;
 @RolesAllowed("USER")
 @Slf4j
 public class TicketEditView extends VerticalLayout
-    implements HasUrlParameter<String>,
+        implements HasUrlParameter<String>,
         PoolioNotification,
         PoolioAvatar,
         NoteCreator,
         TicketEditUi {
 
-  @Getter private final AuthenticatedUser authenticatedUser;
-  private final User player;
-  @Getter private final PoolService poolService;
-  private final NflGameService nflGameService;
-  @Getter private final TicketService ticketService;
-  private final TicketUiService ticketUiService;
-  private final TimeZone timeZone;
-  IntegerField tieBreakerFiled;
-  Pool pool;
-  Ticket ticket;
-  @Getter boolean errorFound = false;
+    @Getter
+    private final AuthenticatedUser authenticatedUser;
+    private final User player;
+    @Getter
+    private final PoolService poolService;
+    private final NflGameService nflGameService;
+    @Getter
+    private final TicketService ticketService;
+    private final TicketUiService ticketUiService;
+    private final TimeZone timeZone;
+    IntegerField tieBreakerFiled;
+    Pool pool;
+    Ticket ticket;
+    @Getter
+    boolean errorFound = false;
 
-  public TicketEditView(
-      AuthenticatedUser authenticatedUser,
-      PoolService poolService,
-      NflGameService nflGameService,
-      TicketService ticketService,
-      TicketUiService ticketUiService) {
-    this.poolService = poolService;
-    this.nflGameService = nflGameService;
-    player = authenticatedUser.get().orElseThrow();
-    this.ticketService = ticketService;
-    this.authenticatedUser = authenticatedUser;
-    this.ticketUiService = ticketUiService;
+    public TicketEditView(
+            AuthenticatedUser authenticatedUser,
+            PoolService poolService,
+            NflGameService nflGameService,
+            TicketService ticketService,
+            TicketUiService ticketUiService) {
+        this.poolService = poolService;
+        this.nflGameService = nflGameService;
+        player = authenticatedUser.get().orElseThrow();
+        this.ticketService = ticketService;
+        this.authenticatedUser = authenticatedUser;
+        this.ticketUiService = ticketUiService;
 
-    timeZone = MainLayout.getTimeZone();
-  }
-
-  @Override
-  public void setErrorFound(boolean errorFound) {}
-
-  public HasComponents getDialogHasComponents() {
-    return this;
-  }
-
-  @Override
-  public void setParameter(BeforeEvent event, @OptionalParameter String s) {
-    Location location = event.getLocation();
-    var optionalPoolId = location.getQueryParameters().getSingleParameter("poolId");
-
-    if (optionalPoolId.isPresent()) processPoolIdParameter(optionalPoolId.get());
-    else createNullPoolIdDialogAndGoHome();
-
-    var optionalTicketId = location.getQueryParameters().getSingleParameter("ticketId");
-
-    if (errorFound) return;
-
-    optionalTicketId.ifPresent(this::processTicketIdParameter);
-
-    if (errorFound) return;
-
-    if (ticket == null) buildNewTicket();
-
-    createTicketUI();
-  }
-
-  private void processPoolIdParameter(String poolIdParameter) {
-    pool = findPoolWithQueryParam(poolIdParameter, player);
-  }
-
-  private void createNullPoolIdDialogAndGoHome() {
-    errorFound = true;
-    add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
-  }
-
-  private void processTicketIdParameter(String ticketIdParameter) {
-    ticket = processTicketIdParameter(ticketIdParameter, player);
-  }
-
-  private void buildNewTicket() {
-    String userName = authenticatedUser.get().map(User::getName).orElse("unknown");
-    String note =
-        "User: %s Created ticket for pool: %s-%s"
-            .formatted(userName, pool.getName(), pool.getWeek());
-    var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
-
-    ticket =
-        ticketUiService.createTicket(
-            createTicket(pool, player), pool, player, jsonbNote, pool.getWeek());
-  }
-
-  private void createTicketUI() {
-    add(createHeaderBadgesTop(pool, ticket, timeZone));
-
-    add(
-        new Paragraph(
-            "If a game has a point spread and a team listed as a favorite, the winner will be determined by this point spread. "
-                + "The final point spread will be the point spread at game time. We will use the score as our reference. "
-                + " https://www.thescore.com/nfl/events/"));
-
-    var games = nflGameService.getWeeklyGamesForPool(pool);
-
-    var formLayout = new FormLayout();
-    formLayout.setMaxWidth("900px");
-    formLayout.setResponsiveSteps(
-        new ResponsiveStep("0", 1),
-        new ResponsiveStep("200px", 2),
-        new ResponsiveStep("400px", 3),
-        new ResponsiveStep("6000px", 4));
-
-    games.forEach(g -> formLayout.add(createGamePick(g)));
-
-    add(formLayout);
-
-    HorizontalLayout buttonLayout = new HorizontalLayout();
-    buttonLayout.setPadding(true);
-    buttonLayout.setAlignItems(Alignment.BASELINE);
-
-    tieBreakerFiled = createTieBreakerField(ticket);
-    buttonLayout.add(tieBreakerFiled);
-    buttonLayout.add(createSubmitButton(e -> saveTicket()));
-
-    AtomicBoolean showScoring = new AtomicBoolean(false);
-
-    games.forEach(
-        g -> {
-          if (!CollectionUtils.isEmpty(g.getSillies()) || g.getOverUnder() != null) {
-            showScoring.set(true);
-          }
-        });
-
-    if (showScoring.get()) {
-      add(new Hr());
-      add(createScoringBlurb());
-      add(new Hr());
+        timeZone = MainLayout.getTimeZone();
     }
 
-    add(buttonLayout);
-    add(new Hr());
-    add(new Hr());
-
-    HorizontalLayout spacerLayout = new HorizontalLayout();
-    spacerLayout.setPadding(true);
-    spacerLayout.setMargin(true);
-    spacerLayout.add(new Hr());
-    spacerLayout.setMinHeight(50, Unit.PIXELS);
-    add(spacerLayout);
-  }
-
-  private Component createGamePick(NflGame nflGame) {
-    VerticalLayout verticalLayout = new VerticalLayout();
-    verticalLayout.getElement().getStyle().set("border", "1px solid black");
-
-    HorizontalLayout horizontalLayout = new HorizontalLayout();
-    horizontalLayout.add(createGameRadioButton(nflGame));
-
-    verticalLayout.add(horizontalLayout);
-
-    if (nflGame.getOverUnder() != null) {
-      var overUnder = createOverUnderField(nflGame, ticket);
-      overUnder.addValueChangeListener(
-          c -> setOverUnderValue(ticket, c.getValue(), nflGame.getId()));
-      verticalLayout.add(overUnder);
+    @Override
+    public void setErrorFound(boolean errorFound) {
     }
 
-    if (!CollectionUtils.isEmpty(nflGame.getSillies())) {
-      var sillies =
-          nflGame.getSillies().stream().map(s -> createSillyRadio(s, ticket, nflGame)).toList();
-      verticalLayout.add(sillies);
+    public HasComponents getDialogHasComponents() {
+        return this;
     }
 
-    return verticalLayout;
-  }
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String s) {
+        Location location = event.getLocation();
+        var optionalPoolId = location.getQueryParameters().getSingleParameter("poolId");
 
-  private void saveTicket() {
-    try {
-      ticket.getSheet().setTieBreaker(tieBreakerFiled.getValue());
+        if (optionalPoolId.isPresent()) processPoolIdParameter(optionalPoolId.get());
+        else createNullPoolIdDialogAndGoHome();
 
-      var savedTicket = ticketService.save(ticket);
-      log.debug("Saved ticket id: {}", savedTicket.getId());
-      boolean ticketComplete = ticketService.isTicketComplete(savedTicket);
+        var optionalTicketId = location.getQueryParameters().getSingleParameter("ticketId");
 
-      if (ticketComplete) UI.getCurrent().navigate("ticketShow?ticketId=" + savedTicket.getId());
-      else {
-        ticket = savedTicket;
+        if (errorFound) return;
+
+        optionalTicketId.ifPresent(this::processTicketIdParameter);
+
+        if (errorFound) return;
+
+        if (ticket == null) buildNewTicket();
+
+        createTicketUI();
+    }
+
+    private void processPoolIdParameter(String poolIdParameter) {
+        pool = findPoolWithQueryParam(poolIdParameter, player);
+    }
+
+    private void createNullPoolIdDialogAndGoHome() {
+        errorFound = true;
+        add(createErrorNotification(new Span("Cannot find pool with supplied poolId.")));
+    }
+
+    private void processTicketIdParameter(String ticketIdParameter) {
+        ticket = processTicketIdParameter(ticketIdParameter, player);
+    }
+
+    private void buildNewTicket() {
+        String userName = authenticatedUser.get().map(User::getName).orElse("unknown");
+        String note =
+                "User: %s Created ticket for pool: %s-%s"
+                        .formatted(userName, pool.getName(), pool.getWeek());
+        var jsonbNote = JsonbNote.builder().note(note).created(Instant.now()).user(userName).build();
+
+        ticket =
+                ticketUiService.createTicket(
+                        createTicket(pool, player), pool, player, jsonbNote, pool.getWeek());
+    }
+
+    private void createTicketUI() {
+        add(createHeaderBadgesTop(pool, ticket, timeZone));
+
+        add(
+                new Paragraph(
+                        "If a game has a point spread and a team listed as a favorite, the winner will be determined by this point spread. "
+                                + "The final point spread will be the point spread at game time. We will use the score as our reference. "
+                                + " https://www.thescore.com/nfl/events/"));
+
+        var games = nflGameService.getWeeklyGamesForPool(pool);
+
+        var formLayout = new FormLayout();
+        formLayout.setMaxWidth("900px");
+        formLayout.setResponsiveSteps(
+                new ResponsiveStep("0", 1),
+                new ResponsiveStep("200px", 2),
+                new ResponsiveStep("400px", 3),
+                new ResponsiveStep("6000px", 4));
+
+        games.forEach(g -> formLayout.add(createGamePick(g)));
+
+        add(formLayout);
+
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setPadding(true);
+        buttonLayout.setAlignItems(Alignment.BASELINE);
+
+        tieBreakerFiled = createTieBreakerField(ticket);
+        buttonLayout.add(tieBreakerFiled);
+        buttonLayout.add(createSubmitButton(e -> saveTicket()));
+
+        AtomicBoolean showScoring = new AtomicBoolean(false);
+
+        games.forEach(
+                g -> {
+                    if (!CollectionUtils.isEmpty(g.getSillies()) || g.getOverUnder() != null) {
+                        showScoring.set(true);
+                    }
+                });
+
+        if (showScoring.get()) {
+            add(new Hr());
+            add(createScoringBlurb());
+            add(new Hr());
+        }
+
+        add(buttonLayout);
+        add(new Hr());
+        add(new Hr());
+
+        HorizontalLayout spacerLayout = new HorizontalLayout();
+        spacerLayout.setPadding(true);
+        spacerLayout.setMargin(true);
+        spacerLayout.add(new Hr());
+        spacerLayout.setMinHeight(50, Unit.PIXELS);
+        add(spacerLayout);
+    }
+
+    private Component createGamePick(NflGame nflGame) {
         VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.getElement().getStyle().set("border", "1px solid black");
 
-        var missingPicks =
-            ticket.getSheet().getGamePicks().entrySet().stream()
-                .filter(e -> Objects.isNull(e.getValue()))
-                .map(e -> createMissingGamePick(e.getKey()))
-                .toList();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(createGameRadioButton(nflGame));
 
-        if (missingPicks.isEmpty()) log.debug("No Picks missing");
-        else if (missingPicks.size() > 3)
-          verticalLayout.add(new Div("Missing picks on " + missingPicks.size() + " games"));
-        else {
-          verticalLayout.add(new Div("Missing picks:"));
-          verticalLayout.add(missingPicks);
+        verticalLayout.add(horizontalLayout);
+
+        if (nflGame.getOverUnder() != null) {
+            var overUnder = createOverUnderField(nflGame, ticket);
+            overUnder.addValueChangeListener(
+                    c -> setOverUnderValue(ticket, c.getValue(), nflGame.getId()));
+            verticalLayout.add(overUnder);
         }
 
-        if (tieBreakerFiled.getValue() == null) {
-          var tieBreaker = new Div(TIE_BREAKER_ICON.create());
-          tieBreaker.add(new Span(" Missing tie breaker"));
-          verticalLayout.add(tieBreaker);
+        if (!CollectionUtils.isEmpty(nflGame.getSillies())) {
+            var sillies =
+                    nflGame.getSillies().stream().map(s -> createSillyRadio(s, ticket, nflGame)).toList();
+            verticalLayout.add(sillies);
         }
 
-        var d = new Div("Ticket is Saved but it is not complete - Please Complete ASAP!");
-        d.add(verticalLayout);
-        add(createWarningNotification(d));
-      }
-    } catch (Exception e) {
-      add(createErrorNotification(new Span("Ticket Not saved ERROR." + e.getMessage())));
-    }
-  }
-
-  private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
-    RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
-
-    radioGroup.setHelperComponent(createHelperSpread(g));
-    g.setTimeZone(timeZone);
-
-
-    var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTimeWithZone());
-    radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
-    radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
-    radioGroup.setRequired(true);
-    radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
-
-    if (!canChangeGame(g)) {
-      radioGroup.setReadOnly(true);
+        return verticalLayout;
     }
 
-    var value = ticket.getSheet().getGamePicks().get(g.getId());
-    if (value != null) radioGroup.setValue(value);
+    private void saveTicket() {
+        try {
+            ticket.getSheet().setTieBreaker(tieBreakerFiled.getValue());
 
-    radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), g.getId()));
+            var savedTicket = ticketService.save(ticket);
+            log.debug("Saved ticket id: {}", savedTicket.getId());
+            boolean ticketComplete = ticketService.isTicketComplete(savedTicket);
 
-    radioGroup.setRenderer(
-        new ComponentRenderer<>(
-            nflTeam -> {
-              var layout =
-                  new HorizontalLayout(
-                      createNflTeamAvatar(nflTeam, AvatarVariant.LUMO_SMALL),
-                      createGameSpan(nflTeam, g));
-              layout.setAlignItems(Alignment.CENTER);
-              return layout;
-            }));
+            if (ticketComplete) UI.getCurrent().navigate("ticketShow?ticketId=" + savedTicket.getId());
+            else {
+                ticket = savedTicket;
+                VerticalLayout verticalLayout = new VerticalLayout();
 
-    return radioGroup;
-  }
+                var missingPicks =
+                        ticket.getSheet().getGamePicks().entrySet().stream()
+                                .filter(e -> Objects.isNull(e.getValue()))
+                                .map(e -> createMissingGamePick(e.getKey()))
+                                .toList();
 
-  private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
-    ticket.getSheet().getOverUnderPicks().put(id, value);
-  }
+                if (missingPicks.isEmpty()) log.debug("No Picks missing");
+                else if (missingPicks.size() > 3)
+                    verticalLayout.add(new Div("Missing picks on " + missingPicks.size() + " games"));
+                else {
+                    verticalLayout.add(new Div("Missing picks:"));
+                    verticalLayout.add(missingPicks);
+                }
 
-  private Component createMissingGamePick(String gameKey) {
-    var game = nflGameService.findGameById(gameKey);
+                if (tieBreakerFiled.getValue() == null) {
+                    var tieBreaker = new Div(TIE_BREAKER_ICON.create());
+                    tieBreaker.add(new Span(" Missing tie breaker"));
+                    verticalLayout.add(tieBreaker);
+                }
 
-    HorizontalLayout layout = new HorizontalLayout();
-    layout.setAlignItems(Alignment.BASELINE);
-
-    layout.add(new Span(createNflTeamAvatar(game.getAwayTeam(), AvatarVariant.LUMO_XSMALL)));
-    layout.add(new Span(" " + game.getAwayTeam().name() + " vs "));
-    layout.add(new Span(createNflTeamAvatar(game.getHomeTeam(), AvatarVariant.LUMO_XSMALL)));
-    layout.add(new Span(" " + game.getHomeTeam().name() + " "));
-
-    return layout;
-  }
-
-  private Component createHelperSpread(NflGame g) {
-    if (g.getSpread() == null) return new Span(new Text("PICK EM"));
-
-    return g.getSpread() > 0.0
-        ? createSpreadSpan(g.getHomeTeam(), g.getSpread())
-        : createSpreadSpan(g.getAwayTeam(), -g.getSpread());
-  }
-
-  private boolean canChangeGame(NflGame g) {
-    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
-      return false;
+                var d = new Div("Ticket is Saved but it is not complete - Please Complete ASAP!");
+                d.add(verticalLayout);
+                add(createWarningNotification(d));
+            }
+        } catch (Exception e) {
+            add(createErrorNotification(new Span("Ticket Not saved ERROR." + e.getMessage())));
+        }
     }
 
-    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
-    if (gamesNotStarted.isEmpty()) {
-      return false;
+    private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
+        RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
+
+        radioGroup.setHelperComponent(createHelperSpread(g));
+        g.setTimeZone(timeZone);
+
+
+        var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTimeWithZone());
+        radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
+        radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
+        radioGroup.setRequired(true);
+        radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
+
+        if (!canChangeGame(g)) {
+            radioGroup.setReadOnly(true);
+        }
+
+        var value = ticket.getSheet().getGamePicks().get(g.getId());
+        if (value != null) radioGroup.setValue(value);
+
+        radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), g.getId()));
+
+        radioGroup.setRenderer(
+                new ComponentRenderer<>(
+                        nflTeam -> {
+                            var layout =
+                                    new HorizontalLayout(
+                                            createNflTeamAvatar(nflTeam, AvatarVariant.LUMO_SMALL),
+                                            createGameSpan(nflTeam, g));
+                            layout.setAlignItems(Alignment.CENTER);
+                            return layout;
+                        }));
+
+        return radioGroup;
     }
 
-    var firstGameNotStarted = gamesNotStarted.getFirst();
-    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
-
-    if (dayOfWeek == DayOfWeek.MONDAY) {
-      return false;
+    private void setOverUnderValue(Ticket ticket, OverUnder value, String id) {
+        ticket.getSheet().getOverUnderPicks().put(id, value);
     }
 
-    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
-      return false;
+    private Component createMissingGamePick(String gameKey) {
+        var game = nflGameService.findGameById(gameKey);
 
-    return true;
-  }
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setAlignItems(Alignment.BASELINE);
 
-  //  private boolean canChangeGame(NflGame g) {
-  //    if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
-  //      return false;
-  //    }
-  //
-  //    var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
-  //    if (gamesNotStarted.isEmpty()) {
-  //      return false;
-  //    }
-  //
-  //    var firstGameNotStarted = gamesNotStarted.getFirst();
-  //    var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
-  //
-  //    if (dayOfWeek == DayOfWeek.MONDAY) {
-  //      return false;
-  //    }
-  //
-  //    if (dayOfWeek == DayOfWeek.SUNDAY && firstGameNotStarted.getLocalDateTime().getHour() <= 11)
-  //      return false;
-  //
-  //    return true;
-  //  }
+        layout.add(new Span(createNflTeamAvatar(game.getAwayTeam(), AvatarVariant.LUMO_XSMALL)));
+        layout.add(new Span(" " + game.getAwayTeam().name() + " vs "));
+        layout.add(new Span(createNflTeamAvatar(game.getHomeTeam(), AvatarVariant.LUMO_XSMALL)));
+        layout.add(new Span(" " + game.getHomeTeam().name() + " "));
 
-  private Component createGameSpan(NflTeam nflTeam, NflGame g) {
-    if (g.getSpread() == null) return new Span(new Text(nflTeam.getFullName()));
-
-    boolean isHomeTeam = g.getHomeTeam() == nflTeam;
-
-    if (!isHomeTeam && g.getSpread() > 0.0) {
-      return new Span(new Text(nflTeam.getFullName() + "  " + (-1 * g.getSpread())));
+        return layout;
     }
 
-    if (isHomeTeam && g.getSpread() <= 0.0) {
-      return new Span(new Text(nflTeam.getFullName() + "  " + (g.getSpread())));
+    private Component createHelperSpread(NflGame g) {
+        if (g.getSpread() == null) return new Span(new Text("PICK EM"));
+
+        return g.getSpread() < 0.0
+                ? createSpreadSpan(g.getHomeTeam(), g.getSpread())
+                : createSpreadSpan(g.getAwayTeam(), g.getSpread());
     }
 
-    return new Span(new Text(nflTeam.getFullName()));
-  }
+    private boolean canChangeGame(NflGame g) {
+        if (pool.getStatus() != PoolStatus.OPEN || g.getGameTime().isBefore(Instant.now())) {
+            return false;
+        }
 
-  private Span createSpreadSpan(NflTeam team, double spread) {
-    return new Span(new Text(team.name() + " favored by " + spread + " points."));
-  }
+        var gamesNotStarted = nflGameService.getWeeklyGamesNotStarted(pool.getWeek());
+        if (gamesNotStarted.isEmpty()) {
+            return false;
+        }
+
+        var firstGameNotStarted = gamesNotStarted.getFirst();
+        var dayOfWeek = firstGameNotStarted.getLocalDateTime().getDayOfWeek();
+
+        if (dayOfWeek == DayOfWeek.MONDAY) {
+            return false;
+        }
+
+        return dayOfWeek != DayOfWeek.SUNDAY || firstGameNotStarted.getLocalDateTime().getHour() > 11;
+    }
+
+
+    private Component createGameSpan(NflTeam nflTeam, NflGame g) {
+        if (g.getSpread() == null) return new Span(new Text(nflTeam.getFullName()));
+
+        boolean isHomeTeam = g.getHomeTeam() == nflTeam;
+
+        if (!isHomeTeam && g.getSpread() > 0.0) {
+            return new Span(new Text(nflTeam.getFullName() + "  " + (-1 * g.getSpread())));
+        }
+
+        if (isHomeTeam && g.getSpread() <= 0.0) {
+            return new Span(new Text(nflTeam.getFullName() + "  " + (g.getSpread())));
+        }
+
+        return new Span(new Text(nflTeam.getFullName()));
+    }
+
+    private Span createSpreadSpan(NflTeam team, double spread) {
+        return new Span(new Text(team.name() + " favored by " + Math.abs(spread) + " points."));
+    }
 }

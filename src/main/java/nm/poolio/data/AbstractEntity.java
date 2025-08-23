@@ -20,7 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 public abstract class AbstractEntity {
   @JsonIgnore TimeZone timeZone;
 
-  @Nullable
+  // @Nullable
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
   @SequenceGenerator(name = "idgenerator", initialValue = 10)

@@ -53,7 +53,7 @@ public class GameBet extends AbstractEntity {
       inverseJoinColumns = @JoinColumn(name = "transaction_id"))
   private Set<PoolioTransaction> acceptorTransactions = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinTable(
       name = "game_bet_winners",
       joinColumns = @JoinColumn(name = "game_bet_id"),

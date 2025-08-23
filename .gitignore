@@ -35,3 +35,4 @@ vite.generated.ts
 /.mvn/wrapper/maven-wrapper.properties
 /.mvn/wrapper/MavenWrapperDownloader.java
 /src/main/frontend/generated
+/src/main/bundles/prod.bundle

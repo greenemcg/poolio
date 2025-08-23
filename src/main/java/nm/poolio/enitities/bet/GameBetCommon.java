@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import nm.poolio.enitities.transaction.*;
+import nm.poolio.model.enums.Season;
 import org.springframework.util.CollectionUtils;
 
 public interface GameBetCommon {
@@ -44,6 +45,7 @@ public interface GameBetCommon {
     if (refundAmount == 0) return null;
 
     var refund = new PoolioTransaction();
+    refund.setSeason(Season.getCurrent());
     refund.setAmount(refundAmount);
     refund.setCreditUser(b.getProposerTransaction().getDebitUser());
     refund.setDebitUser(b.getProposerTransaction().getCreditUser());

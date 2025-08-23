@@ -367,6 +367,7 @@ public class BetView extends VerticalLayout
         var banker = userService.findByUserName(nflBetService.getBetBanker());
 
         PoolioTransaction poolioTransaction = new PoolioTransaction();
+        poolioTransaction.setSeason(Season.getCurrent());
         poolioTransaction.setCreditUser(player);
         poolioTransaction.setDebitUser(banker); // add bet banker
         poolioTransaction.setAmount(gameBet.getAmount());

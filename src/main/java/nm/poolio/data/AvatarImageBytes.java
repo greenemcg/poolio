@@ -6,14 +6,14 @@ import jakarta.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 
 public interface AvatarImageBytes {
-  @JsonIgnore
-  @Nullable
-  byte[] getProfilePicture();
+    @JsonIgnore
+    @Nullable
+    byte[] getProfilePicture();
 
-  @JsonIgnore
-  default byte[] getImageResource() {
-    if (getProfilePicture() != null && getProfilePicture().length != 0)
-      return new ByteArrayInputStream(getProfilePicture()).readAllBytes();
-    else return new byte[0];
-  }
+    @JsonIgnore
+    default byte[] getImageResource() {
+        if (getProfilePicture() != null && getProfilePicture().length != 0)
+            return new ByteArrayInputStream(getProfilePicture()).readAllBytes();
+        else return new byte[0];
+    }
 }
