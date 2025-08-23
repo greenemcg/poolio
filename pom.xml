@@ -7,7 +7,7 @@
     <groupId>nm.poolio</groupId>
     <artifactId>poolio</artifactId>
     <name>poolio</name>
-    <version>2025.5-BETA</version>
+    <version>2025.6-BETA</version>
     <packaging>jar</packaging>
 
     <properties>
