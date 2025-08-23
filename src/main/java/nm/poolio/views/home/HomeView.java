@@ -12,18 +12,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TimeZone;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +26,15 @@ import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.views.MainLayout;
 import nm.poolio.views.transaction.PoolioTransactionGrid;
 import org.apache.commons.lang3.BooleanUtils;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TimeZone;
 
 @PageTitle("Home \uD83C\uDFE0")
 @Route(value = "", layout = MainLayout.class)
