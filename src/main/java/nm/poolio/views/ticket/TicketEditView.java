@@ -1,7 +1,5 @@
 package nm.poolio.views.ticket;
 
-import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
-
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -16,21 +14,8 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Location;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
-
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nm.poolio.data.User;
@@ -51,6 +36,15 @@ import nm.poolio.vaadin.PoolioAvatar;
 import nm.poolio.vaadin.PoolioNotification;
 import nm.poolio.views.MainLayout;
 import org.springframework.util.CollectionUtils;
+
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static nm.poolio.utils.VaddinUtils.TIE_BREAKER_ICON;
 
 @PageTitle("Edit Ticket \uFE0F")
 @Route(value = "ticketEdit", layout = MainLayout.class)
@@ -274,27 +268,30 @@ public class TicketEditView extends VerticalLayout
         }
     }
 
-    private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame g) {
+    private RadioButtonGroup<NflTeam> createGameRadioButton(NflGame game) {
+
+        boolean canUserChangeGame = canChangeGame(game);
+
         RadioButtonGroup<NflTeam> radioGroup = new RadioButtonGroup<>();
 
-        radioGroup.setHelperComponent(createHelperSpread(g));
-        g.setTimeZone(timeZone);
+        radioGroup.setHelperComponent(createHelperSpread(game, canUserChangeGame));
+        game.setTimeZone(timeZone);
 
 
-        var t = DateTimeFormatter.ofPattern("E, h:mm").format(g.getLocalDateTimeWithZone());
-        radioGroup.setLabel(g.getAwayTeam() + " v " + g.getHomeTeam() + " at " + t);
+        var t = DateTimeFormatter.ofPattern("E, h:mm").format(game.getLocalDateTimeWithZone());
+        radioGroup.setLabel(game.getAwayTeam() + " v " + game.getHomeTeam() + " at " + t);
         radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
         radioGroup.setRequired(true);
-        radioGroup.setItems(g.getAwayTeam(), g.getHomeTeam());
+        radioGroup.setItems(game.getAwayTeam(), game.getHomeTeam());
 
-        if (!canChangeGame(g)) {
+        if (!canUserChangeGame) {
             radioGroup.setReadOnly(true);
         }
 
-        var value = ticket.getSheet().getGamePicks().get(g.getId());
+        var value = ticket.getSheet().getGamePicks().get(game.getId());
         if (value != null) radioGroup.setValue(value);
 
-        radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), g.getId()));
+        radioGroup.addValueChangeListener(c -> setTicketGameValue(ticket, c.getValue(), game.getId()));
 
         radioGroup.setRenderer(
                 new ComponentRenderer<>(
@@ -302,7 +299,7 @@ public class TicketEditView extends VerticalLayout
                             var layout =
                                     new HorizontalLayout(
                                             createNflTeamAvatar(nflTeam, AvatarVariant.LUMO_SMALL),
-                                            createGameSpan(nflTeam, g));
+                                            createGameSpan(nflTeam, game));
                             layout.setAlignItems(Alignment.CENTER);
                             return layout;
                         }));
@@ -328,12 +325,15 @@ public class TicketEditView extends VerticalLayout
         return layout;
     }
 
-    private Component createHelperSpread(NflGame g) {
-        if (g.getSpread() == null) return new Span(new Text("PICK EM"));
+    private Component createHelperSpread(NflGame g, boolean canUserChangeGame) {
+        String locked = canUserChangeGame ? "" : " \uD83D\uDD10";
+        if (g.getSpread() == null) return new Span(new Text(locked + "PICK EM"));
 
-        return g.getSpread() < 0.0
+        String text = g.getSpread() < 0.0
                 ? createSpreadSpan(g.getHomeTeam(), g.getSpread())
                 : createSpreadSpan(g.getAwayTeam(), g.getSpread());
+
+        return new Span(locked + text);
     }
 
     private boolean canChangeGame(NflGame g) {
@@ -373,7 +373,8 @@ public class TicketEditView extends VerticalLayout
         return new Span(new Text(nflTeam.getFullName()));
     }
 
-    private Span createSpreadSpan(NflTeam team, double spread) {
-        return new Span(new Text(team.name() + " favored by " + Math.abs(spread) + " points."));
+    private String createSpreadSpan(NflTeam team, double spread) {
+        return team.name() + " favored by " + Math.abs(spread) + " points.";
+        //     return new Span(new Text(team.name() + " favored by " + Math.abs(spread) + " points."));
     }
 }

@@ -448,11 +448,12 @@ public class ResultsView extends VerticalLayout
     @NotNull
     private Span createGameSpan(NflGame game, Ticket e) {// tod make class shared with over under
 
-        if( !showTeam(game)) {
+        if (!showTeam(game)) {
             return new Span("\uD83E\uDEE3");
         }
 
         var value = e.getSheet().getGamePicks().get(game.getId());
+        var span = new Span(value != null ? value.name() : "");
         var optional = gameScoreService.findScore(game.getId());
         String cssName = "font-weight";
         String cssValue = "normal";
@@ -467,18 +468,20 @@ public class ResultsView extends VerticalLayout
 
             if (winner.equals(value)) {
                 cssValue = "bolder";
+                span.getStyle().set("color", "green");
             } else if (winner.equals(NflTeam.TBD)) {
                 cssValue = "normal";
             } else if (winner.equals(NflTeam.TIE)) {
                 cssName = "font-style";
                 cssValue = "oblique";
             } else {
+                span.getStyle().set("color", "red");
                 cssName = "text-decoration";
                 cssValue = "line-through";
             }
         }
 
-        var span = new Span(value != null ? value.name() : "");
+
         span.getStyle().set(cssName, cssValue);
         return span;
     }
