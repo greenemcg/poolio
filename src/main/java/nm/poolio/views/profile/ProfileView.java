@@ -199,7 +199,6 @@ public class ProfileView extends VerticalLayout implements PoolioAvatar {
         saveButtonAvatar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         horizontalLayout.add(cancelButtonAvatar, saveButtonAvatar);
 
-
         UploadHandler inMemoryUploadHandler = UploadHandler.inMemory(
                 (uploadMetadata, bytes) -> {
                     log.info("b : {}", bytes.length);
@@ -208,6 +207,8 @@ public class ProfileView extends VerticalLayout implements PoolioAvatar {
                     avatarSpan.setText(" Uploaded Avatar Image Preview");
                 });
         upload = new Upload(inMemoryUploadHandler);
+       upload.setDropAllowed(false);
+        upload.setMaxFiles(1);
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
 
         int maxFileSizeInBytes = 2 * 1024 * 1024; // 2mb
