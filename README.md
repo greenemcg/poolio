@@ -5,17 +5,25 @@
 
 RE-direct nginx to https
 
+Add admin avatar
 
+Add footer scores
 
+fix null season in poolio_trans and make season not null
 
+mano a mano when player submits ticket create spring event
+and bets
+
+move mac mini to wired
+
+add spreads to admin tickets (editing)
 
 
 
 
 ======= clean up this shite
 HEmal thurs
-mano a mano when player submits ticket create spring event
-and bets 
+
 
 SIlly Builder
 
