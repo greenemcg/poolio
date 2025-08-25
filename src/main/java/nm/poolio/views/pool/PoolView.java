@@ -158,7 +158,6 @@ public class PoolView extends VerticalLayout implements PoolGrid, PoolioDialog, 
 
     private void onSavePool(Pool pool) {
         pool.setPayAsYouGoUser(userComboBox.getSelected());
-        pool.setSeason(Season.S_2024);
 
         if (binder.validate().isOk()) {
 
