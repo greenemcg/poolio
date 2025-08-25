@@ -23,6 +23,7 @@ import nm.poolio.enitities.transaction.PoolioTransaction;
 import nm.poolio.enitities.transaction.PoolioTransactionService;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.vaadin.PoolioAvatar;
+import nm.poolio.vaadin.UserTheme;
 import nm.poolio.views.MainLayout;
 import nm.poolio.views.transaction.PoolioTransactionGrid;
 import org.apache.commons.lang3.BooleanUtils;
@@ -41,7 +42,7 @@ import java.util.TimeZone;
 @RouteAlias(value = "home", layout = MainLayout.class)
 @AnonymousAllowed
 @Slf4j
-public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTransactionGrid {
+public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTransactionGrid, UserTheme {
     private final PoolService poolService;
     private final PoolioTransactionService poolioTransactionService;
     private final TimeZone timeZone;
@@ -75,7 +76,7 @@ public class HomeView extends VerticalLayout implements PoolioAvatar, PoolioTran
 
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
             if (user.getTheme() != null) {
-                MainLayout.setTheme(user.getTheme(), themeList);
+                setTheme(user.getTheme(), themeList);
             }
 
             Boolean aBoolean = (Boolean) VaadinSession.getCurrent().getAttribute("loggedInitDetails");

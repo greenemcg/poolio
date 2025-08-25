@@ -146,11 +146,13 @@ public class TicketEditView extends VerticalLayout
     private void createTicketUI() {
         add(createHeaderBadgesTop(pool, ticket, timeZone));
 
-        add(
-                new Paragraph(
-                        "If a game has a point spread and a team listed as a favorite, the winner will be determined by this point spread. "
-                                + "The final point spread will be the point spread at game time. We will use the score as our reference. "
-                                + " https://www.thescore.com/nfl/events/"));
+        add(new Paragraph(
+                "If a game has a point spread and a team listed as a favorite, the winner will be determined by this point spread. "
+                        + "The final point spread will be the point spread at game time. We will use the score as our reference. "
+                        + " https://www.thescore.com/nfl/events/"));
+
+        add(new Paragraph("You can edit your game picks before the game starts or before the early the early (Noon) Sunday games begin." +
+                " Once the noon games begin all games are locked \uD83D\uDD10 amd no changes can be made."));
 
         var games = nflGameService.getWeeklyGamesForPool(pool);
 

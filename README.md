@@ -1,7 +1,7 @@
 
 
 
-add change passwd and theme in user profile view
+
 
 RE-direct nginx to https
 
@@ -26,7 +26,10 @@ if games not started yet don't show scores and rank in results grid
 sort users  by name in admin grid
 
 
-add change passwd 
+Fix gmae picks when screen is small 
+
+fix bet descriptions 
+
 
 logging to file and check statements so can grep and then elastic search
 
@@ -34,7 +37,7 @@ BobsNo passwd for non log in users
 
 add build time 
 
-Edit Credit amount on APP
+Edit Credit amount on AP
 
 Do notes
 

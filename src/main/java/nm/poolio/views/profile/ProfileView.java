@@ -32,6 +32,7 @@ import nm.poolio.data.Theme;
 import nm.poolio.security.AuthenticatedUser;
 import nm.poolio.services.UserService;
 import nm.poolio.vaadin.PoolioAvatar;
+import nm.poolio.vaadin.UserTheme;
 import nm.poolio.views.MainLayout;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,7 +44,7 @@ import java.io.InputStream;
 @Route(value = "profile", layout = MainLayout.class)
 @RolesAllowed({"ADMIN", "USER"})
 @Slf4j
-public class ProfileView extends VerticalLayout implements PoolioAvatar {
+public class ProfileView extends VerticalLayout implements PoolioAvatar, UserTheme {
     private final AuthenticatedUser authenticatedUser;
     private final UserService userService;
 
@@ -175,7 +176,7 @@ public class ProfileView extends VerticalLayout implements PoolioAvatar {
 
             Theme theme = Theme.valueOf(event.getValue());
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
-            MainLayout.setTheme(theme, themeList);
+            setTheme(theme, themeList);
 
             var fresh = userService.get(user.getId()).orElseThrow();
 

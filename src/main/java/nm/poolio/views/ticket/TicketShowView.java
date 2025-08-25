@@ -145,7 +145,7 @@ public class TicketShowView extends VerticalLayout
 
                     var bytes = t.getPlayer().getImageResource();
 
-                    if (bytes != null && bytes.length > 0) {
+                    if (bytes.length > 0) {
                         avatar.setImageResource(
                                 new StreamResource(
                                         "profile-pic", () -> new ByteArrayInputStream(bytes)));
